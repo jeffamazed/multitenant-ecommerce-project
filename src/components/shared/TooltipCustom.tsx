@@ -25,7 +25,7 @@ const TooltipCustom = ({
         align={align}
         side={side}
         alignOffset={alignOffset}
-        className="text-sm font-semibold"
+        className="text-xs font-semibold"
       >
         {content}
       </TooltipContent>

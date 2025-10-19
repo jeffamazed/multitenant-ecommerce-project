@@ -141,7 +141,11 @@
   @apply max-w-[1400px] mx-auto w-full;
 }
 
+@utility flex-cent {
+  @apply flex items-center justify-center;
+}
+
 /* NAVBAR MOBILE */
 @utility navbar-items-mobile {
-  @apply w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium focus-visible:bg-black focus-visible:text-white;
+  @apply w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center text-base font-medium focus-visible:bg-black focus-visible:text-white;
 }

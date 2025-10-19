@@ -1,9 +1,10 @@
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -46,16 +47,30 @@ export const NavbarSidebar = () => {
       />
 
       <SheetContent
-        side="left"
+        side="right"
         className="p-0 transition-none gap-0"
         onCloseAutoFocus={() => {
           triggerRef.current?.focus();
         }}
       >
-        <SheetHeader className="p-4 border-b">
-          <div className="flex items-center">
-            <SheetTitle className="text-xl">Menu</SheetTitle>
-          </div>
+        <SheetHeader className="px-6 border-b h-18 flex-cent relative">
+          <SheetTitle className="text-xl w-full">Menu</SheetTitle>
+          <TooltipCustom
+            trigger={
+              <SheetClose
+                asChild
+                className="absolute right-6 border-transparent bg-white size-12"
+              >
+                <Button variant="ghost">
+                  <X className="size-6" />
+                  <span className="sr-only">Close menu</span>
+                </Button>
+              </SheetClose>
+            }
+            content="Close"
+            side="left"
+            sideOffset={5}
+          />
           <SheetDescription className="sr-only">
             Mobile sidebar
           </SheetDescription>
@@ -63,7 +78,7 @@ export const NavbarSidebar = () => {
 
         {/* NAV CONTENT */}
         <nav aria-label="Main navigation" className="overflow-y-auto">
-          <ScrollArea className="flex flex-col  h-full pb-2">
+          <ScrollArea className="flex flex-col h-full pb-2">
             {NAVBAR_ITEMS.map(({ href, children }) => {
               const isActive = isActiveDeterminer(href, pathname);
               return (
@@ -85,14 +100,14 @@ export const NavbarSidebar = () => {
             <div className="border-t">
               <Link
                 href="/sign-in"
-                className="navbar-items-mobile"
+                className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
                 onClick={() => setOpen(false)}
               >
                 Sign in
               </Link>
               <Link
                 href="/sign-up"
-                className="navbar-items-mobile"
+                className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
                 onClick={() => setOpen(false)}
               >
                 Start selling
