@@ -42,7 +42,7 @@ export const NavbarSidebar = () => {
           </Button>
         }
         content="Menu"
-        sideOffset={10}
+        sideOffset={8}
       />
 
       <SheetContent
@@ -75,6 +75,7 @@ export const NavbarSidebar = () => {
                       isActive,
                   })}
                   onClick={() => setOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {children}
                 </Link>
