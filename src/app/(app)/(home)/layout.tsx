@@ -5,11 +5,12 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout = async ({ children }: Props) => {
   return (
-    <div className="flex flex-col min-h-dvh">
+    <div className="flex flex-col min-h-dvh overflow-x-hidden">
       <Navbar />
-      <div className="flex-1 bg-zinc-100">{children}</div>
+
+      <main className="flex-1 bg-zinc-100">{children}</main>
       <Footer />
     </div>
   );

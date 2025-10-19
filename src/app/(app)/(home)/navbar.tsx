@@ -27,7 +27,7 @@ const NavbarItem = ({ href, children, isActive }: NavbarItemprops) => {
       asChild
       variant="outline"
       className={cn(
-        "bg-transparent hover:bg-transparent rounded-full hover:border-primary border-transparent px-3.5 text-lg active",
+        "bg-transparent hover:bg-transparent rounded-full hover:border-border border-transparent px-3.5 text-lg active",
         {
           "bg-black text-white hover:bg-black hover:text-white": isActive,
         }
@@ -45,9 +45,9 @@ export const Navbar = () => {
 
   return (
     <header className="border-b sticky top-0 bg-white z-50">
-      <div className="max-container h-18 flex items-center w-full justify-between gap-6 xl:gap-8">
+      <div className="max-container h-18 flex items-center w-full justify-between gap-6 xl:gap-8 overflow-x-auto">
         {/* MAIN LINK */}
-        <Link href="/" className="ml-6">
+        <Link href="/" className="ml-6 lg:ml-8">
           <span className={cn("text-4xl font-semibold", poppins.className)}>
             Monavo
           </span>
