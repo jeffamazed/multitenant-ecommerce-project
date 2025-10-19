@@ -5,7 +5,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-base font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-base font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border cursor-pointer focus-visible:border-ring focus-visible:ring-ring focus-visible:ring-[2px]",
+
   {
     variants: {
       variant: {
@@ -20,7 +21,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         elevated:
-          "bg-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[4px] hover:-translate-y-[4px] focus-visible:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus-visible:-translate-x-[4px] focus-visible:-translate-y-[4px] transition-all",
+          "bg-white hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[4px] hover:-translate-y-[4px] focus-visible:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus-visible:-translate-x-[4px] focus-visible:-translate-y-[4px] transition-all focus-visible:ring-0 focus-visible:border-border active:translate-x-0 active:translate-y-0 active:shadow-none",
       },
       size: {
         default: "h-12 px-4 py-2 has-[>svg]:px-3",

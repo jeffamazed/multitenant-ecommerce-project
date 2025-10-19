@@ -41,6 +41,8 @@
   --radius-md: calc(var(--radius) - 4px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --color-custom-accent: var(--custom-accent);
 }
 
 :root {
@@ -76,6 +78,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* custom accent */
+  --custom-accent: oklch(0.83 0.1 230);
 }
 
 .dark {
@@ -119,4 +124,24 @@
   body {
     @apply bg-background text-foreground;
   }
+  a {
+    @apply focus-visible:ring-ring focus-visible:ring-[2px] focus-visible:outline-0;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+}
+
+/* UTILITIES */
+@utility chk {
+  @apply border border-red-500;
+}
+
+@utility max-container {
+  @apply max-w-[1400px] mx-auto w-full;
+}
+
+/* NAVBAR MOBILE */
+@utility navbar-items-mobile {
+  @apply w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium focus-visible:bg-black focus-visible:text-white;
 }
