@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+  preferredstrategy: "pseudoelements";
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -43,6 +48,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   --color-custom-accent: var(--custom-accent);
+  --color-custom-accent-secondary: var(--custom-accent-secondary);
 }
 
 :root {
@@ -81,6 +87,7 @@
 
   /* custom accent */
   --custom-accent: oklch(0.83 0.1 230);
+  --custom-accent-secondary: oklch(0.98 0.01 237);
 }
 
 .dark {
@@ -119,7 +126,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 scrollbar-thin scrollbar-thumb-sky-700 scrollbar-thumb-rounded-full scrollbar-hover:scrollbar-thumb-sky-600 scrollbar-active:scrollbar-thumb-sky-800;
   }
   body {
     @apply bg-background text-foreground;

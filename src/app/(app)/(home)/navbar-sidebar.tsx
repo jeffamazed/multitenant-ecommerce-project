@@ -55,24 +55,19 @@ export const NavbarSidebar = () => {
       >
         <SheetHeader className="px-6 border-b h-18 flex-cent relative">
           <SheetTitle className="text-xl w-full">Menu</SheetTitle>
-          <TooltipCustom
-            trigger={
-              <SheetClose
-                asChild
-                className="absolute right-6 border-transparent bg-white size-12"
-              >
-                <Button variant="ghost">
-                  <X className="size-6" />
-                  <span className="sr-only">Close menu</span>
-                </Button>
-              </SheetClose>
-            }
-            content="Close"
-            side="left"
-            sideOffset={5}
-          />
+
+          <SheetClose
+            asChild
+            className="absolute right-6 border-transparent bg-white size-12"
+          >
+            <Button variant="ghost">
+              <X className="size-6" />
+              <span className="sr-only">Close menu</span>
+            </Button>
+          </SheetClose>
+
           <SheetDescription className="sr-only">
-            Mobile sidebar
+            Mobile main navigation
           </SheetDescription>
         </SheetHeader>
 
