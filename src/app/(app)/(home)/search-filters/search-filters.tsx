@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { CategoryDropdown } from "./categories-dropdown";
 import { SearchInput } from "./search-input";
-import { CustomCategory } from "../types";
-import { SearchFiltersSkeleton } from "../search-filters-skeleton";
+import { SearchFiltersSkeleton } from "./search-filters-skeleton";
 import { CategoriesSidebar } from "./categories-sidebar";
 
 import {
@@ -17,11 +16,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface Props {
-  data: CustomCategory[];
-}
+import { useTRPC } from "@/trpc/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-export function SearchFilters({ data }: Props) {
+export function SearchFilters() {
+  const trpc = useTRPC();
+  const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measureRef = useRef<HTMLDivElement | null>(null);
   const viewAllRef = useRef<HTMLButtonElement | null>(null);
@@ -86,7 +87,7 @@ export function SearchFilters({ data }: Props) {
       aria-label="Product Search Navigation"
       viewport={false}
     >
-      <SearchInput data={data} isMobile={isMobile} />
+      <SearchInput isMobile={isMobile} />
 
       {/* INVISIBLE MEASUREMENT PLACEHOLDER */}
       <div
@@ -120,6 +121,8 @@ export function SearchFilters({ data }: Props) {
             inert={!mounted}
             onPointerEnter={() => setIsAnyHovered(true)}
             onPointerLeave={() => setIsAnyHovered(false)}
+            onFocusCapture={() => setIsAnyHovered(true)}
+            onBlurCapture={() => setIsAnyHovered(false)}
           >
             {/* SLICE ONLY FOR VISIBLE ITEMS */}
             {data.slice(0, visibleCount).map((category, index) => (
@@ -133,7 +136,6 @@ export function SearchFilters({ data }: Props) {
             {/* VIEW ALL BUTTON */}
             <li className="shrink-0">
               <CategoriesSidebar
-                data={data}
                 trigger={
                   <Button
                     ref={viewAllRef}

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const TooltipCustom = ({
@@ -7,6 +8,7 @@ const TooltipCustom = ({
   alignOffset,
   side,
   align,
+  className,
 }: {
   trigger: React.ReactNode;
   content: string;
@@ -14,6 +16,7 @@ const TooltipCustom = ({
   alignOffset?: number;
   side?: "bottom" | "left" | "top" | "right";
   align?: "center" | "start" | "end";
+  className?: string;
 }) => {
   return (
     <Tooltip disableHoverableContent>
@@ -25,7 +28,7 @@ const TooltipCustom = ({
         align={align}
         side={side}
         alignOffset={alignOffset}
-        className="text-xs font-semibold select-none"
+        className={cn("text-xs font-semibold select-none", className)}
       >
         {content}
       </TooltipContent>

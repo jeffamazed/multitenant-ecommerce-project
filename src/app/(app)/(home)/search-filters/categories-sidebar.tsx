@@ -2,7 +2,9 @@ import { ChevronLeftIcon, ChevronRightIcon, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-import { CustomCategory } from "../types";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
+import { CategoriesGetManyOutput } from "@/modules/categories/types";
 
 import {
   Sheet,
@@ -13,30 +15,29 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import TooltipCustom from "@/components/shared/TooltipCustom";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   trigger: React.ReactNode;
-  data: CustomCategory[]; // TODO: remove this later
 }
 
-export const CategoriesSidebar = ({
-  open,
-  onOpenChange,
-  trigger,
-  data,
-}: Props) => {
-  const [parentCategories, setParentCategories] = useState<
-    CustomCategory[] | null
+export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
+  const trpc = useTRPC();
+  const { data } = useQuery(trpc.categories.getMany.queryOptions());
+
+  const [parentCategories, setParentCategories] =
+    useState<CategoriesGetManyOutput | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoriesGetManyOutput[1] | null
   >(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState<CustomCategory | null>(null);
   const pathname = usePathname();
 
   // auto closing when not changing ismobile
@@ -48,6 +49,7 @@ export const CategoriesSidebar = ({
   // FOCUS BACK BUTTON
   const backButtonRef = useRef<HTMLButtonElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     if (parentCategories) backButtonRef.current?.focus();
     else closeButtonRef.current?.focus();
@@ -62,9 +64,9 @@ export const CategoriesSidebar = ({
     onOpenChange(open);
   };
 
-  const handleCategoryClick = (category: CustomCategory) => {
+  const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
     if (category.subcategories && category.subcategories.length > 0) {
-      setParentCategories(category.subcategories as CustomCategory[]);
+      setParentCategories(category.subcategories as CategoriesGetManyOutput);
       setSelectedCategory(category);
     }
   };
@@ -80,7 +82,13 @@ export const CategoriesSidebar = ({
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
-      <SheetTrigger asChild>{trigger}</SheetTrigger>
+      <TooltipCustom
+        trigger={<SheetTrigger asChild>{trigger}</SheetTrigger>}
+        content="View all"
+        side="bottom"
+        sideOffset={10}
+        className="md:hidden"
+      />
 
       <SheetContent
         side="left"

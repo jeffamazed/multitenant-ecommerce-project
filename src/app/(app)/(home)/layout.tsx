@@ -1,54 +1,42 @@
-import { getPayload } from "payload";
+import { Suspense } from "react";
+
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
+import { getQueryClient, trpc } from "@/trpc/server";
+
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
-import { CustomCategory } from "./types";
-
 import { SearchFilters } from "./search-filters/search-filters";
-
-import configPromise from "@payload-config";
-import { Category } from "@/payload-types";
+import { SearchInputSkeleton } from "./search-filters/search-input-skeleton";
 
 interface Props {
   children: React.ReactNode;
 }
 
 const Layout = async ({ children }: Props) => {
-  const payload = await getPayload({
-    config: configPromise,
-  });
-
-  const data = await payload.find({
-    collection: "categories",
-    pagination: false,
-    depth: 1, // Populate subcategories, subcategories[0] will be type "Category"
-    where: {
-      parent: {
-        exists: false,
-      },
-    },
-    sort: "name",
-  });
-
-  const formattedData: CustomCategory[] = data.docs.map((doc) => ({
-    ...doc,
-    subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
-      // Because of 'depth: 1' "doc" will be type of Category
-      ...(doc as Category),
-      subcategories: undefined,
-    })),
-  }));
+  const queryClient = getQueryClient();
+  // void to ignore the returned promise
+  void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions());
 
   return (
     <div className="flex flex-col min-h-dvh overflow-x-hidden">
       <Navbar />
 
       <main className="flex-1 bg-zinc-100">
-        <section className="bg-custom-accent-secondary flex-cent">
+        <section
+          className="flex-cent"
+          style={{ backgroundColor: "oklch(0.98 0.01 237)" }}
+        >
           <div className="max-container common-padding">
             <h1 className="text-center text-2xl md:text-3xl mb-6 lg:mb-8 font-semibold">
               One Platform. Every Store. Seamlessly.
             </h1>
-            <SearchFilters data={formattedData} />
+
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Suspense fallback={<SearchInputSkeleton />}>
+                <SearchFilters />
+              </Suspense>
+            </HydrationBoundary>
           </div>
         </section>
         {children}
