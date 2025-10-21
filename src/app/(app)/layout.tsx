@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
 import { TRPCReactProvider } from "@/trpc/client";
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
+import { dmSans } from "@/lib/fonts";
+import { ToasterCustom } from "@/components/shared/ToasterCustom";
 
 export const metadata: Metadata = {
   title: "Monavo",
@@ -22,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.className} antialiased`}>
+        <ToasterCustom />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>

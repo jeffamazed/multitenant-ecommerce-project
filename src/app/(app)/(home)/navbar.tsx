@@ -1,6 +1,5 @@
 "use client";
 
-import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,12 +7,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAVBAR_ITEMS } from "@/lib/constants";
 
-import { NavbarSidebar } from "./navbar-sidebar";
+import { poppins } from "@/lib/fonts";
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["700"],
-});
+import { NavbarSidebar } from "./navbar-sidebar";
 
 interface NavbarItemprops {
   href: string;
@@ -72,13 +68,17 @@ export const Navbar = () => {
               variant="secondary"
               className="border-l border-t-0 border-b-0 border-r-0 px-8 xl:px-12 h-full rounded-none bg-white hover:bg-custom-accent focus-visible:bg-custom-accent transition-colors text-lg"
             >
-              <Link href="/sign-in">Sign in</Link>
+              <Link prefetch href="/sign-in">
+                Sign in
+              </Link>
             </Button>
             <Button
               asChild
               className="border-l border-t-0 border-b-0 border-r-0 px-8 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
             >
-              <Link href="/sign-up">Start selling</Link>
+              <Link prefetch href="/sign-up">
+                Start selling
+              </Link>
             </Button>
           </div>
         </nav>
