@@ -16,7 +16,7 @@ const TooltipCustom = ({
   align?: "center" | "start" | "end";
 }) => {
   return (
-    <Tooltip>
+    <Tooltip disableHoverableContent>
       <TooltipTrigger asChild aria-describedby={undefined}>
         {trigger}
       </TooltipTrigger>
@@ -25,7 +25,7 @@ const TooltipCustom = ({
         align={align}
         side={side}
         alignOffset={alignOffset}
-        className="text-xs font-semibold"
+        className="text-xs font-semibold select-none"
       >
         {content}
       </TooltipContent>

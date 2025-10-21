@@ -9,7 +9,7 @@ export const SearchFiltersSkeleton = () => {
       {widths.map((width, i) => (
         <Skeleton
           key={i}
-          className="h-12 rounded-full bg-zinc-200"
+          className="h-12 rounded-full bg-skeleton"
           style={{ width }}
         />
       ))}
