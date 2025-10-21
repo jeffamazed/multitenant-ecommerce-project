@@ -14,7 +14,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { NAVBAR_ITEMS } from "@/lib/constants";
 import TooltipCustom from "@/components/shared/TooltipCustom";
-import { cn, isActiveDeterminer } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -75,7 +75,7 @@ export const NavbarSidebar = () => {
         <nav aria-label="Main navigation" className="overflow-y-auto">
           <ScrollArea className="flex flex-col h-full pb-2">
             {NAVBAR_ITEMS.map(({ href, children }) => {
-              const isActive = isActiveDeterminer(href, pathname);
+              const isActive = pathname === href;
               return (
                 <Link
                   href={href}

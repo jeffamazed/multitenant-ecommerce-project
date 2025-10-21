@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ListFilterIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import { CategoryDropdown } from "./categories-dropdown";
 import { SearchInput } from "./search-input";
@@ -25,6 +26,7 @@ export function SearchFilters({ data }: Props) {
   const measureRef = useRef<HTMLDivElement | null>(null);
   const viewAllRef = useRef<HTMLButtonElement | null>(null);
   const isMobile = useIsMobile();
+  const pathname = usePathname();
 
   const [visibleCount, setVisibleCount] = useState<number>(data.length);
   const [isAnyHovered, setIsAnyHovered] = useState<boolean>(false);
@@ -33,15 +35,17 @@ export function SearchFilters({ data }: Props) {
 
   useEffect(() => setMounted(true), []);
 
-  // TODO: ACTIVE CATEGORY FOR NAV MENU LINKS STILL BROKEN
   // THESE ARE FOR CHECKING IF THE ACTIVE CATEGORY IS NOT VISIBLE
-  const activeCategory = "all";
-  const activeCategoryIndex = data.findIndex(
-    (cat) => cat.slug === activeCategory
-  );
+
+  const activeCategoryIndex =
+    pathname === "/"
+      ? 0
+      : data.findIndex((cat) => pathname.startsWith(`/${cat.slug}`));
+
   const isActiveCategoryHidden =
     activeCategoryIndex >= visibleCount && activeCategoryIndex !== -1;
 
+  // FOR CALCULING HOW MANY FILTERS SHOULD BE VISIBLE
   useEffect(() => {
     const calculateVisible = () => {
       const container = containerRef.current;
@@ -118,11 +122,11 @@ export function SearchFilters({ data }: Props) {
             onPointerLeave={() => setIsAnyHovered(false)}
           >
             {/* SLICE ONLY FOR VISIBLE ITEMS */}
-            {data.slice(0, visibleCount).map((category) => (
+            {data.slice(0, visibleCount).map((category, index) => (
               <CategoryDropdown
                 key={category.id}
                 category={category}
-                isActive={activeCategory === category.slug}
+                isActive={!isAnyHovered && index === activeCategoryIndex}
               />
             ))}
 

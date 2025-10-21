@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { cn, isActiveDeterminer } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { NAVBAR_ITEMS } from "@/lib/constants";
 
 import { NavbarSidebar } from "./navbar-sidebar";
@@ -59,11 +59,7 @@ export const Navbar = () => {
           {/* MIDDLE NAV */}
           <div className="items-center gap-2 xl:gap-4 flex">
             {NAVBAR_ITEMS.map(({ href, children }) => (
-              <NavbarItem
-                key={href}
-                href={href}
-                isActive={isActiveDeterminer(href, pathname)}
-              >
+              <NavbarItem key={href} href={href} isActive={pathname === href}>
                 {children}
               </NavbarItem>
             ))}
