@@ -74,40 +74,45 @@ export const NavbarSidebar = () => {
         {/* NAV CONTENT */}
         <nav aria-label="Main navigation" className="overflow-y-auto">
           <ScrollArea className="flex flex-col h-full pb-2">
-            {NAVBAR_ITEMS.map(({ href, children }) => {
-              const isActive = pathname === href;
-              return (
+            <ul className="w-full">
+              {NAVBAR_ITEMS.map(({ href, children }) => {
+                const isActive = pathname === href;
+                return (
+                  <li key={href} className="w-full">
+                    <Link
+                      href={href}
+                      className={cn("navbar-items-mobile", {
+                        "bg-black text-white hover:bg-black hover:text-white":
+                          isActive,
+                      })}
+                      onClick={() => setOpen(false)}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {children}
+                    </Link>
+                  </li>
+                );
+              })}
+              <li className="w-full border-t">
                 <Link
-                  href={href}
-                  key={href}
-                  className={cn("navbar-items-mobile", {
-                    "bg-black text-white hover:bg-black hover:text-white":
-                      isActive,
-                  })}
+                  href="/sign-in"
+                  className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
                   onClick={() => setOpen(false)}
-                  aria-current={isActive ? "page" : undefined}
                 >
-                  {children}
+                  Sign in
                 </Link>
-              );
-            })}
+              </li>
 
-            <div className="border-t">
-              <Link
-                href="/sign-in"
-                className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
-                onClick={() => setOpen(false)}
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/sign-up"
-                className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
-                onClick={() => setOpen(false)}
-              >
-                Start selling
-              </Link>
-            </div>
+              <li className="w-full">
+                <Link
+                  href="/sign-up"
+                  className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
+                  onClick={() => setOpen(false)}
+                >
+                  Start selling
+                </Link>
+              </li>
+            </ul>
           </ScrollArea>
         </nav>
       </SheetContent>

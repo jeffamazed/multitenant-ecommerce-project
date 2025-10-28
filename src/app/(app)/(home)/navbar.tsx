@@ -53,13 +53,15 @@ export const Navbar = () => {
           className="h-full hidden lg:flex items-center gap-6 xl:gap-8 font-medium bg-white w-full justify-between"
         >
           {/* MIDDLE NAV */}
-          <div className="items-center gap-2 xl:gap-4 flex">
+          <ul className="items-center gap-2 xl:gap-4 flex">
             {NAVBAR_ITEMS.map(({ href, children }) => (
-              <NavbarItem key={href} href={href} isActive={pathname === href}>
-                {children}
-              </NavbarItem>
+              <li key={href}>
+                <NavbarItem href={href} isActive={pathname === href}>
+                  {children}
+                </NavbarItem>
+              </li>
             ))}
-          </div>
+          </ul>
 
           {/* RIGHT LINKS */}
           <div className="hidden lg:flex h-full">

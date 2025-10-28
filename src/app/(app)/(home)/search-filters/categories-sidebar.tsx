@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import { useQuery } from "@tanstack/react-query";
@@ -40,11 +40,20 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
   >(null);
   const pathname = usePathname();
 
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      setSelectedCategory(null);
+      setParentCategories(null);
+      onOpenChange(open);
+    },
+    [onOpenChange]
+  );
+
   // auto closing when not changing ismobile
   const isMobile = useIsMobile();
   useEffect(() => {
     handleOpenChange(false);
-  }, [isMobile]);
+  }, [isMobile, handleOpenChange]);
 
   // FOCUS BACK BUTTON
   const backButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -58,15 +67,14 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
   // if we have parent categories, show those, otherwise show root categories
   const currentCategories = parentCategories ?? data ?? [];
 
-  const handleOpenChange = (open: boolean) => {
-    setSelectedCategory(null);
-    setParentCategories(null);
-    onOpenChange(open);
-  };
-
   const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
     if (category.subcategories && category.subcategories.length > 0) {
-      setParentCategories(category.subcategories as CategoriesGetManyOutput);
+      setParentCategories(
+        category.subcategories.map((sub) => ({
+          ...sub,
+          subcategories: [], // this matches the expected structure
+        }))
+      );
       setSelectedCategory(category);
     }
   };
@@ -106,7 +114,7 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
             <Button
               ref={closeButtonRef}
               variant="ghost"
-              className="hover:bg-white focus-visible:bg-white bg-transparent"
+              className="hover:bg-transparent focus-visible:bg-transparent bg-transparent"
             >
               <X className="size-6" />
               <span className="sr-only">Close category sidebar</span>
@@ -146,50 +154,54 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
             </button>
           )}
 
-          {/* CATEGORIES TO DISPLAY WHETHER IT'S A CATEGORY OR SUBCATEGORY */}
-          {currentCategories.map((category) => {
-            const hasSubCategory = category.subcategories?.length > 0;
+          <ul className="w-full">
+            {/* CATEGORIES TO DISPLAY WHETHER IT'S A CATEGORY OR SUBCATEGORY */}
+            {currentCategories.map((category) => {
+              const hasSubCategory = category.subcategories?.length > 0;
 
-            const href =
-              parentCategories && selectedCategory
-                ? `/${selectedCategory.slug}/${category.slug}`
-                : category.slug === "all"
-                  ? "/"
-                  : `/${category.slug}`;
+              const href =
+                parentCategories && selectedCategory
+                  ? `/${selectedCategory.slug}/${category.slug}`
+                  : category.slug === "all"
+                    ? "/"
+                    : `/${category.slug}`;
 
-            const isActive =
-              pathname === href || pathname.startsWith(`${href}/`);
+              const isActive =
+                pathname === href || pathname.startsWith(`${href}/`);
 
-            return category.subcategories && hasSubCategory ? (
-              <button
-                onClick={() => handleCategoryClick(category)}
-                key={category.slug}
-                className="w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center justify-between text-base font-medium focus-visible:bg-black focus-visible:text-white"
-                // ARIA
-                aria-haspopup="true"
-                aria-expanded={selectedCategory?.slug === category.slug}
-                aria-label={`View subcategories under ${category.name}`}
-              >
-                {category.name}
-                {category.subcategories && hasSubCategory && (
-                  <ChevronRightIcon className="size-4" />
-                )}
-              </button>
-            ) : (
-              <Link
-                key={category.slug}
-                href={href}
-                onClick={() => handleOpenChange(false)}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center justify-between text-base font-medium focus-visible:bg-black focus-visible:text-white",
-                  isActive && "bg-black text-white"
-                )}
-              >
-                {category.name}
-              </Link>
-            );
-          })}
+              return category.subcategories && hasSubCategory ? (
+                <li key={category.slug} className="w-full">
+                  <button
+                    onClick={() => handleCategoryClick(category)}
+                    className="w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center justify-between text-base font-medium focus-visible:bg-black focus-visible:text-white"
+                    // ARIA
+                    aria-haspopup="true"
+                    aria-expanded={selectedCategory?.slug === category.slug}
+                    aria-label={`View subcategories under ${category.name}`}
+                  >
+                    {category.name}
+                    {category.subcategories && hasSubCategory && (
+                      <ChevronRightIcon className="size-4" />
+                    )}
+                  </button>
+                </li>
+              ) : (
+                <li key={category.slug} className="w-full">
+                  <Link
+                    href={href}
+                    onClick={() => handleOpenChange(false)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center justify-between text-base font-medium focus-visible:bg-black focus-visible:text-white",
+                      isActive && "bg-black text-white"
+                    )}
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </ScrollArea>
       </SheetContent>
     </Sheet>
