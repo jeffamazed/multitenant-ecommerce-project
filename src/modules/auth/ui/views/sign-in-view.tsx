@@ -7,21 +7,13 @@ import Link from "next/link";
 import z from "zod";
 import { toast } from "sonner";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import AuthBackground from "@/app/assets/img/background.png";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 
 import { poppins } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -30,6 +22,12 @@ import { useMutation } from "@tanstack/react-query";
 
 import { signInSchema } from "../../schemas";
 import { Eye, EyeOff } from "lucide-react";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 
 type SignInSchemaType = z.infer<typeof signInSchema>;
 
@@ -62,110 +60,119 @@ export const SignInView = () => {
   };
 
   return (
-    <main className="grid grid-cols-1 md:grid-cols-5 max-container">
-      <div className="bg-custom-accent-secondary h-dvh w-full md:col-span-3 overflow-y-auto">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4 common-padding"
-          >
-            <div className="flex items-center justify-between mb-8">
-              <Link href="/">
-                <span
-                  className={cn("text-2xl font-semibold", poppins.className)}
-                >
-                  Monavo
-                </span>
-              </Link>
+    <main className="grid grid-cols-1 md:grid-cols-5">
+      <div className="bg-custom-accent-secondary h-dvh w-full md:col-span-3 lg:col-span-2 overflow-y-auto">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 common-padding"
+        >
+          <div className="flex items-center justify-between mb-8">
+            <Link href="/">
+              <span className={cn("text-2xl font-semibold", poppins.className)}>
+                Monavo
+              </span>
+            </Link>
 
-              <Button
-                asChild
-                variant="link"
-                size="sm"
-                className="text-base border-none underline"
-              >
-                <Link href="/sign-up">Sign up</Link>
-              </Button>
-            </div>
+            <Button
+              asChild
+              variant="link"
+              size="sm"
+              className="text-base border-none underline"
+            >
+              <Link href="/sign-up">Sign Up</Link>
+            </Button>
+          </div>
 
-            <h1 className="text-3xl lg:text-4xl font-medium mb-4">
-              Welcome back to Monavo
-            </h1>
+          <h1 className="text-3xl lg:text-4xl font-medium mb-4">
+            Welcome back to Monavo
+          </h1>
 
+          <FieldGroup className="gap-4">
             {/* EMAIL */}
-            <FormField
+            <Controller
               name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">Email</FormLabel>
-                  <FormControl className="max-w-lg">
-                    <Input
-                      {...field}
-                      type="email"
-                      disabled={isPendingSigningIn}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor="sign-in-email" className="text-base">
+                    Email
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="sign-in-email"
+                    type="email"
+                    disabled={isPendingSigningIn}
+                    aria-invalid={fieldState.invalid}
+                    required
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
 
             {/* PASSWORD */}
-            <FormField
+            <Controller
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">Password</FormLabel>
-                  <FormControl className="relative max-w-lg ">
-                    <div>
-                      <Input
-                        {...field}
-                        type={showPassword ? "text" : "password"}
-                        disabled={isPendingSigningIn}
-                      />
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel htmlFor="sign-in-password" className="text-base">
+                    Password
+                  </FieldLabel>
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      id="sign-in-password"
+                      type={showPassword ? "text" : "password"}
+                      disabled={isPendingSigningIn}
+                      required
+                    />
+                    {/* SHOW PASSWORD BUTTON */}
+                    <Button
+                      variant="ghost"
+                      type="button"
+                      size="icon-sm"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 border-none rounded-full bg-transparent hover:bg-black hover:text-white"
+                      onMouseDown={(e) => e.preventDefault()} // <-- keeps input focused
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                      aria-pressed={showPassword}
+                      disabled={isPendingSigningIn}
+                    >
+                      {showPassword ? (
+                        <Eye className="size-5" />
+                      ) : (
+                        <EyeOff className="size-5" />
+                      )}
+                    </Button>
+                  </div>
 
-                      {/* SHOW PASSWORD BUTTON */}
-                      <Button
-                        variant="ghost"
-                        type="button"
-                        size="icon-sm"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 border-none rounded-full bg-transparent hover:bg-black hover:text-white"
-                        onMouseDown={(e) => e.preventDefault()} // <-- keeps input focused
-                        onClick={() => setShowPassword((prev) => !prev)}
-                        aria-label={
-                          showPassword ? "Hide password" : "Show password"
-                        }
-                        aria-pressed={showPassword}
-                        disabled={isPendingSigningIn}
-                      >
-                        {showPassword ? (
-                          <Eye className="size-5" />
-                        ) : (
-                          <EyeOff className="size-5" />
-                        )}
-                      </Button>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
+          </FieldGroup>
 
-            {/* SUBMIT BUTTON */}
-            <Button
-              type="submit"
-              size="lg"
-              variant="elevated"
-              className="max-w-lg bg-black text-white hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black mt-4"
-              disabled={isPendingSigningIn}
-            >
-              {isPendingSigningIn ? "Signing in..." : "Sign in"}
-            </Button>
-          </form>
-        </Form>
+          {/* SUBMIT BUTTON */}
+          <Button
+            type="submit"
+            size="lg"
+            variant="elevated"
+            className="bg-black text-white hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black mt-4"
+            disabled={isPendingSigningIn}
+          >
+            {isPendingSigningIn ? "Signing In..." : "Sign In"}
+          </Button>
+        </form>
       </div>
 
-      <div className="h-dvh w-full md:col-span-2 hidden md:block relative">
+      <div className="h-dvh w-full md:col-span-2 lg:col-span-3 hidden md:block relative">
         <Image
           src={AuthBackground}
           alt="People in cartoon style"

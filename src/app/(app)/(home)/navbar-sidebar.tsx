@@ -99,7 +99,7 @@ export const NavbarSidebar = () => {
                   className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
                   onClick={() => setOpen(false)}
                 >
-                  Sign in
+                  Sign In
                 </Link>
               </li>
 
@@ -108,8 +108,9 @@ export const NavbarSidebar = () => {
                   href="/sign-up"
                   className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
                   onClick={() => setOpen(false)}
+                  aria-label="Sign up and start selling"
                 >
-                  Start selling
+                  Start Selling
                 </Link>
               </li>
             </ul>

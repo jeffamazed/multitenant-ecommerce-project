@@ -4,6 +4,7 @@ import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 
 import { signInSchema, signUpSchema } from "../schemas";
+import { BasePayload } from "payload";
 
 export const authRouter = createTRPCRouter({
   session: baseProcedure.query(async ({ ctx }) => {
@@ -31,7 +32,6 @@ export const authRouter = createTRPCRouter({
     });
 
     if (existingUser.docs[0]) {
-      console.log(existingUser.docs[0]);
       throw new TRPCError({
         code: "CONFLICT",
         message: "Username or email already taken",
@@ -48,63 +48,53 @@ export const authRouter = createTRPCRouter({
       },
     });
 
-    // login after register
-    const data = await ctx.db.login({
-      collection: "users",
-      data: {
-        email: input.email,
-        password: input.password,
-      },
-    });
-
-    if (!data.token) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Sign in failed",
-      });
-    }
-
-    const cookies = await getCookies();
-    cookies.set({
-      name: "payload-token",
-      value: data.token,
-      httpOnly: true,
-      path: "/",
-      // secure: true,
-      // sameSite: "none",
-      // domain: ""
-      // TODO: ENSURE CROSS-DOMAIN COOKIE SHARING
-    });
+    return signInHelper(input, ctx);
   }),
 
   signIn: baseProcedure.input(signInSchema).mutation(async ({ input, ctx }) => {
-    const data = await ctx.db.login({
+    return signInHelper(input, ctx);
+  }),
+});
+
+async function signInHelper(
+  input: { email: string; password: string },
+  ctx: { db: BasePayload }
+) {
+  let data;
+  try {
+    data = await ctx.db.login({
       collection: "users",
       data: {
         email: input.email,
         password: input.password,
       },
     });
-
-    if (!data.token) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Sign in failed",
-      });
-    }
-
-    const cookies = await getCookies();
-    cookies.set({
-      name: "payload-token",
-      value: data.token,
-      httpOnly: true,
-      path: "/",
-      // secure: true,
-      // sameSite: "none",
-      // domain: ""
-      // TODO: ENSURE CROSS-DOMAIN COOKIE SHARING
+  } catch {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Invalid email and/or password.",
     });
+  }
 
-    return data;
-  }),
-});
+  if (!data?.token) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Invalid email and/or password.",
+    });
+  }
+
+  const cookies = await getCookies();
+  cookies.set({
+    name: "payload-token",
+    value: data.token,
+    httpOnly: true,
+    path: "/",
+    // secure: true,
+    // sameSite: "none",
+    // domain: ""
+    // TODO: ENSURE CROSS-DOMAIN COOKIE SHARING
+  });
+
+  // TODO: PROBABLY DON'T SEND DATA IF NOT NEEDED
+  return data;
+}
