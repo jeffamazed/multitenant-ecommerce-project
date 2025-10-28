@@ -24,7 +24,7 @@ const Layout = async ({ children }: Props) => {
 
       <main className="flex-1 bg-zinc-100">
         <section
-          className="flex-cent"
+          className="flex-cent border-b"
           style={{ backgroundColor: "oklch(0.98 0.01 237)" }}
         >
           <div className="max-container common-padding">

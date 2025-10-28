@@ -1,10 +1,11 @@
-import { headers as getHeaders, cookies as getCookies } from "next/headers";
+import { headers as getHeaders } from "next/headers";
+import { BasePayload } from "payload";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 
 import { signInSchema, signUpSchema } from "../schemas";
-import { BasePayload } from "payload";
+import { generateAuthCookie } from "../utils";
 
 export const authRouter = createTRPCRouter({
   session: baseProcedure.query(async ({ ctx }) => {
@@ -12,11 +13,6 @@ export const authRouter = createTRPCRouter({
     const session = await ctx.db.auth({ headers });
 
     return session;
-  }),
-
-  signOut: baseProcedure.mutation(async () => {
-    const cookies = await getCookies();
-    cookies.delete("payload-token");
   }),
 
   signUp: baseProcedure.input(signUpSchema).mutation(async ({ input, ctx }) => {
@@ -34,7 +30,7 @@ export const authRouter = createTRPCRouter({
     if (existingUser.docs[0]) {
       throw new TRPCError({
         code: "CONFLICT",
-        message: "Username or email already taken",
+        message: "Username or email already taken.",
       });
     }
 
@@ -82,17 +78,9 @@ async function signInHelper(
       message: "Invalid email and/or password.",
     });
   }
-
-  const cookies = await getCookies();
-  cookies.set({
-    name: "payload-token",
+  await generateAuthCookie({
+    prefix: ctx.db.config.cookiePrefix,
     value: data.token,
-    httpOnly: true,
-    path: "/",
-    // secure: true,
-    // sameSite: "none",
-    // domain: ""
-    // TODO: ENSURE CROSS-DOMAIN COOKIE SHARING
   });
 
   // TODO: PROBABLY DON'T SEND DATA IF NOT NEEDED

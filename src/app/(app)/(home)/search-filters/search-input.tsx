@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ListFilterIcon, SearchIcon } from "lucide-react";
+import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,6 +7,9 @@ import { CategoriesSidebar } from "./categories-sidebar";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import useAuth from "@/hooks/use-auth";
+import Link from "next/link";
+import TooltipCustom from "@/components/shared/TooltipCustom";
 
 interface Props {
   disabled?: boolean;
@@ -14,6 +17,7 @@ interface Props {
 }
 
 export const SearchInput = ({ disabled, isMobile }: Props) => {
+  const session = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   useEffect(() => setMounted(true), []);
@@ -35,7 +39,12 @@ export const SearchInput = ({ disabled, isMobile }: Props) => {
         />
       </div>
       {!mounted && (
-        <Skeleton className="size-12 shrink-0 rounded-md bg-skeleton md:hidden" />
+        <>
+          <Skeleton className="size-12 shrink-0 rounded-md bg-skeleton md:hidden" />
+          {session.isFetching && (
+            <Skeleton className="h-12 w-12 md:w-[6.57rem] shrink-0 rounded-md bg-skeleton" />
+          )}
+        </>
       )}
       {isMobile && (
         <CategoriesSidebar
@@ -43,7 +52,7 @@ export const SearchInput = ({ disabled, isMobile }: Props) => {
             <Button
               variant="elevated"
               className={cn(
-                "select-none transition-all! focus-visible:ring-0! relative size-12 shrink-0 border-border bg-white"
+                "select-none transition-all! size-12 shrink-0 bg-white"
               )}
               aria-label="View all category filters"
             >
@@ -54,7 +63,28 @@ export const SearchInput = ({ disabled, isMobile }: Props) => {
           onOpenChange={setIsSidebarOpen}
         />
       )}
-      {/* TODO: ADD LIBRARY BUTTON */}
+
+      {/* LIBRARY LINK */}
+      {session?.data?.user && (
+        <TooltipCustom
+          trigger={
+            <Button
+              variant="elevated"
+              className="select-none bg-white h-12 min-w-12 shrink-0"
+              asChild
+            >
+              <Link href="/library">
+                <BookmarkCheckIcon className="size-4.5" />
+                <span className="max-md:sr-only">Library</span>
+              </Link>
+            </Button>
+          }
+          content="Library"
+          side="bottom"
+          sideOffset={10}
+          className="md:hidden"
+        />
+      )}
     </div>
   );
 };

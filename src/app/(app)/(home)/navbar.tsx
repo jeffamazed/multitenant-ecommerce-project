@@ -6,10 +6,11 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAVBAR_ITEMS } from "@/lib/constants";
-
 import { poppins } from "@/lib/fonts";
 
 import { NavbarSidebar } from "./navbar-sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
+import useAuth from "@/hooks/use-auth";
 
 interface NavbarItemprops {
   href: string;
@@ -38,7 +39,7 @@ const NavbarItem = ({ href, children, isActive }: NavbarItemprops) => {
 
 export const Navbar = () => {
   const pathname = usePathname();
-
+  const session = useAuth();
   return (
     <header className="border-b sticky top-0 bg-white z-50">
       <div className="max-container h-18 flex items-center w-full justify-between gap-6 xl:gap-8 overflow-x-auto">
@@ -62,31 +63,61 @@ export const Navbar = () => {
               </li>
             ))}
           </ul>
+          {session.isPending && (
+            <Skeleton className="bg-skeleton h-full max-xl:w-[9.9125rem] w-[11.875rem] rounded-none" />
+          )}
 
           {/* RIGHT LINKS */}
-          <div className="hidden lg:flex h-full">
-            <Button
-              asChild
-              variant="secondary"
-              className="border-l border-t-0 border-b-0 border-r-0 px-8 xl:px-12 h-full rounded-none bg-white hover:bg-custom-accent focus-visible:bg-custom-accent transition-colors text-lg"
+          {session.data?.user ? (
+            <div
+              className={cn("h-full", {
+                "opacity-0 absolute pointer-events-none": session.isPending,
+              })}
+              inert={session.isPending}
             >
-              <Link prefetch href="/sign-in">
-                Sign In
-              </Link>
-            </Button>
-            <Button
-              asChild
-              className="border-l border-t-0 border-b-0 border-r-0 px-8 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
-            >
-              <Link
-                prefetch
-                href="/sign-up"
-                aria-label="Sign up and start selling"
+              <Button
+                asChild
+                className="border-l border-t-0 border-b-0 border-r px-8 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
               >
-                Start Selling
-              </Link>
-            </Button>
-          </div>
+                <Link href="/admin" aria-label="Navigate to dashboard">
+                  Dashboard
+                </Link>
+              </Button>
+            </div>
+          ) : (
+            <ul
+              className={cn("hidden lg:flex h-full", {
+                "opacity-0 absolute pointer-events-none": session.isPending,
+              })}
+              inert={session.isPending}
+            >
+              <li>
+                <Button
+                  asChild
+                  variant="secondary"
+                  className="border-l border-t-0 border-b-0 border-r-0 px-8 xl:px-12 h-full rounded-none bg-white hover:bg-custom-accent focus-visible:bg-custom-accent transition-colors text-lg"
+                >
+                  <Link prefetch href="/sign-in">
+                    Sign In
+                  </Link>
+                </Button>
+              </li>
+              <li>
+                <Button
+                  asChild
+                  className="border-l border-t-0 border-b-0 border-r px-8 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
+                >
+                  <Link
+                    prefetch
+                    href="/sign-up"
+                    aria-label="Sign up and start selling"
+                  >
+                    Start Selling
+                  </Link>
+                </Button>
+              </li>
+            </ul>
+          )}
         </nav>
 
         {/* FOR MOBILE */}

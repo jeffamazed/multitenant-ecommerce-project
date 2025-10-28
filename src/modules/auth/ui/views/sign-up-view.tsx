@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { poppins } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { signUpSchema } from "../../schemas";
 import { Eye, EyeOff } from "lucide-react";
@@ -38,12 +38,17 @@ export const SignUpView = () => {
   const router = useRouter();
 
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { mutate: mutateSignUp, isPending: isPendingSigningUp } = useMutation(
     trpc.auth.signUp.mutationOptions({
       onError: (error) => {
         toast.error(error.message);
       },
-      onSuccess: () => router.push("/"),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
+
+        router.push("/");
+      },
     })
   );
 
@@ -71,7 +76,7 @@ export const SignUpView = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4 common-padding"
         >
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 flex-wrap">
             <Link href="/">
               <span className={cn("text-2xl font-semibold", poppins.className)}>
                 Monavo

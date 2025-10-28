@@ -1,6 +1,7 @@
 import { MenuIcon, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   Sheet,
@@ -15,14 +16,15 @@ import { Button } from "@/components/ui/button";
 import { NAVBAR_ITEMS } from "@/lib/constants";
 import TooltipCustom from "@/components/shared/TooltipCustom";
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import useAuth from "@/hooks/use-auth";
 
 export const NavbarSidebar = () => {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState<boolean>(false);
   const isMobile = useIsMobile(1024);
   const pathname = usePathname();
+  const session = useAuth();
 
   useEffect(() => {
     if (!isMobile) setOpen(false);
@@ -93,26 +95,41 @@ export const NavbarSidebar = () => {
                   </li>
                 );
               })}
-              <li className="w-full border-t">
-                <Link
-                  href="/sign-in"
-                  className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
-                  onClick={() => setOpen(false)}
-                >
-                  Sign In
-                </Link>
-              </li>
+              {session.data?.user ? (
+                <li className="w-full border-t">
+                  <Link
+                    href="/admin"
+                    className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
+                    onClick={() => setOpen(false)}
+                    aria-label="Navigate to dashboard"
+                  >
+                    Dashboard
+                  </Link>
+                </li>
+              ) : (
+                <>
+                  <li className="w-full border-t">
+                    <Link
+                      href="/sign-in"
+                      className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
+                      onClick={() => setOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                  </li>
 
-              <li className="w-full">
-                <Link
-                  href="/sign-up"
-                  className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
-                  onClick={() => setOpen(false)}
-                  aria-label="Sign up and start selling"
-                >
-                  Start Selling
-                </Link>
-              </li>
+                  <li className="w-full">
+                    <Link
+                      href="/sign-up"
+                      className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
+                      onClick={() => setOpen(false)}
+                      aria-label="Sign up and start selling"
+                    >
+                      Start Selling
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </ScrollArea>
         </nav>

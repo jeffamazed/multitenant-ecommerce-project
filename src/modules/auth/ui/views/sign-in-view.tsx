@@ -6,8 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import z from "zod";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 import { Controller, useForm } from "react-hook-form";
+import { signInSchema } from "../../schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import AuthBackground from "@/app/assets/img/background.png";
@@ -18,10 +20,8 @@ import { Button } from "@/components/ui/button";
 import { poppins } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { signInSchema } from "../../schemas";
-import { Eye, EyeOff } from "lucide-react";
 import {
   Field,
   FieldError,
@@ -37,12 +37,16 @@ export const SignInView = () => {
   const router = useRouter();
 
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { mutate: mutateSignIn, isPending: isPendingSigningIn } = useMutation(
     trpc.auth.signIn.mutationOptions({
       onError: (error) => {
         toast.error(error.message);
       },
-      onSuccess: () => router.push("/"),
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
+        router.push("/");
+      },
     })
   );
 
@@ -66,7 +70,7 @@ export const SignInView = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4 common-padding"
         >
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 flex-wrap">
             <Link href="/">
               <span className={cn("text-2xl font-semibold", poppins.className)}>
                 Monavo
