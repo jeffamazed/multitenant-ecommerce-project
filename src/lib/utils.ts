@@ -1,6 +1,22 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { NAVBAR_ITEMS } from "./constants";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function isActiveMainNav(href: string, pathname: string) {
+  const excluded = NAVBAR_ITEMS.map((item) => item.href).filter(
+    (item) => item !== "/"
+  );
+
+  let isActive: boolean;
+  // HOME ACTIVE ONLY IF PATHNAME IS NOT IN EXCLUDED
+  if (href === "/")
+    isActive = !excluded.some((path) => pathname.startsWith(path));
+  else isActive = pathname === href || pathname.startsWith(href);
+
+  return isActive;
 }

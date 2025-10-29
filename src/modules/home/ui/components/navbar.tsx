@@ -4,11 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, isActiveMainNav } from "@/lib/utils";
 import { NAVBAR_ITEMS } from "@/lib/constants";
 import { poppins } from "@/lib/fonts";
 
 import { NavbarSidebar } from "./navbar-sidebar";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import useAuth from "@/hooks/use-auth";
 
@@ -55,13 +56,18 @@ export const Navbar = () => {
         >
           {/* MIDDLE NAV */}
           <ul className="items-center gap-2 xl:gap-4 flex">
-            {NAVBAR_ITEMS.map(({ href, children }) => (
-              <li key={href}>
-                <NavbarItem href={href} isActive={pathname === href}>
-                  {children}
-                </NavbarItem>
-              </li>
-            ))}
+            {NAVBAR_ITEMS.map(({ href, children }) => {
+              // EXCLUDED HREF
+              const isActive = isActiveMainNav(href, pathname);
+
+              return (
+                <li key={href}>
+                  <NavbarItem href={href} isActive={isActive}>
+                    {children}
+                  </NavbarItem>
+                </li>
+              );
+            })}
           </ul>
           {session.isPending && (
             <Skeleton className="bg-skeleton h-full max-xl:w-[9.9125rem] w-[11.875rem] rounded-none" />

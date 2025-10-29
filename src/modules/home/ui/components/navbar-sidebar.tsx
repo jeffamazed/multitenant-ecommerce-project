@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { NAVBAR_ITEMS } from "@/lib/constants";
 import TooltipCustom from "@/components/shared/TooltipCustom";
-import { cn } from "@/lib/utils";
+import { cn, isActiveMainNav } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAuth from "@/hooks/use-auth";
 
@@ -78,7 +78,7 @@ export const NavbarSidebar = () => {
           <ScrollArea className="flex flex-col h-full pb-2">
             <ul className="w-full">
               {NAVBAR_ITEMS.map(({ href, children }) => {
-                const isActive = pathname === href;
+                const isActive = isActiveMainNav(href, pathname);
                 return (
                   <li key={href} className="w-full">
                     <Link

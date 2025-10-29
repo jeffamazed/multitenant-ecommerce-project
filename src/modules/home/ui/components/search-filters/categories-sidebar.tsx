@@ -172,7 +172,10 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
                 <li key={category.slug} className="w-full">
                   <button
                     onClick={() => handleCategoryClick(category)}
-                    className="w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center justify-between text-base font-medium focus-visible:bg-black focus-visible:text-white"
+                    className={cn(
+                      "w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center justify-between text-base font-medium focus-visible:bg-black focus-visible:text-white",
+                      isActive && "bg-black text-white"
+                    )}
                     // ARIA
                     aria-haspopup="true"
                     aria-expanded={selectedCategory?.slug === category.slug}

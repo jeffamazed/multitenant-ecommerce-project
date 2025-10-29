@@ -1,5 +1,6 @@
 import { getPayload } from "payload";
 import config from "./payload.config";
+import { DEFAULT_BG_COLOR } from "./modules/home/constants";
 
 const categories = [
   {
@@ -173,7 +174,7 @@ const seed = async () => {
         data: {
           name: category.name,
           slug: category.slug,
-          color: category.color || "#fff",
+          color: category.color || DEFAULT_BG_COLOR,
           parent: null,
         },
       })
