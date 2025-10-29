@@ -9,6 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { SlashIcon } from "lucide-react";
+import { memo } from "react";
 
 interface Props {
   activeCategoryName: string | null;
@@ -16,16 +17,16 @@ interface Props {
   activeSubcategoryName: string | null;
 }
 
-export const BreadcrumbNavigation = ({
+export const BreadcrumbNavigation = memo(function BreadcrumbNavigation({
   activeCategoryName,
   activeCategory,
   activeSubcategoryName,
-}: Props) => {
+}: Props) {
   if (!activeCategoryName || activeCategory === "all") return null;
 
   return (
     <Breadcrumb>
-      <BreadcrumbList className="text-lg text-primary font-medium mt-4">
+      <BreadcrumbList className="text-lg text-primary font-medium common-margin-top">
         {activeSubcategoryName ? (
           <>
             <BreadcrumbItem>
@@ -55,4 +56,4 @@ export const BreadcrumbNavigation = ({
       </BreadcrumbList>
     </Breadcrumb>
   );
-};
+});

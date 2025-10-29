@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -19,7 +20,10 @@ interface Props {
   isActive: boolean;
 }
 
-export const CategoryDropdown = ({ category, isActive }: Props) => {
+export const CategoryDropdown = memo(function CategoryDropdown({
+  category,
+  isActive,
+}: Props) {
   const backgroundColor = category.color || "#f5f5f5";
   const hasNoSubCat = category.subcategories.length === 0;
   const pathname = usePathname();
@@ -107,4 +111,4 @@ export const CategoryDropdown = ({ category, isActive }: Props) => {
       )}
     </NavigationMenuItem>
   );
-};
+});

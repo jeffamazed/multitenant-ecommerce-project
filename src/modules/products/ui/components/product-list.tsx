@@ -13,5 +13,14 @@ export const ProductList = ({ category }: Props) => {
   const { data } = useSuspenseQuery(
     trpc.products.getMany.queryOptions({ category })
   );
-  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      {data?.docs.map((p) => (
+        <article key={p.id} className="border rounded-md bg-white p-4">
+          <h3 className="text-xl font-medium">{p.name}</h3>
+          <p>${p.price}</p>
+        </article>
+      ))}
+    </div>
+  );
 };

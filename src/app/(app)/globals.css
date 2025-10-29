@@ -47,6 +47,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  /* CUSTOM COLORS */
   --color-custom-accent: var(--custom-accent);
   --color-custom-accent-secondary: var(--custom-accent-secondary);
 }
@@ -140,6 +141,10 @@
 }
 
 /* UTILITIES */
+@utility common-margin-top {
+  @apply mt-6 lg:mt-8 xl:mt-10;
+}
+
 @utility common-padding {
   @apply p-6 lg:p-8 xl:p-10;
 }
@@ -177,4 +182,9 @@
 /* SKELETON */
 @utility bg-skeleton {
   @apply bg-zinc-200;
+}
+
+/* SHADCN INPUT */
+@utility custom-shadcn-input {
+  @apply placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input w-full min-w-0 rounded-md border px-3 py-1 text-base transition-[color,box-shadow] outline-none  disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12 bg-white font-medium md:text-base focus-visible:border-ring focus-visible:ring-ring focus-visible:ring-[2px];
 }

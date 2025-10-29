@@ -68,12 +68,7 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
 
   const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
     if (category.subcategories && category.subcategories.length > 0) {
-      setParentCategories(
-        category.subcategories.map((sub) => ({
-          ...sub,
-          subcategories: [], // this matches the expected structure
-        }))
-      );
+      setParentCategories(category.subcategories as CategoriesGetManyOutput);
       setSelectedCategory(category);
     }
   };

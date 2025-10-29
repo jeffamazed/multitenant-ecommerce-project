@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { ChevronDown, ListFilterIcon } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
@@ -24,7 +24,7 @@ import { DEFAULT_BG_COLOR } from "@/modules/home/constants";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-export function SearchFilters() {
+export const SearchFilters = memo(function SearchFilters() {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
 
@@ -221,4 +221,4 @@ export function SearchFilters() {
       </section>
     </>
   );
-}
+});
