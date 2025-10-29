@@ -26,34 +26,31 @@ export const CategoryDropdown = ({ category, isActive }: Props) => {
 
   // FOR CHECKING ARIA CURRENT PARENT HREF
   const parentHref = category.slug === "all" ? "/" : `/${category.slug}`;
-  const isCurrentPage = pathname === parentHref;
+  const isCurrentPageParent = pathname === parentHref;
 
   return (
     <NavigationMenuItem>
       <NavigationMenuTrigger
         asChild
+        // DISABLE ARIA WHEN NO THERE'S NO DROPDOWN
         {...(category.slug !== "all" && category.slug !== "other"
           ? {}
           : { "aria-expanded": undefined, "aria-controls": undefined })}
       >
         <Button
-          asChild
           variant="elevated"
           className={cn(
             "rounded-full! select-none border-transparent hover:border-border bg-transparent hover:bg-white! focus-visible:bg-white! transition-all! focus-visible:ring-0! relative text-base! h-11! px-4! py-2! has-[>svg]:px-3!",
-            "data-[state=open]:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] data-[state=open]:-translate-x-[4px] data-[state=open]:-translate-y-[4px] data-[state=open]:bg-white data-[state=open]:border-border",
+            "data-[state=open]:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] data-[state=open]:-translate-x-[4px] data-[state=open]:-translate-y-[4px] data-[state=open]:bg-white data-[state=open]:border-border cursor-default",
             isActive && "border-border bg-white"
           )}
         >
-          <Link
-            href={parentHref}
-            aria-current={isCurrentPage ? "page" : undefined}
-          >
+          <>
             {category.name}
             {!hasNoSubCat && (
               <ChevronDown className="transition duration-200 group-data-[state=open]:rotate-180" />
             )}
-          </Link>
+          </>
         </Button>
       </NavigationMenuTrigger>
 
@@ -64,9 +61,25 @@ export const CategoryDropdown = ({ category, isActive }: Props) => {
         >
           <div className="overflow-hidden">
             <ul
-              className="text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]! -translate-x-[2px] -translate-y-[2px] rounded-md border-border max-h-[300px] overflow-y-auto overflow-x-hidden max-md:scrollbar-none!"
+              className="text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]! -translate-x-[2px] -translate-y-[2px] rounded-md border-border max-h-[350px] overflow-y-auto overflow-x-hidden max-md:scrollbar-none!"
               style={{ backgroundColor }}
             >
+              {/* PARENT DOMAIN */}
+              <li>
+                <NavigationMenuLink asChild>
+                  <Link
+                    href={parentHref}
+                    aria-current={isCurrentPageParent ? "page" : undefined}
+                    className={cn(
+                      "font-bold nav-product-filter-item",
+                      isCurrentPageParent && "bg-black text-white"
+                    )}
+                  >
+                    {category.name}
+                  </Link>
+                </NavigationMenuLink>
+              </li>
+
               {category.subcategories?.map((subcategory: Category) => {
                 const href = `/${category.slug}/${subcategory.slug}`;
                 const isCurrentPageSubCat = pathname === href;
@@ -78,7 +91,7 @@ export const CategoryDropdown = ({ category, isActive }: Props) => {
                         href={href}
                         aria-current={isCurrentPageSubCat ? "page" : undefined}
                         className={cn(
-                          "w-60 p-4 hover:bg-black! hover:text-white! underline font-medium hover:ring-0 focus-visible:text-white! focus-visible:bg-black! focus-visible:ring-0 cursor-pointer rounded-none! text-base!",
+                          "font-medium nav-product-filter-item",
                           isCurrentPageSubCat && "bg-black text-white"
                         )}
                       >

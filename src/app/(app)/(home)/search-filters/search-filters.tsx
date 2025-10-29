@@ -10,6 +10,7 @@ import { CategoriesSidebar } from "./categories-sidebar";
 
 import {
   NavigationMenu,
+  NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 export function SearchFilters() {
   const trpc = useTRPC();
@@ -125,13 +127,31 @@ export function SearchFilters() {
             onBlurCapture={() => setIsAnyHovered(false)}
           >
             {/* SLICE ONLY FOR VISIBLE ITEMS */}
-            {data.slice(0, visibleCount).map((category, index) => (
-              <CategoryDropdown
-                key={category.id}
-                category={category}
-                isActive={!isAnyHovered && index === activeCategoryIndex}
-              />
-            ))}
+            {data.slice(0, visibleCount).map((category, index) => {
+              return category.subcategories.length > 0 ? (
+                <CategoryDropdown
+                  key={category.id}
+                  category={category}
+                  isActive={!isAnyHovered && index === activeCategoryIndex}
+                />
+              ) : (
+                <NavigationMenuItem asChild key={category.id}>
+                  <Button
+                    asChild
+                    variant="elevated"
+                    className={cn(
+                      "rounded-full! select-none border-transparent hover:border-border bg-transparent hover:bg-white! focus-visible:bg-white! transition-all! focus-visible:ring-0! relative text-base! h-11! px-4! py-2! has-[>svg]:px-3!",
+                      "data-[state=open]:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] data-[state=open]:-translate-x-[4px] data-[state=open]:-translate-y-[4px] data-[state=open]:bg-white data-[state=open]:border-border",
+                      !isAnyHovered &&
+                        index === activeCategoryIndex &&
+                        "border-border bg-white"
+                    )}
+                  >
+                    <Link href={category.slug}>{category.name}</Link>
+                  </Button>
+                </NavigationMenuItem>
+              );
+            })}
 
             {/* VIEW ALL BUTTON */}
             <li className="shrink-0">

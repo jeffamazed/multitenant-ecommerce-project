@@ -164,6 +164,11 @@
   @apply flex items-center justify-center;
 }
 
+/* NAVIGATION PRODUCT FILTER */
+@utility nav-product-filter-item {
+  @apply w-60! p-4! hover:bg-black! hover:text-white! underline! hover:ring-0! focus-visible:text-white! focus-visible:bg-black! focus-visible:ring-0! cursor-pointer! rounded-none! text-base!;
+}
+
 /* NAVBAR MOBILE */
 @utility navbar-items-mobile {
   @apply w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center text-base font-medium focus-visible:bg-black focus-visible:text-white;

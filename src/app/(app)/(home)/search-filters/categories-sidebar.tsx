@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/sheet";
 
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -126,7 +125,7 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
           </SheetDescription>
         </SheetHeader>
 
-        <ScrollArea
+        <div
           className="flex flex-col overflow-y-auto h-full"
           aria-label={
             parentCategories
@@ -202,7 +201,7 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
               );
             })}
           </ul>
-        </ScrollArea>
+        </div>
       </SheetContent>
     </Sheet>
   );
