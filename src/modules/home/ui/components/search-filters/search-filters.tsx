@@ -147,6 +147,7 @@ export function SearchFilters() {
                   })}
                   inert={!mounted}
                 >
+                  {/* TODO: HARDCORE `ALL` LINK LATER*/}
                   {/* SLICE ONLY FOR VISIBLE ITEMS */}
                   {data.slice(0, visibleCount).map((category, index) => {
                     return category.subcategories &&

@@ -8,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { SlashIcon } from "lucide-react";
 
 interface Props {
   activeCategoryName: string | null;
@@ -28,7 +29,7 @@ export const BreadcrumbNavigation = ({
         {activeSubcategoryName ? (
           <>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild className="underline">
+              <BreadcrumbLink asChild>
                 <Link href={`${activeCategory}`}>{activeCategoryName}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
@@ -36,7 +37,7 @@ export const BreadcrumbNavigation = ({
               aria-hidden="true"
               className="pointer-events-none select-none"
             >
-              /
+              <SlashIcon />
             </BreadcrumbSeparator>
             <BreadcrumbItem>
               <BreadcrumbPage className="underline">
