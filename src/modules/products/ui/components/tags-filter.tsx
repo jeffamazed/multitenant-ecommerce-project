@@ -1,0 +1,94 @@
+import { useTRPC } from "@/trpc/client";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { memo, useEffect, useRef } from "react";
+
+import { Checkbox } from "@/components/ui/checkbox";
+
+import { DEFAULT_LIMIT_INFINITE_LOAD } from "@/lib/constants";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
+import { TagsFilterSkeleton } from "./tags-filter-skeleton";
+
+interface TagsFilterProps {
+  value?: string[] | null;
+  onChange: (value: string[]) => void;
+}
+
+export const TagsFilter = memo(function Tagsfilter({
+  value,
+  onChange,
+}: TagsFilterProps) {
+  const loadMoreBtnRef = useRef<null | HTMLButtonElement>(null);
+  const trpc = useTRPC();
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery(
+      trpc.tags.getMany.infiniteQueryOptions(
+        {
+          limit: DEFAULT_LIMIT_INFINITE_LOAD,
+        },
+        {
+          getNextPageParam: (lastPage) => {
+            return lastPage.docs.length > 0 ? lastPage.nextPage : undefined;
+          },
+        }
+      )
+    );
+
+  const pages = data?.pages.flatMap((page) => page.docs) ?? [];
+
+  const onClick = (tag: string) => {
+    if (value?.includes(tag)) {
+      onChange(value?.filter((t) => t !== tag) || []);
+    } else {
+      onChange([...(value || []), tag]);
+    }
+  };
+
+  // move focus back to loadmorebtn
+  useEffect(() => {
+    if (!isFetchingNextPage) {
+      loadMoreBtnRef.current?.focus();
+    }
+  }, [isFetchingNextPage]);
+
+  return (
+    <div className="flex flex-col gap-4" aria-label="Tags filter" role="group">
+      {isLoading ? (
+        <TagsFilterSkeleton />
+      ) : (
+        pages.map((tag) => (
+          <div
+            key={tag.id}
+            className="flex items-center gap-2 cursor-pointer hover:ring hover:ring-ring"
+            onClick={() => onClick(tag.name)}
+          >
+            <Checkbox
+              id={tag.id}
+              checked={value?.includes(tag.name)}
+              onCheckedChange={() => onClick(tag.name)}
+            />
+            <Label htmlFor={tag.id} className="font-medium">
+              {tag.name}
+            </Label>
+          </div>
+        ))
+      )}
+
+      {/* LOADER FETCHING NEXT PAGE */}
+      {isFetchingNextPage && <TagsFilterSkeleton />}
+      {hasNextPage && (
+        <Button
+          type="button"
+          ref={loadMoreBtnRef}
+          disabled={isFetchingNextPage}
+          onClick={() => fetchNextPage()}
+          variant="link"
+          className="text-sm underline text-foreground/80 size-fit p-0.5! border-none mx-auto mt-2"
+        >
+          {isFetchingNextPage ? "Loading more..." : "Load more"}
+        </Button>
+      )}
+    </div>
+  );
+});

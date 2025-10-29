@@ -1,5 +1,4 @@
-import { memo, useEffect, useState } from "react";
-import { useDebounce } from "use-debounce";
+import { memo } from "react";
 import CurrencyInput from "react-currency-input-field";
 
 import { Label } from "@/components/ui/label";
@@ -17,39 +16,24 @@ export const PriceFilter = memo(function PriceFilter({
   onMinPriceChange,
   onMaxPriceChange,
 }: Props) {
-  const [localMin, setLocalMin] = useState(minPrice ?? "");
-  const [localMax, setLocalMax] = useState(maxPrice ?? "");
-
-  // DEBOUNCE BEFORE SYNCING
-  const [debouncedMin] = useDebounce(localMin, 500);
-  const [debouncedMax] = useDebounce(localMax, 500);
-
-  useEffect(() => {
-    if (debouncedMin !== minPrice) onMinPriceChange(debouncedMin);
-  }, [debouncedMin, minPrice, onMinPriceChange]);
-
-  useEffect(() => {
-    if (debouncedMax !== maxPrice) onMaxPriceChange(debouncedMax);
-  }, [debouncedMax, maxPrice, onMaxPriceChange]);
-
   const handlePriceChange = (
-    value: string | undefined,
+    value: string | undefined | null,
     type: "minPrice" | "maxPrice"
   ) => {
-    if (type === "minPrice") setLocalMin(value ?? "");
-    else setLocalMax(value ?? "");
+    if (type === "minPrice") onMinPriceChange(value ?? "");
+    else onMaxPriceChange(value ?? "");
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" aria-label="Price filter" role="group">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="filter-minimum-price" className="font-medium text-base">
+        <Label htmlFor="filter-minimum-price" className="font-medium text-sm">
           Minimum Price
         </Label>
         <CurrencyInput
           id="filter-minimum-price"
           placeholder="$0"
-          defaultValue={localMin}
+          value={minPrice ?? ""}
           decimalsLimit={2}
           onValueChange={(value) => handlePriceChange(value, "minPrice")}
           intlConfig={{ locale: "en-US", currency: "USD" }}
@@ -57,13 +41,13 @@ export const PriceFilter = memo(function PriceFilter({
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="filter-maximum-price" className="font-medium text-base">
+        <Label htmlFor="filter-maximum-price" className="font-medium text-sm">
           Maximum Price
         </Label>
         <CurrencyInput
           id="filter-maximum-price"
           placeholder="∞"
-          defaultValue={localMax}
+          value={maxPrice ?? ""}
           decimalsLimit={2}
           onValueChange={(value) => handlePriceChange(value, "maxPrice")}
           intlConfig={{ locale: "en-US", currency: "USD" }}
