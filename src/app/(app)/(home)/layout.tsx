@@ -19,7 +19,7 @@ const Layout = async ({ children }: Props) => {
   void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions());
 
   return (
-    <div className="flex flex-col min-h-dvh overflow-x-hidden">
+    <div className="flex flex-col min-h-dvh">
       <Navbar />
 
       <main className="flex-1 bg-zinc-100">

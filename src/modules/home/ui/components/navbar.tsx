@@ -42,10 +42,10 @@ export const Navbar = () => {
   const pathname = usePathname();
   const session = useAuth();
   return (
-    <header className="border-b sticky top-0 bg-white z-50">
-      <div className="max-container h-18 flex items-center w-full justify-between gap-6 xl:gap-8 overflow-x-auto">
+    <header className="border-b sticky top-0 left-0 bg-white z-50 w-full h-18">
+      <div className="common-padding-x max-container size-full flex items-center justify-between gap-6 xl:gap-8 overflow-x-auto">
         {/* MAIN LINK */}
-        <Link href="/" className="ml-6 lg:ml-8">
+        <Link href="/">
           <span className={cn("text-4xl font-semibold", poppins.className)}>
             Monavo
           </span>
