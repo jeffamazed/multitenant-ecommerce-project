@@ -53,14 +53,14 @@ export const TagsFilter = memo(function Tagsfilter({
   }, [isFetchingNextPage]);
 
   return (
-    <div className="flex flex-col gap-4" aria-label="Tags filter" role="group">
+    <div className="flex flex-col" aria-label="Tags filter" role="group">
       {isLoading ? (
         <TagsFilterSkeleton />
       ) : (
         pages.map((tag) => (
           <div
             key={tag.id}
-            className="flex items-center gap-2 cursor-pointer hover:ring hover:ring-ring"
+            className="flex items-center gap-2 cursor-pointer hover:bg-black hover:text-white rounded-xs transition-colors duration-75 py-2"
             onClick={() => onClick(tag.name)}
           >
             <Checkbox
@@ -68,7 +68,7 @@ export const TagsFilter = memo(function Tagsfilter({
               checked={value?.includes(tag.name)}
               onCheckedChange={() => onClick(tag.name)}
             />
-            <Label htmlFor={tag.id} className="font-medium">
+            <Label htmlFor={tag.id} className="font-medium cursor-pointer">
               {tag.name}
             </Label>
           </div>

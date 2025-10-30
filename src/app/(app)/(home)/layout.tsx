@@ -22,7 +22,7 @@ const Layout = async ({ children }: Props) => {
     <div className="flex flex-col min-h-dvh">
       <Navbar />
 
-      <main className="flex-1 bg-zinc-100">
+      <main className="flex-1 bg-zinc-100 overflow-x-hidden">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <Suspense fallback={<SearchSectionSkeleton />}>
             <SearchFilters />

@@ -55,7 +55,7 @@ export const Navbar = () => {
           className="h-full hidden lg:flex items-center gap-6 xl:gap-8 font-medium bg-white w-full justify-between"
         >
           {/* MIDDLE NAV */}
-          <ul className="items-center gap-2 xl:gap-4 flex">
+          <ul className="items-center gap-1 xl:gap-4 flex">
             {NAVBAR_ITEMS.map(({ href, children }) => {
               // EXCLUDED HREF
               const isActive = isActiveMainNav(href, pathname);
@@ -83,7 +83,7 @@ export const Navbar = () => {
             >
               <Button
                 asChild
-                className="border-l border-t-0 border-b-0 border-r px-8 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
+                className="border-l border-t-0 border-b-0 border-r px-6 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
               >
                 <Link href="/admin" aria-label="Navigate to dashboard">
                   Dashboard
@@ -101,7 +101,7 @@ export const Navbar = () => {
                 <Button
                   asChild
                   variant="secondary"
-                  className="border-l border-t-0 border-b-0 border-r-0 px-8 xl:px-12 h-full rounded-none bg-white hover:bg-custom-accent focus-visible:bg-custom-accent transition-colors text-lg"
+                  className="border-l border-t-0 border-b-0 border-r-0 px-6 xl:px-12 h-full rounded-none bg-white hover:bg-custom-accent focus-visible:bg-custom-accent transition-colors text-lg"
                 >
                   <Link prefetch href="/sign-in">
                     Sign In
@@ -127,7 +127,7 @@ export const Navbar = () => {
         </nav>
 
         {/* FOR MOBILE */}
-        <div className="flex lg:hidden items-center justify-center mr-6 ml-auto">
+        <div className="flex lg:hidden items-center justify-center">
           <NavbarSidebar />
         </div>
       </div>

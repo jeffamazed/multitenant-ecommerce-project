@@ -141,6 +141,10 @@
 }
 
 /* UTILITIES */
+@utility common-gap {
+  @apply gap-6 lg:gap-8 xl:gap-10;
+}
+
 @utility common-margin-top {
   @apply mt-6 lg:mt-8 xl:mt-10;
 }
@@ -195,4 +199,15 @@
 /* SHADCN INPUT */
 @utility custom-shadcn-input {
   @apply placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input w-full min-w-0 rounded-md border px-3 py-1 text-base transition-[color,box-shadow] outline-none  disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-12 bg-white font-medium md:text-base focus-visible:border-ring focus-visible:ring-ring focus-visible:ring-[2px];
+}
+
+/* SHADCN ELEVATED BUTTON */
+@utility custom-shadcn-button-product {
+  @apply transition-all duration-100 ease-out
+    hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+    focus-visible:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+    focus-visible:ring-0
+    focus-visible:border-border
+    active:shadow-none
+    focus-within:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)];
 }
