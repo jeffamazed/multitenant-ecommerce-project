@@ -44,10 +44,6 @@ export const Users: CollectionConfig = {
     },
     {
       ...defaultTenantArrayField,
-      admin: {
-        ...(defaultTenantArrayField?.admin || {}),
-        position: "sidebar",
-      },
     },
   ],
 };
