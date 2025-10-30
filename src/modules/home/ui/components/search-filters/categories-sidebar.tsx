@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon, X } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Sparkles, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
@@ -37,6 +37,7 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
   const [selectedCategory, setSelectedCategory] = useState<
     CategoriesGetManyOutput[1] | null
   >(null);
+
   const pathname = usePathname();
 
   const handleOpenChange = useCallback(
@@ -149,6 +150,29 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
           )}
 
           <ul className="w-full">
+            {/* TOP LEVEL PARENT CATEGORY */}
+            {selectedCategory && (
+              <li key={selectedCategory.slug} className="w-full">
+                <Link
+                  href={`/${selectedCategory.slug}`}
+                  onClick={() => handleOpenChange(false)}
+                  aria-current={
+                    pathname === `/${selectedCategory.slug}`
+                      ? "page"
+                      : undefined
+                  }
+                  className={cn(
+                    "w-full text-left px-6 py-4 hover:bg-black hover:text-white flex items-center gap-2 text-base font-bold focus-visible:bg-black focus-visible:text-white underline",
+                    pathname === `/${selectedCategory.slug}` &&
+                      "bg-black text-white"
+                  )}
+                >
+                  {selectedCategory.name}
+                  <Sparkles className="size-4" />
+                </Link>
+              </li>
+            )}
+
             {/* CATEGORIES TO DISPLAY WHETHER IT'S A CATEGORY OR SUBCATEGORY */}
             {currentCategories.map((category) => {
               const hasSubCategory = category.subcategories?.length > 0;

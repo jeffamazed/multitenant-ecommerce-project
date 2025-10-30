@@ -1,6 +1,6 @@
 import { memo } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Sparkles } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { Category } from "@/payload-types";
@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
+import { DEFAULT_BG_COLOR } from "@/modules/home/constants";
 
 interface Props {
   category: CategoriesGetManyOutput[1];
@@ -24,7 +25,7 @@ export const CategoryDropdown = memo(function CategoryDropdown({
   category,
   isActive,
 }: Props) {
-  const backgroundColor = category.color || "#f5f5f5";
+  const backgroundColor = category.color || DEFAULT_BG_COLOR;
   const hasNoSubCat = category.subcategories.length === 0;
   const pathname = usePathname();
 
@@ -75,11 +76,11 @@ export const CategoryDropdown = memo(function CategoryDropdown({
                     href={parentHref}
                     aria-current={isCurrentPageParent ? "page" : undefined}
                     className={cn(
-                      "font-bold nav-product-filter-item",
+                      "font-bold nav-product-filter-item flex items-center flex-row gap-2",
                       isCurrentPageParent && "bg-black text-white"
                     )}
                   >
-                    {category.name}
+                    {category.name} <Sparkles className="size-4 text-inherit" />
                   </Link>
                 </NavigationMenuLink>
               </li>

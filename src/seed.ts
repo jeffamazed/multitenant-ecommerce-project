@@ -138,10 +138,12 @@ const categories = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const retryCreate = async (fn: () => Promise<any>, retries = 3) => {
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       if (
         err.errorLabels?.includes("TransientTransactionError") &&
@@ -158,6 +160,35 @@ const retryCreate = async (fn: () => Promise<any>, retries = 3) => {
 
 const seed = async () => {
   const payload = await getPayload({ config });
+
+  console.log("Creating admin account...");
+  // Create admin tenant
+  const adminTenant = await payload.create({
+    collection: "tenants",
+    data: {
+      name: "admin",
+      slug: "admin",
+      stripeAccountId: "admin",
+    },
+  });
+  console.log("Admin tenant created!");
+
+  // Create admin user
+  await payload.create({
+    collection: "users",
+    data: {
+      email: "admin@demo.com",
+      password: "Demo123!@#",
+      roles: ["super-admin"],
+      username: "admin",
+      tenants: [
+        {
+          tenant: adminTenant.id,
+        },
+      ],
+    },
+  });
+  console.log("Admin user created!");
 
   // Clear the collection first (safe for dev)
   console.log("Clearing categories collection...");

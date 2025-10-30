@@ -15,7 +15,8 @@ import {
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 
-import PlaceholderImage from "@/app/assets/img/plageholder.png";
+import ProductPlaceholder from "@/app/assets/img/product_placeholder.png";
+import AvatarPlaceholderSmall from "@/app/assets/img/avatar_placeholder_small.png";
 
 interface ProductCardProps {
   id: string;
@@ -54,7 +55,8 @@ export const ProductCard = memo(function ProductCard({
               <Image
                 alt={name}
                 fill
-                src={imageUrl || PlaceholderImage}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                src={imageUrl || ProductPlaceholder}
                 placeholder="blur"
                 className="object-cover"
               />
@@ -74,15 +76,14 @@ export const ProductCard = memo(function ProductCard({
               onClick={() => {}}
             >
               <span>
-                {authorImageUrl && (
-                  <Image
-                    alt={`${authorUsername}'s avatar`}
-                    src={authorImageUrl}
-                    width={16}
-                    height={16}
-                    className="rounded-full border shrink-0 size-[16px]"
-                  />
-                )}
+                <Image
+                  alt={`${authorUsername}'s avatar`}
+                  src={authorImageUrl || AvatarPlaceholderSmall}
+                  width={16}
+                  height={16}
+                  className="rounded-full border shrink-0 size-[16px]"
+                  placeholder="blur"
+                />
                 <span className="text-sm font-medium">
                   <span className="sr-only">View profile page of </span>
                   {authorUsername}

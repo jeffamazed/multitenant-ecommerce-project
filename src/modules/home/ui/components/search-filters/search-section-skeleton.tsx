@@ -1,12 +1,14 @@
+import { SearchIcon } from "lucide-react";
+
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SearchIcon } from "lucide-react";
+import { DEFAULT_BG_COLOR } from "@/modules/home/constants";
 
 export const SearchSectionSkeleton = () => {
   return (
     <div
       className="flex-cent border-b"
-      style={{ backgroundColor: "oklch(0.98 0.01 237)" }}
+      style={{ backgroundColor: DEFAULT_BG_COLOR }}
     >
       <div className="max-container common-padding">
         <h1 className="text-center text-2xl md:text-3xl mb-6 lg:mb-8 font-semibold">
