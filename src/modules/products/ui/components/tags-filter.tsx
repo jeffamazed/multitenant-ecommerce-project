@@ -83,8 +83,8 @@ export const TagsFilter = memo(function Tagsfilter({
           ref={loadMoreBtnRef}
           disabled={isFetchingNextPage}
           onClick={() => fetchNextPage()}
-          variant="link"
-          className="text-sm underline text-foreground/80 size-fit p-0.5! border-none mx-auto mt-2"
+          variant="customLink"
+          className="text-sm text-foreground/80 mx-auto mt-2"
         >
           {isFetchingNextPage ? "Loading more..." : "Load more"}
         </Button>

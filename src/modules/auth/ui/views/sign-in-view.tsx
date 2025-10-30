@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import z from "zod";
@@ -27,21 +27,24 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
 } from "@/components/ui/field";
 
 type SignInSchemaType = z.infer<typeof signInSchema>;
 
 export const SignInView = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const router = useRouter();
-
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const { mutate: mutateSignIn, isPending: isPendingSigningIn } = useMutation(
+  const { mutate: mutateSignIn } = useMutation(
     trpc.auth.signIn.mutationOptions({
       onError: (error) => {
         toast.error(error.message);
+        setIsPending(false);
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
@@ -49,6 +52,10 @@ export const SignInView = () => {
       },
     })
   );
+
+  // FOR FOCUSING FIRST INPUT
+  const firstInputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => firstInputRef.current?.focus(), []);
 
   const form = useForm<SignInSchemaType>({
     mode: "onChange",
@@ -60,6 +67,7 @@ export const SignInView = () => {
   });
 
   const onSubmit = (values: SignInSchemaType) => {
+    setIsPending(true);
     mutateSignIn(values);
   };
 
@@ -77,12 +85,7 @@ export const SignInView = () => {
               </span>
             </Link>
 
-            <Button
-              asChild
-              variant="link"
-              size="sm"
-              className="text-base border-none underline"
-            >
+            <Button asChild variant="customLink" size="sm">
               <Link href="/sign-up">Sign Up</Link>
             </Button>
           </div>
@@ -91,77 +94,86 @@ export const SignInView = () => {
             Welcome back to Monavo
           </h1>
 
-          <FieldGroup className="gap-4">
-            {/* EMAIL */}
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field>
-                  <FieldLabel htmlFor="sign-in-email" className="text-base">
-                    Email
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="sign-in-email"
-                    type="email"
-                    disabled={isPendingSigningIn}
-                    aria-invalid={fieldState.invalid}
-                    required
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            {/* PASSWORD */}
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field>
-                  <FieldLabel htmlFor="sign-in-password" className="text-base">
-                    Password
-                  </FieldLabel>
-                  <div className="relative">
+          <FieldSet>
+            <FieldLegend className="sr-only">
+              Sign In Credentials Information
+            </FieldLegend>
+            <FieldGroup className="gap-4">
+              {/* EMAIL */}
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel htmlFor="sign-in-email" className="text-base">
+                      Email
+                    </FieldLabel>
                     <Input
                       {...field}
-                      id="sign-in-password"
-                      type={showPassword ? "text" : "password"}
-                      disabled={isPendingSigningIn}
+                      id="sign-in-email"
+                      type="email"
+                      disabled={isPending}
+                      aria-invalid={fieldState.invalid}
                       required
+                      ref={firstInputRef}
                     />
-                    {/* SHOW PASSWORD BUTTON */}
-                    <Button
-                      variant="ghost"
-                      type="button"
-                      size="icon-sm"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 border-none rounded-full bg-transparent hover:bg-black hover:text-white"
-                      onMouseDown={(e) => e.preventDefault()} // <-- keeps input focused
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      aria-label={
-                        showPassword ? "Hide password" : "Show password"
-                      }
-                      aria-pressed={showPassword}
-                      disabled={isPendingSigningIn}
-                    >
-                      {showPassword ? (
-                        <Eye className="size-5" />
-                      ) : (
-                        <EyeOff className="size-5" />
-                      )}
-                    </Button>
-                  </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
 
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
+              {/* PASSWORD */}
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel
+                      htmlFor="sign-in-password"
+                      className="text-base"
+                    >
+                      Password
+                    </FieldLabel>
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        id="sign-in-password"
+                        type={showPassword ? "text" : "password"}
+                        disabled={isPending}
+                        required
+                      />
+                      {/* SHOW PASSWORD BUTTON */}
+                      <Button
+                        variant="ghost"
+                        type="button"
+                        size="icon-sm"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 border-none rounded-full bg-transparent hover:bg-black hover:text-white"
+                        onMouseDown={(e) => e.preventDefault()} // <-- keeps input focused
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                        aria-pressed={showPassword}
+                        disabled={isPending}
+                      >
+                        {showPassword ? (
+                          <Eye className="size-5" />
+                        ) : (
+                          <EyeOff className="size-5" />
+                        )}
+                      </Button>
+                    </div>
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
 
           {/* SUBMIT BUTTON */}
           <Button
@@ -169,9 +181,9 @@ export const SignInView = () => {
             size="lg"
             variant="elevated"
             className="bg-black text-white hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black mt-4"
-            disabled={isPendingSigningIn}
+            disabled={isPending}
           >
-            {isPendingSigningIn ? "Signing In..." : "Sign In"}
+            {isPending ? "Signing In..." : "Sign In"}
           </Button>
         </form>
       </div>

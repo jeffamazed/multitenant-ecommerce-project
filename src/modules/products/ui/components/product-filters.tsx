@@ -61,9 +61,8 @@ export const ProductFilters = memo(function ProductFilters() {
         <h3 className="font-medium text-lg">Product Filters</h3>
         {hasAnyFilters && (
           <Button
-            variant="link"
+            variant="customLink"
             size="sm"
-            className="text-sm size-fit underline border-none p-0.5!"
             type="button"
             onClick={onClear}
           >

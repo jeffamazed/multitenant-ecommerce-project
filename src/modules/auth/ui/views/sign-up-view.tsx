@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import z from "zod";
@@ -28,21 +28,24 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
 } from "@/components/ui/field";
 
 type SignUpSchemaType = z.infer<typeof signUpSchema>;
 
 export const SignUpView = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const router = useRouter();
-
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const { mutate: mutateSignUp, isPending: isPendingSigningUp } = useMutation(
+  const { mutate: mutateSignUp } = useMutation(
     trpc.auth.signUp.mutationOptions({
       onError: (error) => {
         toast.error(error.message);
+        setIsPending(false);
       },
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
@@ -51,6 +54,10 @@ export const SignUpView = () => {
       },
     })
   );
+
+  // FOR FOCUSING FIRST INPUT
+  const firstInputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => firstInputRef.current?.focus(), []);
 
   const form = useForm<SignUpSchemaType>({
     mode: "onChange",
@@ -63,6 +70,7 @@ export const SignUpView = () => {
   });
 
   const onSubmit = (values: SignUpSchemaType) => {
+    setIsPending(true);
     mutateSignUp(values);
   };
 
@@ -83,12 +91,7 @@ export const SignUpView = () => {
               </span>
             </Link>
 
-            <Button
-              asChild
-              variant="link"
-              size="sm"
-              className="text-base border-none underline"
-            >
+            <Button asChild variant="customLink">
               <Link href="/sign-in">Sign In</Link>
             </Button>
           </div>
@@ -97,113 +100,125 @@ export const SignUpView = () => {
             Join 1,000+ creators making money doing what they love on Monavo
           </h1>
 
-          <FieldGroup className="gap-4">
-            {/* USERNAME */}
-            <Controller
-              name="username"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field>
-                  <FieldLabel className="text-base" htmlFor="sign-up-username">
-                    Username
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="sign-up-username"
-                    type="text"
-                    disabled={isPendingSigningUp}
-                    aria-invalid={fieldState.invalid}
-                    required
-                  />
-                  {/* TODO: USE PROPER METHOD TO SHOW SHOP URL */}
-                  <FieldDescription
-                    className={cn(
-                      "hidden",
-                      username && !fieldState.invalid && "block"
-                    )}
-                    aria-label={`Your store will be available at ${username} dot shop dot com.`}
-                  >
-                    Your store will be available at&nbsp;
-                    <strong>{username}</strong>.shop.com
-                  </FieldDescription>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            {/* EMAIL */}
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field>
-                  <FieldLabel htmlFor="sign-up-email" className="text-base">
-                    Email
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="sign-up-email"
-                    type="email"
-                    disabled={isPendingSigningUp}
-                    aria-invalid={fieldState.invalid}
-                    required
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            {/* PASSWORD */}
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field>
-                  <FieldLabel htmlFor="sign-up-password" className="text-base">
-                    Password
-                  </FieldLabel>
-                  <div className="relative">
+          <FieldSet>
+            <FieldLegend className="sr-only">
+              Sign Up Account Information
+            </FieldLegend>
+            <FieldGroup className="gap-4">
+              {/* USERNAME */}
+              <Controller
+                name="username"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel
+                      className="text-base"
+                      htmlFor="sign-up-username"
+                    >
+                      Username
+                    </FieldLabel>
                     <Input
                       {...field}
-                      id="sign-up-password"
-                      type={showPassword ? "text" : "password"}
-                      disabled={isPendingSigningUp}
+                      id="sign-up-username"
+                      type="text"
+                      disabled={isPending}
+                      aria-invalid={fieldState.invalid}
+                      required
+                      ref={firstInputRef}
+                    />
+                    {/* TODO: USE PROPER METHOD TO SHOW SHOP URL */}
+                    <FieldDescription
+                      className={cn(
+                        "hidden",
+                        username && !fieldState.invalid && "block"
+                      )}
+                      aria-label={`Your store will be available at ${username} dot shop dot com.`}
+                    >
+                      Your store will be available at&nbsp;
+                      <strong>{username}</strong>.shop.com
+                    </FieldDescription>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              {/* EMAIL */}
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel htmlFor="sign-up-email" className="text-base">
+                      Email
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="sign-up-email"
+                      type="email"
+                      disabled={isPending}
                       aria-invalid={fieldState.invalid}
                       required
                     />
-                    {/* SHOW PASSWORD BUTTON */}
-                    <Button
-                      variant="ghost"
-                      type="button"
-                      size="icon-sm"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 border-none rounded-full bg-transparent hover:bg-black hover:text-white"
-                      onMouseDown={(e) => e.preventDefault()} // <-- keeps input focused
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      aria-label={
-                        showPassword ? "Hide password" : "Show password"
-                      }
-                      aria-pressed={showPassword}
-                      disabled={isPendingSigningUp}
-                    >
-                      {showPassword ? (
-                        <Eye className="size-5" />
-                      ) : (
-                        <EyeOff className="size-5" />
-                      )}
-                    </Button>
-                  </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
 
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </FieldGroup>
+              {/* PASSWORD */}
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel
+                      htmlFor="sign-up-password"
+                      className="text-base"
+                    >
+                      Password
+                    </FieldLabel>
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        id="sign-up-password"
+                        type={showPassword ? "text" : "password"}
+                        disabled={isPending}
+                        aria-invalid={fieldState.invalid}
+                        required
+                      />
+                      {/* SHOW PASSWORD BUTTON */}
+                      <Button
+                        variant="ghost"
+                        type="button"
+                        size="icon-sm"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 border-none rounded-full bg-transparent hover:bg-black hover:text-white"
+                        onMouseDown={(e) => e.preventDefault()} // <-- keeps input focused
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                        aria-pressed={showPassword}
+                        disabled={isPending}
+                      >
+                        {showPassword ? (
+                          <Eye className="size-5" />
+                        ) : (
+                          <EyeOff className="size-5" />
+                        )}
+                      </Button>
+                    </div>
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
 
           {/* SUBMIT BUTTON */}
           <Button
@@ -211,9 +226,9 @@ export const SignUpView = () => {
             size="lg"
             variant="elevated"
             className="bg-black text-white hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black mt-4"
-            disabled={isPendingSigningUp}
+            disabled={isPending}
           >
-            {isPendingSigningUp ? "Creating Account..." : "Create Account"}
+            {isPending ? "Creating Account..." : "Create Account"}
           </Button>
         </form>
       </div>
