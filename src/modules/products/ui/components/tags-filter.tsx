@@ -1,12 +1,13 @@
-import { useTRPC } from "@/trpc/client";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { memo, useEffect, useRef } from "react";
 
-import { Checkbox } from "@/components/ui/checkbox";
+import { useTRPC } from "@/trpc/client";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
+import { Checkbox } from "@/components/ui/checkbox";
 import { DEFAULT_LIMIT_INFINITE_LOAD } from "@/lib/constants";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 
 import { TagsFilterSkeleton } from "./tags-filter-skeleton";
 
@@ -51,6 +52,16 @@ export const TagsFilter = memo(function Tagsfilter({
       loadMoreBtnRef.current?.focus();
     }
   }, [isFetchingNextPage]);
+
+  if (pages.length === 0) {
+    return (
+      <EmptyPlaceholder
+        Heading="h5"
+        headingContent="Nothing's here..."
+        content="No tags available"
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col" aria-label="Tags filter" role="group">

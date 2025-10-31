@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 
 import { useProductsFilters } from "../../hooks/use-product-filter";
 import { ProductCard } from "./product-card";
-import { EmptyProductList } from "./empty-product-list";
 import { ProductCardSkeleton } from "./product-card-skeleton";
+import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 
 interface Props {
   category?: string;
@@ -53,7 +53,13 @@ export const ProductList = ({ category, tenantSlug }: Props) => {
   );
 
   if (pages.length === 0) {
-    return <EmptyProductList />;
+    return (
+      <EmptyPlaceholder
+        Heading="h3"
+        headingContent="It's empty here..."
+        content="No products found"
+      />
+    );
   }
 
   return (
