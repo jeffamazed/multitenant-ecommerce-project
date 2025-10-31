@@ -105,7 +105,7 @@ export const SearchFilters = memo(function SearchFilters() {
         style={{ backgroundColor: activeCategoryColor }}
       >
         <div className="max-container common-padding">
-          <h1 className="text-center text-2xl md:text-3xl mb-6 lg:mb-8 font-semibold">
+          <h1 className="text-center mb-6 lg:mb-8 font-semibold">
             One Platform. Every Store. Seamlessly.
           </h1>
 

@@ -138,6 +138,9 @@
   button {
     @apply cursor-pointer;
   }
+  h1 {
+    @apply text-2xl lg:text-3xl xl:text-4xl font-medium;
+  }
 }
 
 /* UTILITIES */
@@ -179,6 +182,11 @@
 
 @utility flex-cent {
   @apply flex items-center justify-center;
+}
+
+/* TYPOGRAPHY */
+@utility common-heading-span {
+  @apply text-xl xl:text-2xl;
 }
 
 /* NAVIGATION PRODUCT FILTER */

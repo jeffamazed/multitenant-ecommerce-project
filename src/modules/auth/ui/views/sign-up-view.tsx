@@ -96,7 +96,7 @@ export const SignUpView = () => {
             </Button>
           </div>
 
-          <h1 className="text-3xl lg:text-4xl font-medium mb-4">
+          <h1 className="mb-4">
             Join 1,000+ creators making money doing what they love on Monavo
           </h1>
 

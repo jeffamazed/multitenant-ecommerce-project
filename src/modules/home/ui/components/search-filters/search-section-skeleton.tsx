@@ -11,7 +11,7 @@ export const SearchSectionSkeleton = () => {
       style={{ backgroundColor: DEFAULT_BG_COLOR }}
     >
       <div className="max-container common-padding">
-        <h1 className="text-center text-2xl md:text-3xl mb-6 lg:mb-8 font-semibold">
+        <h1 className="text-center mb-6 lg:mb-8 font-semibold">
           One Platform. Every Store. Seamlessly.
         </h1>
         <div className="flex items-center gap-2 w-full max-w-3xl mx-auto">

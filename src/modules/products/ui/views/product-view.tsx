@@ -31,8 +31,8 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
   );
 
   return (
-    <div className="common-padding">
-      <div className="border rounded-sm bg-white overflow-hidden">
+    <div className="common-padding max-container">
+      <article className="border rounded-sm bg-white overflow-hidden">
         <div className="relative border-b aspect-[1.5] md:aspect-[2] lg:aspect-[2.5] xl:aspect-[3.2]">
           <Image
             src={data.cover?.url || ProductPlaceholderLarge}
@@ -49,9 +49,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
           <div className="col-span-4">
             {/* PRODUCT'S NAME */}
             <div className="p-6 flex items-center border-b">
-              <h2 className="text-2xl lg:text-3xl xl:text-4xl font-medium">
-                {data.name}
-              </h2>
+              <h1>{data.name}</h1>
             </div>
 
             <div className="flex border-b">
@@ -71,7 +69,6 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
               <div className="py-4 px-6 flex flex-cent lg:border-r">
                 <Link
                   href={generateTenantURL(tenantSlug)}
-                  className="flex items-center gap-2 flex-wrap"
                   aria-label={`Visit tenant of ${data.tenant.name}`}
                 >
                   <Image
@@ -79,7 +76,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                     alt={`${data.tenant.name}'s avatar`}
                     width={20}
                     height={20}
-                    className="rounded-full border shrink-0 size-[20px]"
+                    className="rounded-full inline align-middle mr-2 border shrink-0 size-[20px]"
                   />
                   <span className="text-base underline font-medium">
                     {data.tenant.name}
@@ -134,8 +131,8 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                 </div>
 
                 {/* REFUND POLICY */}
-                <p className="text-center font-medium">
-                  <strong>
+                <p className="text-center">
+                  <strong className="italic">
                     {data.refundPolicy === "no-refunds"
                       ? "No refunds"
                       : `${data.refundPolicy} money back guarantee`}
@@ -145,12 +142,12 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
 
               {/* RATINGS OVERVIEW */}
               {/* TODO: EDIT RATINGS OVERVIEW WITH REAL DATA LATER */}
-              <div className="px-6 py-4">
+              <aside className="px-6 py-4">
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <h3 className="text-xl font-medium">
+                  <h2 className="text-xl font-medium">
                     Ratings Overview{" "}
                     <span className="sr-only">of {data.name}</span>
-                  </h3>
+                  </h2>
                   <span className="flex items-center gap-2 flex-wrap">
                     <span
                       className="flex items-center gap-0.5"
@@ -197,11 +194,11 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                     </div>
                   ))}
                 </dl>
-              </div>
+              </aside>
             </div>
           </div>
         </div>
-      </div>
+      </article>
     </div>
   );
 };

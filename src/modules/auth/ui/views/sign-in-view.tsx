@@ -90,9 +90,7 @@ export const SignInView = () => {
             </Button>
           </div>
 
-          <h1 className="text-3xl lg:text-4xl font-medium mb-4">
-            Welcome back to Monavo
-          </h1>
+          <h1 className="mb-4">Welcome back to Monavo</h1>
 
           <FieldSet>
             <FieldLegend className="sr-only">

@@ -101,7 +101,7 @@ export const ProductCard = memo(function ProductCard({
                   height={16}
                   className="rounded-full border shrink-0 size-[16px]"
                 />
-                <span className="text-sm font-medium">
+                <span className="text-sm font-medium whitespace-normal line-clamp-1">
                   <span className="sr-only">Visit tenant of </span>
                   {tenantSlug}
                 </span>

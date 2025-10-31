@@ -32,7 +32,8 @@ export function generateTenantURL(tenantSlug: string) {
   return `/tenants/${tenantSlug}`;
 }
 
-export function formatCurrency(value: number | string) {
+export function formatCurrency(value: number | string | undefined) {
+  if (!value) return;
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
