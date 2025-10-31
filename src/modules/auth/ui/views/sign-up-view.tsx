@@ -238,7 +238,7 @@ export const SignUpView = () => {
           src={AuthBackground}
           alt="People in cartoon style"
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="80vw"
           priority
           placeholder="blur"
           className="object-cover"

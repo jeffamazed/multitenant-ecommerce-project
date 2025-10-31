@@ -13,7 +13,7 @@ export const ProductCardSkeleton = () => {
     <Card className="border-none p-0 gap-0 rounded-md">
       <CardHeader className="p-0 gap-0">
         <AspectRatio className="relative w-full" ratio={1}>
-          <Skeleton className="size-full bg-skeleton" />
+          <Skeleton className="size-full bg-skeleton rounded-b-none" />
         </AspectRatio>
         <CardTitle className="flex py-2 px-4 h-16 overflow-ellipsis">
           <Skeleton className="bg-skeleton size-full" />
