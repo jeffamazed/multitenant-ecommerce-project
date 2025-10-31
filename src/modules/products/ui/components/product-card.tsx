@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { memo } from "react";
+import React, { memo } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { StarIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, generateTenantURL } from "@/lib/utils";
 
 import {
   Card,
@@ -22,8 +25,8 @@ interface ProductCardProps {
   id: string;
   name: string;
   imageUrl?: string | null;
-  authorUsername: string;
-  authorImageUrl: string | null;
+  tenantSlug: string;
+  tenantImageUrl: string | null | undefined;
   reviewRating: number;
   reviewCount: number;
   price: number;
@@ -33,12 +36,22 @@ export const ProductCard = memo(function ProductCard({
   id,
   name,
   imageUrl,
-  authorUsername,
-  authorImageUrl,
+  tenantSlug,
+  tenantImageUrl,
   reviewRating,
   reviewCount,
   price,
 }: ProductCardProps) {
+  const router = useRouter();
+
+  const handleUserNavigation = (
+    e: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(generateTenantURL(tenantSlug));
+  };
+
   return (
     <Link
       href={`/products/${id}`}
@@ -67,29 +80,33 @@ export const ProductCard = memo(function ProductCard({
               </h3>
             </CardTitle>
           </CardHeader>
-          {/* TODO: REDIRECT TO USER SHOP */}
+
           <CardContent className="px-4 border-b pb-2">
             <Button
               asChild
               variant="customLink"
               tabIndex={0}
-              onClick={() => {}}
+              onClick={handleUserNavigation}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleUserNavigation(e);
+              }}
+              role="link"
             >
               <span>
                 <Image
-                  alt={`${authorUsername}'s avatar`}
-                  src={authorImageUrl || AvatarPlaceholderSmall}
+                  alt={`${tenantSlug}'s avatar`}
+                  src={tenantImageUrl || AvatarPlaceholderSmall}
                   width={16}
                   height={16}
                   className="rounded-full border shrink-0 size-[16px]"
-                  placeholder="blur"
                 />
                 <span className="text-sm font-medium">
                   <span className="sr-only">View profile page of </span>
-                  {authorUsername}
+                  {tenantSlug}
                 </span>
               </span>
             </Button>
+
             {reviewCount > 0 && (
               <span className="flex items-center gap-0.5 mt-1 w-fit">
                 <StarIcon className="size-3.5 fill-black" />

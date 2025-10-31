@@ -6,7 +6,7 @@ import { TRPCReactProvider } from "@/trpc/client";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { dmSans } from "@/lib/fonts";
-import { ToasterCustom } from "@/components/shared/ToasterCustom";
+import { ToasterCustom } from "@/components/shared/toaster-custom";
 
 export const metadata: Metadata = {
   title: "Monavo",

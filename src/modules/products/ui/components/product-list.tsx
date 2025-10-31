@@ -15,16 +15,22 @@ import { ProductCardSkeleton } from "./product-card-skeleton";
 
 interface Props {
   category?: string;
+  tenantSlug?: string;
 }
 
-export const ProductList = ({ category }: Props) => {
+export const ProductList = ({ category, tenantSlug }: Props) => {
   const loadMoreBtnRef = useRef<null | HTMLButtonElement>(null);
   const [filters] = useProductsFilters();
   const trpc = useTRPC();
   const { data, hasNextPage, isFetchingNextPage, isLoading, fetchNextPage } =
     useSuspenseInfiniteQuery(
       trpc.products.getMany.infiniteQueryOptions(
-        { category, ...filters, limit: DEFAULT_LIMIT_INFINITE_LOAD },
+        {
+          category,
+          tenantSlug,
+          ...filters,
+          limit: DEFAULT_LIMIT_INFINITE_LOAD,
+        },
         {
           getNextPageParam: (lastPage) => {
             return lastPage.docs.length > 0 ? lastPage.nextPage : undefined;
@@ -61,8 +67,8 @@ export const ProductList = ({ category }: Props) => {
                 id={p.id}
                 name={p.name}
                 imageUrl={p.image?.url}
-                authorUsername="jeffamazed"
-                authorImageUrl={null}
+                tenantSlug={p.tenant.slug}
+                tenantImageUrl={p.tenant.image?.url}
                 reviewRating={3}
                 reviewCount={5}
                 price={p.price}
@@ -72,7 +78,7 @@ export const ProductList = ({ category }: Props) => {
         {/* LOADER FETCHING NEXT PAGE */}
         {isFetchingNextPage && skeletons}
       </div>
-      <div className="w-full flex-cent mt-8">
+      <div className="w-full flex-cent">
         {hasNextPage && (
           <Button
             type="button"
@@ -80,7 +86,7 @@ export const ProductList = ({ category }: Props) => {
             disabled={isFetchingNextPage}
             onClick={() => fetchNextPage()}
             variant="elevated"
-            className="text-sm"
+            className="text-sm mt-8"
           >
             {isFetchingNextPage
               ? "Loading more products..."

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useAuth from "@/hooks/use-auth";
 import Link from "next/link";
-import TooltipCustom from "@/components/shared/TooltipCustom";
+import TooltipCustom from "@/components/shared/tooltip-custom";
 
 interface Props {
   disabled?: boolean;

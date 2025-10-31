@@ -6,24 +6,34 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { loadProductFilters } from "@/modules/products/search-params";
 import { ProductListView } from "@/modules/products/ui/views/product-list-view";
 import { DEFAULT_LIMIT_INFINITE_LOAD } from "@/lib/constants";
+import { Suspense } from "react";
+import { SearchFilters } from "@/modules/home/ui/components/search-filters/search-filters";
+import { SearchSectionSkeleton } from "@/modules/home/ui/components/search-filters/search-section-skeleton";
 
 interface Props {
   searchParams: Promise<SearchParams>;
 }
 
 const HomePage = async ({ searchParams }: Props) => {
+  const queryClient = getQueryClient();
   const filters = await loadProductFilters(searchParams);
 
-  const queryClient = getQueryClient();
-  void queryClient.prefetchInfiniteQuery(
-    trpc.products.getMany.infiniteQueryOptions({
-      ...filters,
-      limit: DEFAULT_LIMIT_INFINITE_LOAD,
-    })
-  );
+  // Using void
+  void Promise.all([
+    queryClient.prefetchQuery(trpc.categories.getMany.queryOptions()),
+    queryClient.prefetchInfiniteQuery(
+      trpc.products.getMany.infiniteQueryOptions({
+        ...filters,
+        limit: DEFAULT_LIMIT_INFINITE_LOAD,
+      })
+    ),
+  ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense fallback={<SearchSectionSkeleton />}>
+        <SearchFilters />
+      </Suspense>
       <ProductListView />
     </HydrationBoundary>
   );

@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
-import TooltipCustom from "@/components/shared/TooltipCustom";
+import TooltipCustom from "@/components/shared/tooltip-custom";
 
 interface Props {
   open: boolean;

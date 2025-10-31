@@ -14,7 +14,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { NAVBAR_ITEMS } from "@/lib/constants";
-import TooltipCustom from "@/components/shared/TooltipCustom";
+import TooltipCustom from "@/components/shared/tooltip-custom";
 import { cn, isActiveMainNav } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useAuth from "@/hooks/use-auth";
