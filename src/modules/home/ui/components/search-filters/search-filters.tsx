@@ -146,6 +146,7 @@ export const SearchFilters = memo(function SearchFilters() {
                     "sr-only": !mounted,
                   })}
                   inert={!mounted}
+                  aria-hidden={!mounted}
                 >
                   {/* TODO: HARDCORE `ALL` LINK LATER*/}
                   {/* SLICE ONLY FOR VISIBLE ITEMS */}

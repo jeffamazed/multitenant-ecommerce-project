@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 
 import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import AvatarPlaceholderSmall from "@/app/assets/img/avatar_placeholder_small.png";
+import { MAX_PRODUCT_RATING } from "@/lib/constants";
 
 interface ProductCardProps {
   id: string;
@@ -115,7 +116,7 @@ export const ProductCard = memo(function ProductCard({
                 </span>
                 {/* FOR SR USERS */}
                 <span className="sr-only">
-                  {`This product has ${reviewCount} reviews and a rating of ${reviewRating} out of 5.`}
+                  {`This product has an overall rating of ${reviewRating} out of ${MAX_PRODUCT_RATING} and a total rating of ${reviewCount}`}
                 </span>
               </span>
             )}

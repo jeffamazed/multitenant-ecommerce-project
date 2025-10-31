@@ -17,6 +17,8 @@ import TooltipCustom from "@/components/shared/tooltip-custom";
 import { Progress } from "@/components/ui/progress";
 import { MAX_PRODUCT_RATING } from "@/lib/constants";
 
+import { CartButton } from "../components/cart-button";
+
 interface Props {
   productId: string;
   tenantSlug: string;
@@ -111,12 +113,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
             <div className="border-t lg:border-t-0 lg:border-l h-full">
               <div className="flex flex-col gap-4 px-6 py-4 border-b">
                 <div className="flex items-center gap-2">
-                  <Button
-                    className="flex-1 bg-custom-accent"
-                    variant="elevated"
-                  >
-                    Add to cart
-                  </Button>
+                  <CartButton productId={productId} tenantSlug={tenantSlug} />
 
                   <TooltipCustom
                     trigger={

@@ -7,6 +7,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import AvatarPlaceholder from "@/app/assets/img/avatar_placeholder_small.png";
 import { generateTenantURL } from "@/lib/utils";
+import { CheckoutButton } from "@/modules/checkout/ui/components/checkout-button";
 
 interface Props {
   slug: string;
@@ -18,7 +19,7 @@ export const Navbar = ({ slug }: Props) => {
 
   return (
     <header className="border-b sticky top-0 left-0 bg-white z-50 w-full h-18">
-      <nav className="common-padding-x max-container size-full flex items-center overflow-x-auto">
+      <nav className="common-padding-x max-container size-full flex justify-between items-center overflow-x-auto gap-4">
         <Link
           href={generateTenantURL(slug)}
           className="flex items-center gap-2"
@@ -33,6 +34,8 @@ export const Navbar = ({ slug }: Props) => {
           />
           <h1 className="text-2xl">{data.name}</h1>
         </Link>
+
+        <CheckoutButton tenantSlug={slug} />
       </nav>
     </header>
   );
