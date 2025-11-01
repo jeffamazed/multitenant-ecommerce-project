@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { cn, isActiveMainNav } from "@/lib/utils";
-import { NAVBAR_ITEMS } from "@/lib/constants";
+import { NAVBAR_ITEMS } from "@/modules/products/constants";
 import { poppins } from "@/lib/fonts";
 
 import { NavbarSidebar } from "./navbar-sidebar";

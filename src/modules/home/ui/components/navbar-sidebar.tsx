@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { NAVBAR_ITEMS } from "@/lib/constants";
+import { NAVBAR_ITEMS } from "@/modules/products/constants";
 import TooltipCustom from "@/components/shared/tooltip-custom";
 import { cn, isActiveMainNav } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";

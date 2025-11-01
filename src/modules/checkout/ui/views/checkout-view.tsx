@@ -1,10 +1,11 @@
 "use client";
 
 import { toast } from "sonner";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { generateTenantURL } from "@/lib/utils";
 
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
@@ -13,39 +14,81 @@ import { CheckoutItem } from "../components/checkout-item";
 import { useCart } from "../../hooks/use-cart";
 import { CheckoutSidebar } from "../components/checkout-sidebar";
 import { CheckoutItemSkeleton } from "../components/checkout-item-skeleton";
+import { useCheckoutStates } from "../../hooks/use-checkout-states";
 
 interface Props {
   tenantSlug: string;
 }
 
 export const CheckoutView = ({ tenantSlug }: Props) => {
-  const { productIds, clearAllCarts, removeProduct } = useCart(tenantSlug);
+  const router = useRouter();
+  const [checkoutStates, setCheckoutStates] = useCheckoutStates();
+  const [isLoadingLocal, setIsLoadingLocal] = useState<boolean>(false);
+  const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
 
   const trpc = useTRPC();
-  const { data, error, isLoading } = useQuery(
+  const {
+    data,
+    error,
+    isLoading: isLoadingData,
+  } = useQuery(
     trpc.checkout.getProducts.queryOptions({
       ids: productIds,
     })
   );
 
-  // CLEAR LOCALSTORAGE WHEN ITEMS CONFLICTED
+  const purchase = useMutation(
+    trpc.checkout.purchase.mutationOptions({
+      onMutate: () => {
+        // RESET THE STATE FIRST
+        setCheckoutStates({ success: false, cancel: false });
+      },
+      onSuccess: (data) => {
+        // REDIRECT TO STRIPE CHECKOUT PAGE
+        window.location.href = data.url;
+      },
+      onError: (error) => {
+        setIsLoadingLocal(false);
+        toast.error(error.message);
+        if (error.data?.code === "UNAUTHORIZED") {
+          // TODO: MODIFY WHEN SUBDOMAINS ENABLED
+          router.push("/sign-in");
+        }
+      },
+    })
+  );
+
+  useEffect(() => {
+    if (checkoutStates.success) {
+      clearCart();
+      // TODO: INVALIDATE LIBRARY LATER
+      // TODO: ROUTER PUSH QUESTIONABLE
+      router.push("/products");
+    }
+  }, [checkoutStates.success, clearCart, router]);
+
+  // CLEAR LOCALSTORAGE FOR THIS TENANT WHEN ITEMS CONFLICTED
   useEffect(() => {
     if (!error) return;
 
     if (error.data?.code === "NOT_FOUND") {
-      clearAllCarts();
+      clearCart();
       toast.warning(
         "Your cart contained unavailable items and has been refreshed."
       );
     }
-  }, [clearAllCarts, error]);
+  }, [clearCart, error]);
 
   const onRemoveProduct = useCallback(
     (productId: string) => removeProduct(productId),
     [removeProduct]
   );
 
-  const handleOnCheckout = useCallback(() => {}, []);
+  const handleOnPurchase = useCallback(() => {
+    setIsLoadingLocal(true);
+    purchase.mutate({ tenantSlug, productIds });
+  }, [productIds, tenantSlug, purchase]);
+
   const skeletons = [...Array(3)].map((_, i, arr) => (
     <CheckoutItemSkeleton
       key={i}
@@ -63,7 +106,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
           <h2 className="text-xl md:text-2xl mb-4 font-medium">
             Review Your Items
           </h2>
-          {isLoading ? (
+          {isLoadingData ? (
             skeletons
           ) : data?.totalDocs === 0 ? (
             <EmptyPlaceholder
@@ -99,10 +142,10 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
           </h2>
           <CheckoutSidebar
             total={data?.totalPrice}
-            onCheckout={handleOnCheckout}
-            isCanceled={false}
-            isPending={isLoading}
-            isLoading={isLoading}
+            onPurchase={handleOnPurchase}
+            disabled={purchase.isPending || isLoadingLocal}
+            isLoading={isLoadingData}
+            isCanceled={checkoutStates.cancel}
           />
         </aside>
       </div>

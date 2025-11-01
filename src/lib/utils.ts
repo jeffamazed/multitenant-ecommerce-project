@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-import { NAVBAR_ITEMS } from "./constants";
+import { NAVBAR_ITEMS } from "@/modules/products/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

@@ -6,17 +6,17 @@ import { CircleXIcon } from "lucide-react";
 
 interface Props {
   total: number | undefined;
-  onCheckout: () => void;
+  onPurchase: () => void;
   isCanceled?: boolean;
-  isPending?: boolean;
+  disabled?: boolean;
   isLoading: boolean;
 }
 
 export const CheckoutSidebar = ({
   total,
-  onCheckout,
+  onPurchase,
   isCanceled,
-  isPending,
+  disabled,
   isLoading,
 }: Props) => {
   return (
@@ -35,9 +35,9 @@ export const CheckoutSidebar = ({
       <div className="p-4">
         <Button
           variant="elevated"
-          disabled={isPending}
+          disabled={disabled}
           size="lg"
-          onClick={onCheckout}
+          onClick={onPurchase}
           className="text-base text-white bg-primary w-full hover:bg-custom-accent hover:text-primary focus-visible:bg-custom-accent focus-visible:text-primary"
         >
           Checkout
@@ -46,9 +46,12 @@ export const CheckoutSidebar = ({
 
       {isCanceled && (
         <div className="p-4 border-t">
-          <Alert variant="destructive" className="rounded-md bg-destructive/30">
+          <Alert
+            variant="destructive"
+            className="rounded-md bg-destructive/30 overflow-hidden"
+          >
             <AlertTitle className="flex items-center gap-2">
-              <CircleXIcon className="size-5! stroke-red-600" />
+              <CircleXIcon className="size-6! stroke-red-100 fill-red-600" />
               <h3 className="text-red-600 text-lg">Checkout Error!</h3>
             </AlertTitle>
             <AlertDescription>
