@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Trash2Icon } from "lucide-react";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn, formatCurrency } from "@/lib/utils";
@@ -81,9 +82,10 @@ export const CheckoutItem = ({
           variant="customLink"
           aria-label={`Remove product ${name}`}
           onClick={() => onRemove(id)}
-          className="text-sm lg:text-base"
+          className="text-sm lg:text-base text-red-600 self-end"
         >
-          Remove
+          <Trash2Icon className="size-5 md:hidden" />
+          <span className="max-md:sr-only">Remove</span>
         </Button>
       </div>
     </article>

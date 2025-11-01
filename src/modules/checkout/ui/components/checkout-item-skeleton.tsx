@@ -34,7 +34,7 @@ export const CheckoutItemSkeleton = ({
 
       <div className="py-2 sm:py-4 flex flex-col justify-between">
         <Skeleton className="bg-skeleton w-10 h-6 self-end" />
-        <Skeleton className="bg-skeleton w-16 h-6" />
+        <Skeleton className="bg-skeleton w-6 md:w-16 h-6 self-end" />
       </div>
     </div>
   );

@@ -40,7 +40,8 @@ export const ProductCard = memo(function ProductCard({
         "border rounded-md bg-white overflow-hidden block",
         "custom-shadcn-button-product"
       )}
-      aria-label={`Visit product page of ${name}`}
+      aria-label={`View product ${name}`}
+      prefetch
     >
       <article>
         <Card className="border-none p-0 gap-0">

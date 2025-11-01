@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { generateTenantURL } from "@/lib/utils";
 
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
@@ -15,6 +15,7 @@ import { useCart } from "../../hooks/use-cart";
 import { CheckoutSidebar } from "../components/checkout-sidebar";
 import { CheckoutItemSkeleton } from "../components/checkout-item-skeleton";
 import { useCheckoutStates } from "../../hooks/use-checkout-states";
+import { CheckoutSuccess } from "../components/checkout-success";
 
 interface Props {
   tenantSlug: string;
@@ -26,6 +27,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
   const [isLoadingLocal, setIsLoadingLocal] = useState<boolean>(false);
   const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
 
+  const queryClient = useQueryClient();
   const trpc = useTRPC();
   const {
     data,
@@ -61,11 +63,16 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
   useEffect(() => {
     if (checkoutStates.success) {
       clearCart();
-      // TODO: INVALIDATE LIBRARY LATER
-      // TODO: ROUTER PUSH QUESTIONABLE
-      router.push("/products");
+
+      queryClient.invalidateQueries(trpc.library.getMany.infiniteQueryFilter());
     }
-  }, [checkoutStates.success, clearCart, router]);
+  }, [
+    checkoutStates.success,
+    clearCart,
+    queryClient,
+    router,
+    trpc.library.getMany,
+  ]);
 
   // CLEAR LOCALSTORAGE FOR THIS TENANT WHEN ITEMS CONFLICTED
   useEffect(() => {
@@ -86,6 +93,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
 
   const handleOnPurchase = useCallback(() => {
     setIsLoadingLocal(true);
+
     purchase.mutate({ tenantSlug, productIds });
   }, [productIds, tenantSlug, purchase]);
 
@@ -99,58 +107,64 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
 
   return (
     <div className="max-container common-padding">
-      <h1 className="common-margin-bottom">Complete Your Purchase</h1>
+      {checkoutStates.success ? (
+        <CheckoutSuccess />
+      ) : (
+        <>
+          <h1 className="common-margin-bottom">Complete Your Purchase</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-10 common-gap">
-        <section className="md:col-span-6">
-          <h2 className="text-xl md:text-2xl mb-4 font-medium">
-            Review Your Items
-          </h2>
-          {isLoadingData ? (
-            skeletons
-          ) : data?.totalDocs === 0 ? (
-            <EmptyPlaceholder
-              Heading="h3"
-              headingContent="No items here..."
-              content="There's no item to checkout"
-            />
-          ) : (
-            <ul className="">
-              {data?.docs.map((p, i) => (
-                <li key={p.id}>
-                  <CheckoutItem
-                    id={p.id}
-                    isLast={i === data.docs.length - 1}
-                    isFirst={i === 0}
-                    imageUrl={p.image?.url}
-                    name={p.name}
-                    productUrl={`${generateTenantURL(p.tenant.slug)}/products/${p.id}`}
-                    tenantUrl={generateTenantURL(p.tenant.slug)}
-                    tenantName={p.tenant.name}
-                    price={p.price}
-                    onRemove={onRemoveProduct}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
+          <div className="common-grid-setup">
+            <section className="md:col-span-6">
+              <h2 className="text-xl md:text-2xl mb-4 font-medium">
+                Review Your Items
+              </h2>
+              {isLoadingData ? (
+                skeletons
+              ) : data?.totalDocs === 0 ? (
+                <EmptyPlaceholder
+                  Heading="h3"
+                  headingContent="No items here..."
+                  content="There's no item to checkout"
+                />
+              ) : (
+                <ul className="">
+                  {data?.docs.map((p, i) => (
+                    <li key={p.id}>
+                      <CheckoutItem
+                        id={p.id}
+                        isLast={i === data.docs.length - 1}
+                        isFirst={i === 0}
+                        imageUrl={p.image?.url}
+                        name={p.name}
+                        productUrl={`${generateTenantURL(p.tenant.slug)}/products/${p.id}`}
+                        tenantUrl={generateTenantURL(p.tenant.slug)}
+                        tenantName={p.tenant.name}
+                        price={p.price}
+                        onRemove={onRemoveProduct}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
 
-        <aside className="md:col-span-4 ">
-          <div className="md:sticky top-24 lg:top-26 xl:top-28">
-            <h2 className="text-xl md:text-2xl mb-4 font-medium text-right">
-              Order Summary
-            </h2>
-            <CheckoutSidebar
-              total={data?.totalPrice}
-              onPurchase={handleOnPurchase}
-              disabled={purchase.isPending || isLoadingLocal}
-              isLoading={isLoadingData}
-              isCanceled={checkoutStates.cancel}
-            />
+            <aside className="md:col-span-4">
+              <div className="md:sticky top-24 lg:top-26 xl:top-28">
+                <h2 className="text-xl md:text-2xl mb-4 font-medium text-right">
+                  Order Summary
+                </h2>
+                <CheckoutSidebar
+                  total={data?.totalPrice}
+                  onPurchase={handleOnPurchase}
+                  disabled={purchase.isPending || isLoadingLocal}
+                  isLoading={isLoadingData}
+                  isCanceled={checkoutStates.cancel}
+                />
+              </div>
+            </aside>
           </div>
-        </aside>
-      </div>
+        </>
+      )}
     </div>
   );
 };

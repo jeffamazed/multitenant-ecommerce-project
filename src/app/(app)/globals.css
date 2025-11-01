@@ -130,7 +130,7 @@
     @apply border-border outline-ring/50 scrollbar-thin scrollbar-thumb-black scrollbar-thumb-rounded-full scrollbar-hover:scrollbar-thumb-black/90;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-clip;
   }
   a {
     @apply focus-visible:ring-ring focus-visible:ring-[2px] focus-visible:outline-0;
@@ -170,6 +170,10 @@
 
 @utility common-padding-y {
   @apply py-6 lg:py-8 xl:py-10;
+}
+
+@utility common-grid-setup {
+  @apply grid grid-cols-1 md:grid-cols-10 common-gap;
 }
 
 @utility chk {

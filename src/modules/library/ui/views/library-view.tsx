@@ -31,6 +31,7 @@ export const LibraryView = () => {
         </header>
 
         <section className="common-padding max-container">
+          <h2 className="sr-only">Your Product List</h2>
           <Suspense fallback={<ProductListSkeleton />}>
             <ProductList />
           </Suspense>
