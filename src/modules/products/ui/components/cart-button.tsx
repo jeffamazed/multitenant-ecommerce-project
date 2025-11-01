@@ -1,24 +1,26 @@
-import { useEffect, useState } from "react";
 import { SquarePlusIcon, SquareX } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/modules/checkout/hooks/use-cart";
-import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 interface Props {
   tenantSlug: string;
   productId: string;
   productName: string;
+  isPurchased?: boolean;
 }
 
-export const CartButton = ({ tenantSlug, productId, productName }: Props) => {
-  const [mounted, setMounted] = useState<boolean>(false);
+export const CartButton = ({
+  tenantSlug,
+  productId,
+  productName,
+  isPurchased,
+}: Props) => {
   const { isProductInCart, toggleProduct } = useCart(tenantSlug);
   const productInCart = isProductInCart(productId);
-
-  useEffect(() => setMounted(true), []);
 
   const handleClick = () => {
     toggleProduct(productId);
@@ -26,29 +28,34 @@ export const CartButton = ({ tenantSlug, productId, productName }: Props) => {
     if (!productInCart) toast.success(`${productName} added to cart.`);
   };
 
-  return (
-    <>
-      {!mounted && <Skeleton className="bg-skeleton h-12 flex-1" />}
-      <Button
-        className={cn("flex-1 transition-colors duration-75", {
-          "bg-custom-accent": !productInCart,
-          "bg-destructive": productInCart,
-          "loading-state": !mounted,
-        })}
-        variant="elevated"
-        onClick={handleClick}
-        aria-pressed={productInCart}
-        // disabling focus when not mounted
-        inert={!mounted}
-        tabIndex={!mounted ? -1 : 0}
-      >
-        {productInCart ? (
-          <SquareX className="size-5" />
-        ) : (
-          <SquarePlusIcon className="size-5" />
-        )}
-        {productInCart ? "Remove from cart" : "Add to cart"}
-      </Button>
-    </>
+  return isPurchased ? (
+    <Button
+      variant="elevated"
+      asChild
+      className={cn(
+        "flex-1 hover:bg-custom-accent focus-visible:bg-custom-accent"
+      )}
+    >
+      <Link prefetch href={`/library/${productId}`}>
+        View in library
+      </Link>
+    </Button>
+  ) : (
+    <Button
+      className={cn("flex-1", {
+        "bg-custom-accent": !productInCart,
+        "bg-destructive": productInCart,
+      })}
+      variant="elevated"
+      onClick={handleClick}
+      aria-pressed={productInCart}
+    >
+      {productInCart ? (
+        <SquareX className="size-5" />
+      ) : (
+        <SquarePlusIcon className="size-5" />
+      )}
+      {productInCart ? "Remove from cart" : "Add to cart"}
+    </Button>
   );
 };

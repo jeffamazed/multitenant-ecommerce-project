@@ -3,20 +3,12 @@
 import Link from "next/link";
 import React, { memo } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { StarIcon } from "lucide-react";
 
-import { cn, formatCurrency, generateTenantURL } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
 
 import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import AvatarPlaceholderSmall from "@/app/assets/img/avatar_placeholder_small.png";
@@ -30,7 +22,6 @@ interface ProductCardProps {
   tenantImageUrl: string | null | undefined;
   reviewRating: number;
   reviewCount: number;
-  price: number;
 }
 
 export const ProductCard = memo(function ProductCard({
@@ -41,21 +32,10 @@ export const ProductCard = memo(function ProductCard({
   tenantImageUrl,
   reviewRating,
   reviewCount,
-  price,
 }: ProductCardProps) {
-  const router = useRouter();
-
-  const handleUserNavigation = (
-    e: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
-    router.push(generateTenantURL(tenantSlug));
-  };
-
   return (
     <Link
-      href={`${generateTenantURL(tenantSlug)}/products/${id}`}
+      href={`library/${id}`}
       className={cn(
         "border rounded-md bg-white overflow-hidden block",
         "custom-shadcn-button-product"
@@ -83,30 +63,18 @@ export const ProductCard = memo(function ProductCard({
           </CardHeader>
 
           <CardContent className="px-4 border-b pb-2">
-            <Button
-              asChild
-              variant="customLink"
-              tabIndex={0}
-              onClick={handleUserNavigation}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleUserNavigation(e);
-              }}
-              role="link"
-            >
-              <span>
-                <Image
-                  alt={`${tenantSlug}'s avatar`}
-                  src={tenantImageUrl || AvatarPlaceholderSmall}
-                  width={16}
-                  height={16}
-                  className="rounded-full border shrink-0 size-[16px]"
-                />
-                <span className="text-sm font-medium whitespace-normal line-clamp-1">
-                  <span className="sr-only">Visit tenant of </span>
-                  {tenantSlug}
-                </span>
+            <span className="flex items-center gap-2">
+              <Image
+                alt={`${tenantSlug}'s avatar`}
+                src={tenantImageUrl || AvatarPlaceholderSmall}
+                width={16}
+                height={16}
+                className="rounded-full border shrink-0 size-[16px]"
+              />
+              <span className="text-sm font-medium whitespace-normal line-clamp-1">
+                {tenantSlug}
               </span>
-            </Button>
+            </span>
 
             {reviewCount > 0 && (
               <span className="flex items-center gap-0.5 mt-1 w-fit">
@@ -121,15 +89,6 @@ export const ProductCard = memo(function ProductCard({
               </span>
             )}
           </CardContent>
-
-          <CardFooter className="px-4 py-2">
-            <p className="px-2 py-1 border bg-custom-accent w-fit">
-              <span className="text-sm font-medium">
-                <span className="sr-only">This product has a price of </span>
-                {formatCurrency(price)}
-              </span>
-            </p>
-          </CardFooter>
         </Card>
       </article>
     </Link>

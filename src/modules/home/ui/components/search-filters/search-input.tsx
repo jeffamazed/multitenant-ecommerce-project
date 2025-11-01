@@ -73,9 +73,12 @@ export const SearchInput = ({ disabled, isMobile }: Props) => {
               className="select-none bg-white h-12 min-w-12 shrink-0"
               asChild
             >
-              <Link href="/library">
+              <Link prefetch href="/library">
                 <BookmarkCheckIcon className="size-4.5" />
-                <span className="max-md:sr-only">Library</span>
+                <span className="max-md:sr-only">
+                  <span className="sr-only">Visit</span>
+                  Library
+                </span>
               </Link>
             </Button>
           }

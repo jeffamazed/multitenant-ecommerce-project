@@ -114,6 +114,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                     productId={productId}
                     tenantSlug={tenantSlug}
                     productName={data.name}
+                    isPurchased={data.isPurchased}
                   />
 
                   <TooltipCustom
@@ -135,13 +136,15 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                 </div>
 
                 {/* REFUND POLICY */}
-                <p className="text-center">
-                  <strong className="italic">
-                    {data.refundPolicy === "no-refunds"
-                      ? "No refunds"
-                      : `${data.refundPolicy} money back guarantee`}
-                  </strong>
-                </p>
+                {!data.isPurchased && (
+                  <p className="text-center">
+                    <strong className="italic">
+                      {data.refundPolicy === "no-refunds"
+                        ? "No refunds"
+                        : `${data.refundPolicy} money back guarantee`}
+                    </strong>
+                  </p>
+                )}
               </div>
 
               {/* RATINGS OVERVIEW */}

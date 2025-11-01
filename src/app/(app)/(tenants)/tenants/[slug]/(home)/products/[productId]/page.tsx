@@ -16,6 +16,11 @@ const ProductPage = async ({ params }: Props) => {
       slug,
     })
   );
+  void queryClient.prefetchQuery(
+    trpc.products.getOne.queryOptions({
+      id: productId,
+    })
+  );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

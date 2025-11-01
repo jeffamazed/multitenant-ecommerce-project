@@ -7,28 +7,18 @@ import { useTRPC } from "@/trpc/client";
 import { DEFAULT_LIMIT_INFINITE_LOAD } from "@/lib/constants";
 
 import { Button } from "@/components/ui/button";
-
-import { useProductsFilters } from "../../hooks/use-product-filter";
-import { ProductCard } from "./product-card";
-import { ProductCardSkeleton } from "./product-card-skeleton";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
 
-interface Props {
-  category?: string;
-  tenantSlug?: string;
-}
+import { ProductCardSkeleton } from "./product-card-skeleton";
+import { ProductCard } from "./product-card";
 
-export const ProductList = ({ category, tenantSlug }: Props) => {
+export const ProductList = () => {
   const loadMoreBtnRef = useRef<null | HTMLButtonElement>(null);
-  const [filters] = useProductsFilters();
   const trpc = useTRPC();
   const { data, hasNextPage, isFetchingNextPage, isLoading, fetchNextPage } =
     useSuspenseInfiniteQuery(
-      trpc.products.getMany.infiniteQueryOptions(
+      trpc.library.getMany.infiniteQueryOptions(
         {
-          category,
-          tenantSlug,
-          ...filters,
           limit: DEFAULT_LIMIT_INFINITE_LOAD,
         },
         {
@@ -64,12 +54,13 @@ export const ProductList = ({ category, tenantSlug }: Props) => {
 
   return (
     <>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
         {isLoading
           ? skeletons
           : pages.map((p) => (
               <li key={p.id} className="block">
                 <ProductCard
+                  key={p.id}
                   id={p.id}
                   name={p.name}
                   imageUrl={p.image?.url}
@@ -77,7 +68,6 @@ export const ProductList = ({ category, tenantSlug }: Props) => {
                   tenantImageUrl={p.tenant.image?.url}
                   reviewRating={3}
                   reviewCount={5}
-                  price={p.price}
                 />
               </li>
             ))}

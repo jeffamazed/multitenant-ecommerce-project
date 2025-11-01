@@ -1,11 +1,5 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const ProductCardSkeleton = () => {
@@ -23,10 +17,6 @@ export const ProductCardSkeleton = () => {
         <Skeleton className="bg-skeleton w-20 h-5" />
         <Skeleton className="bg-skeleton w-14 h-5" />
       </CardContent>
-
-      <CardFooter className="px-4 py-2">
-        <Skeleton className="bg-skeleton w-14 h-8 rounded-none" />
-      </CardFooter>
     </Card>
   );
 };
