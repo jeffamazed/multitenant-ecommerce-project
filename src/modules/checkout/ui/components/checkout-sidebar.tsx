@@ -35,7 +35,7 @@ export const CheckoutSidebar = ({
       <div className="p-4">
         <Button
           variant="elevated"
-          disabled={disabled}
+          disabled={disabled || isLoading}
           size="lg"
           onClick={onPurchase}
           className="text-base text-white bg-primary w-full hover:bg-custom-accent hover:text-primary focus-visible:bg-custom-accent focus-visible:text-primary"
