@@ -42,7 +42,7 @@ export const CheckoutButton = ({ className, tenantSlug }: Props) => {
           >
             <Link href={`${generateTenantURL(tenantSlug)}/checkout`}>
               <ShoppingCartIcon className="size-5" />
-              {totalItems > 0 ? totalItems : ""}
+              {totalItems > 0 ? `(${totalItems})` : ""}
             </Link>
           </Button>
         }

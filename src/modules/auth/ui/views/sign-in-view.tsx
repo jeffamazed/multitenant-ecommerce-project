@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import z from "zod";
@@ -53,10 +53,6 @@ export const SignInView = () => {
     })
   );
 
-  // FOR FOCUSING FIRST INPUT
-  const firstInputRef = useRef<HTMLInputElement | null>(null);
-  useEffect(() => firstInputRef.current?.focus(), []);
-
   const form = useForm<SignInSchemaType>({
     mode: "onChange",
     resolver: zodResolver(signInSchema),
@@ -86,7 +82,7 @@ export const SignInView = () => {
             </Link>
 
             <Button asChild variant="customLink" size="sm">
-              <Link href="/sign-up">Sign Up</Link>
+              <Link href="/sign-up">Sign up</Link>
             </Button>
           </div>
 
@@ -113,7 +109,6 @@ export const SignInView = () => {
                       disabled={isPending}
                       aria-invalid={fieldState.invalid}
                       required
-                      ref={firstInputRef}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -181,7 +176,7 @@ export const SignInView = () => {
             className="bg-black text-white hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black mt-4"
             disabled={isPending}
           >
-            {isPending ? "Signing In..." : "Sign In"}
+            {isPending ? "Signing in..." : "Sign in"}
           </Button>
         </form>
       </div>

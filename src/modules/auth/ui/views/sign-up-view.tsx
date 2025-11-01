@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import z from "zod";
@@ -55,10 +55,6 @@ export const SignUpView = () => {
     })
   );
 
-  // FOR FOCUSING FIRST INPUT
-  const firstInputRef = useRef<HTMLInputElement | null>(null);
-  useEffect(() => firstInputRef.current?.focus(), []);
-
   const form = useForm<SignUpSchemaType>({
     mode: "onChange",
     resolver: zodResolver(signUpSchema),
@@ -92,7 +88,7 @@ export const SignUpView = () => {
             </Link>
 
             <Button asChild variant="customLink">
-              <Link href="/sign-in">Sign In</Link>
+              <Link href="/sign-in">Sign in</Link>
             </Button>
           </div>
 
@@ -124,7 +120,6 @@ export const SignUpView = () => {
                       disabled={isPending}
                       aria-invalid={fieldState.invalid}
                       required
-                      ref={firstInputRef}
                     />
                     {/* TODO: USE PROPER METHOD TO SHOW SHOP URL */}
                     <FieldDescription
@@ -228,7 +223,7 @@ export const SignUpView = () => {
             className="bg-black text-white hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black mt-4"
             disabled={isPending}
           >
-            {isPending ? "Creating Account..." : "Create Account"}
+            {isPending ? "Creating account..." : "Create account"}
           </Button>
         </form>
       </div>

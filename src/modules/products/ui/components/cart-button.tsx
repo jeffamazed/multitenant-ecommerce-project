@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { SquarePlusIcon, SquareX } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,14 +10,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface Props {
   tenantSlug: string;
   productId: string;
+  productName: string;
 }
 
-export const CartButton = ({ tenantSlug, productId }: Props) => {
+export const CartButton = ({ tenantSlug, productId, productName }: Props) => {
   const [mounted, setMounted] = useState<boolean>(false);
   const { isProductInCart, toggleProduct } = useCart(tenantSlug);
   const productInCart = isProductInCart(productId);
 
   useEffect(() => setMounted(true), []);
+
+  const handleClick = () => {
+    toggleProduct(productId);
+    if (productInCart) toast.warning(`${productName} removed from cart.`);
+    if (!productInCart) toast.success(`${productName} added to cart.`);
+  };
 
   return (
     <>
@@ -28,7 +36,7 @@ export const CartButton = ({ tenantSlug, productId }: Props) => {
           "loading-state": !mounted,
         })}
         variant="elevated"
-        onClick={() => toggleProduct(productId)}
+        onClick={handleClick}
         aria-pressed={productInCart}
         // disabling focus when not mounted
         inert={!mounted}

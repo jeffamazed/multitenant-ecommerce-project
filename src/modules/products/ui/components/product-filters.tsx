@@ -56,7 +56,7 @@ export const ProductFilters = memo(function ProductFilters() {
   };
 
   return (
-    <aside className="border rounded-md bg-white">
+    <aside className="border rounded-md bg-white lg:sticky lg:top-26 xl:top-28">
       <div className="flex justify-between items-center p-4 border-b">
         <h3 className="font-medium text-lg">Product Filters</h3>
         {hasAnyFilters && (

@@ -110,7 +110,11 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
             <div className="border-t lg:border-t-0 lg:border-l h-full">
               <div className="flex flex-col gap-4 px-6 py-4 border-b">
                 <div className="flex items-center gap-2">
-                  <CartButton productId={productId} tenantSlug={tenantSlug} />
+                  <CartButton
+                    productId={productId}
+                    tenantSlug={tenantSlug}
+                    productName={data.name}
+                  />
 
                   <TooltipCustom
                     trigger={

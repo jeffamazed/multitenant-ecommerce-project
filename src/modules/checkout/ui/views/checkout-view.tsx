@@ -136,17 +136,19 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
           )}
         </section>
 
-        <aside className="md:col-span-4">
-          <h2 className="text-xl md:text-2xl mb-4 font-medium text-right">
-            Order Summary
-          </h2>
-          <CheckoutSidebar
-            total={data?.totalPrice}
-            onPurchase={handleOnPurchase}
-            disabled={purchase.isPending || isLoadingLocal}
-            isLoading={isLoadingData}
-            isCanceled={checkoutStates.cancel}
-          />
+        <aside className="md:col-span-4 ">
+          <div className="md:sticky top-24 lg:top-26 xl:top-28">
+            <h2 className="text-xl md:text-2xl mb-4 font-medium text-right">
+              Order Summary
+            </h2>
+            <CheckoutSidebar
+              total={data?.totalPrice}
+              onPurchase={handleOnPurchase}
+              disabled={purchase.isPending || isLoadingLocal}
+              isLoading={isLoadingData}
+              isCanceled={checkoutStates.cancel}
+            />
+          </div>
         </aside>
       </div>
     </div>

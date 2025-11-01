@@ -64,12 +64,15 @@ export const TagsFilter = memo(function Tagsfilter({
   }
 
   return (
-    <div className="flex flex-col" aria-label="Tags filter" role="group">
+    <ul
+      className="flex flex-col max-h-[30vh] overflow-y-auto"
+      aria-label="Tags filter"
+    >
       {isLoading ? (
         <TagsFilterSkeleton />
       ) : (
         pages.map((tag) => (
-          <div
+          <li
             key={tag.id}
             className="flex items-center gap-2 cursor-pointer hover:bg-black hover:text-white rounded-xs transition-colors duration-75 py-2"
             onClick={() => onClick(tag.name)}
@@ -82,7 +85,7 @@ export const TagsFilter = memo(function Tagsfilter({
             <Label htmlFor={tag.id} className="font-medium cursor-pointer">
               {tag.name}
             </Label>
-          </div>
+          </li>
         ))
       )}
 
@@ -100,6 +103,6 @@ export const TagsFilter = memo(function Tagsfilter({
           {isFetchingNextPage ? "Loading more..." : "Load more"}
         </Button>
       )}
-    </div>
+    </ul>
   );
 });

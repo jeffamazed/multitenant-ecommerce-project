@@ -10,7 +10,7 @@ const Layout = async ({ children }: Props) => {
     <div className="flex flex-col min-h-dvh">
       <Navbar />
 
-      <main className="flex-1 bg-zinc-100 overflow-x-hidden">{children}</main>
+      <main className="flex-1 bg-zinc-100">{children}</main>
       <Footer />
     </div>
   );
