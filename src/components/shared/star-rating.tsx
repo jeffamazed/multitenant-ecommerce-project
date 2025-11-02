@@ -39,7 +39,7 @@ export const StarRating = ({
         )}
       </div>
 
-      <p className="text-base font-medium">
+      <p className="text-sm md:text-base font-medium whitespace-nowrap">
         {totalRating > 0 ? (
           <>
             <span className="sr-only">This product has a total of </span>

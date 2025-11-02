@@ -50,9 +50,13 @@ export const ProductView = ({ productId }: Props) => {
             </div>
 
             <div className="md:col-span-6 lg:col-span-7">
-              <p className="font-medium italic text-muted-foreground">
-                No special content
-              </p>
+              {data.content ? (
+                <p>{data.content}</p>
+              ) : (
+                <p className="font-medium italic text-muted-foreground">
+                  No special content
+                </p>
+              )}
             </div>
           </div>
         </section>

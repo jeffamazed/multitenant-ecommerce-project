@@ -32,7 +32,7 @@ export const Navbar = ({ slug }: Props) => {
             alt={`${slug}'s avatar`}
             priority
           />
-          <span className="common-heading-span">
+          <span className="common-heading-span line-clamp-1">
             <span className="sr-only">View tenant of </span>
             {data.name}
           </span>

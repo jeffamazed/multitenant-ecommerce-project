@@ -68,7 +68,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
 
             <div className="flex border-b">
               {/* PRICE */}
-              <div className="py-4 px-6 w-fit border-r">
+              <div className="py-4 px-6 w-fit border-r flex-cent">
                 <p className="px-4 py-2 border bg-custom-accent w-fit">
                   <span className="text-base font-medium">
                     <span className="sr-only">
@@ -84,6 +84,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                 <Link
                   href={generateTenantURL(tenantSlug)}
                   aria-label={`Visit tenant of ${data.tenant.name}`}
+                  className="line-clamp-2 lg:max-w-[300px]"
                 >
                   <Image
                     src={data.tenant.image?.url || AvatarPlaceholderSmall}
@@ -94,6 +95,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                   />
                   <span className="text-base underline font-medium">
                     {data.tenant.name}
+                    rqwerqwer
                   </span>
                 </Link>
               </div>
@@ -173,11 +175,11 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
               {/* TODO: EDIT RATINGS OVERVIEW WITH REAL DATA LATER */}
               <aside className="px-6 py-4">
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <h2 className="text-xl font-medium">
+                  <h2 className="text-lg font-medium whitespace-nowrap">
                     Ratings Overview{" "}
                     <span className="sr-only">of {data.name}</span>
                   </h2>
-                  <p className="flex items-center gap-2 flex-wrap">
+                  <p className="flex items-center gap-2 whitespace-nowrap">
                     {data.reviewCount > 0 ? (
                       <>
                         <span
@@ -192,7 +194,9 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                         </span>
                       </>
                     ) : (
-                      <span>No ratings yet</span>
+                      <span className="text-sm md:text-base font-medium">
+                        No ratings yet
+                      </span>
                     )}
 
                     {/* FOR SR */}
@@ -219,19 +223,19 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                         key={stars}
                         className="flex justify-between items-center gap-2 w-full"
                       >
-                        <dt className="whitespace-nowrap w-1/6 shrink-0">
+                        <dt className="whitespace-nowrap w-1/6 shrink-0 text-sm md:text-base">
                           {stars} {stars === 1 ? "star" : "stars"}
                         </dt>
                         <dd className="flex items-center gap-2 w-5/6">
                           <Progress
                             value={ratingDist}
-                            className="h-[1lh]"
+                            className="h-[0.7lh] md:h-[1lh]"
                             aria-valuenow={ratingDist}
                             aria-label={`${stars} stars rating`}
                           />
                           <span
                             aria-hidden="true"
-                            className="w-1/8 shrink-0 text-right"
+                            className="w-1/8 shrink-0 text-right text-sm md:text-base"
                           >
                             {ratingDist}%
                           </span>
