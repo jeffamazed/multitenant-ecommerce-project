@@ -11,6 +11,9 @@ import { ToasterCustom } from "@/components/shared/toaster-custom";
 export const metadata: Metadata = {
   title: "Monavo",
   description: "Monavo Multitenant E-commerce.",
+  icons: {
+    icon: "/icons/favicon.ico",
+  },
 };
 
 export default function RootLayout({

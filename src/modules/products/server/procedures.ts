@@ -76,13 +76,13 @@ export const productsRouter = createTRPCRouter({
       let sort: Sort = "-createdAt";
 
       // TODO: SORTING EDIT LATER
-      if (input.category !== "favicon.ico" && input.sort === "curated") {
+      if (input.sort === "curated") {
         sort = "name";
       }
-      if (input.category !== "favicon.ico" && input.sort === "trending") {
+      if (input.sort === "trending") {
         sort = "-name";
       }
-      if (input.category !== "favicon.ico" && input.sort === "hot_and_new") {
+      if (input.sort === "hot_and_new") {
         sort = "-createdAt";
       }
 
