@@ -201,38 +201,42 @@ export const productsRouter = createTRPCRouter({
         limit: input.limit,
       });
 
-      const dataWithSummarizedReviews = await Promise.all(
-        data.docs.map(async (doc) => {
-          const reviewsData = await ctx.db.find({
-            collection: "reviews",
-            pagination: false,
-            where: {
-              product: {
-                equals: doc.id,
-              },
-            },
-          });
+      const productIds = data.docs.map((p) => p.id);
+      const allReviews = await ctx.db.find({
+        collection: "reviews",
+        pagination: false,
+        depth: 0,
+        where: {
+          product: { in: productIds },
+        },
+      });
 
-          const reviewCount = reviewsData.totalDocs || 0;
-          const reviewRating =
-            reviewCount > 0
-              ? reviewsData.docs.reduce(
-                  (acc, review) => acc + review.rating,
-                  0
-                ) / reviewCount
-              : 0;
+      // group reviews by product id
+      const reviewsByProduct = allReviews.docs.reduce(
+        (acc, review) => {
+          const productId = review.product as string;
+          if (!acc[productId]) acc[productId] = [];
+          acc[productId].push(review);
 
-          return {
-            ...doc,
-            reviewCount,
-            reviewRating,
-          };
-        })
+          return acc;
+        },
+        {} as Record<string, typeof allReviews.docs>
       );
+
+      const docsWithReviews = data.docs.map((doc) => {
+        const reviews = reviewsByProduct[doc.id] || [];
+        const reviewCount = reviews.length;
+        const reviewRating =
+          reviewCount > 0
+            ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviewCount
+            : 0;
+
+        return { ...doc, reviewCount, reviewRating };
+      });
 
       return {
         ...data,
-        docs: dataWithSummarizedReviews.map((doc) => ({
+        docs: docsWithReviews.map((doc) => ({
           ...doc,
           image: doc.image as Media | null,
           tenant: doc.tenant as Tenant & { image: Media | null },
