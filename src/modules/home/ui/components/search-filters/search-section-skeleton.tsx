@@ -1,7 +1,7 @@
 import { SearchIcon } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { DEFAULT_BG_COLOR } from "@/modules/home/constants";
 
 export const SearchSectionSkeleton = () => {
@@ -26,7 +26,6 @@ export const SearchSectionSkeleton = () => {
               disabled
             />
           </div>
-          <Skeleton className="size-12 rounded-md bg-skeleton md:hidden shrink-0" />
         </div>
         {/* for filling gap */}
         <div className="h-4 opacity-0 md:hidden"></div>

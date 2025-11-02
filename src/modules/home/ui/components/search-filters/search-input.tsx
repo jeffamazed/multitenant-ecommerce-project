@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { CategoriesSidebar } from "./categories-sidebar";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import useAuth from "@/hooks/use-auth";
 import Link from "next/link";
 import TooltipCustom from "@/components/shared/tooltip-custom";
@@ -19,8 +18,6 @@ interface Props {
 export const SearchInput = ({ disabled, isMobile }: Props) => {
   const session = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
-  const [mounted, setMounted] = useState<boolean>(false);
-  useEffect(() => setMounted(true), []);
 
   return (
     // TODO: CHANGE TO FORM IF IT HAS ANY ACTION
@@ -38,14 +35,7 @@ export const SearchInput = ({ disabled, isMobile }: Props) => {
           disabled={disabled}
         />
       </div>
-      {!mounted && (
-        <>
-          <Skeleton className="size-12 shrink-0 rounded-md bg-skeleton md:hidden" />
-          {session.isFetching && (
-            <Skeleton className="h-12 w-12 md:w-[6.57rem] shrink-0 rounded-md bg-skeleton" />
-          )}
-        </>
-      )}
+
       {isMobile && (
         <CategoriesSidebar
           trigger={

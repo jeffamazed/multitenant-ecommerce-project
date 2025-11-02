@@ -27,6 +27,7 @@ const HomePage = async ({ searchParams }: Props) => {
         limit: DEFAULT_LIMIT_INFINITE_LOAD,
       })
     ),
+    queryClient.prefetchQuery(trpc.auth.session.queryOptions()),
   ]);
 
   return (

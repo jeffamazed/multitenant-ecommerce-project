@@ -31,6 +31,7 @@ const SubCategoryPage = async ({ params, searchParams }: Props) => {
       })
     ),
     queryClient.prefetchQuery(trpc.categories.getMany.queryOptions()),
+    queryClient.prefetchQuery(trpc.auth.session.queryOptions()),
   ]);
 
   return (
