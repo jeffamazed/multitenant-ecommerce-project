@@ -41,7 +41,9 @@ export const ProductView = ({ productId }: Props) => {
         </header>
 
         <section className="common-padding max-container">
-          {/* TODO: ADD HEADING */}
+          <h2 className="text-xl lg:text-2xl font-medium common-margin-bottom">
+            Product Details & Review
+          </h2>
           <div className="common-grid-setup">
             <div className="md:col-span-4 lg:col-span-3">
               <ReviewSidebar productId={productId} />

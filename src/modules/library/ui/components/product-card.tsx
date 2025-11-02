@@ -37,7 +37,7 @@ export const ProductCard = memo(function ProductCard({
     <Link
       href={`library/${id}`}
       className={cn(
-        "border rounded-md bg-white overflow-hidden block",
+        "border rounded-md bg-white overflow-hidden block h-full",
         "custom-shadcn-button-product"
       )}
       aria-label={`View product ${name}`}
@@ -77,7 +77,7 @@ export const ProductCard = memo(function ProductCard({
               </span>
             </span>
 
-            {reviewCount > 0 && (
+            {reviewCount > 0 ? (
               <span className="flex items-center gap-0.5 mt-1 w-fit">
                 <StarIcon className="size-3.5 fill-black" />
                 <span className="text-sm font-medium" aria-hidden="true">
@@ -88,6 +88,8 @@ export const ProductCard = memo(function ProductCard({
                   {`This product has an overall rating of ${reviewRating} out of ${MAX_PRODUCT_RATING} and a total rating of ${reviewCount}`}
                 </span>
               </span>
+            ) : (
+              <span className="text-sm">No reviews yet</span>
             )}
           </CardContent>
         </Card>

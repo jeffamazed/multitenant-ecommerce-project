@@ -1,32 +1,12 @@
+import useTimer from "@/hooks/use-timer";
 import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 
 export const CheckoutSuccess = () => {
   const router = useRouter();
-  const [timer, setTimer] = useState<number>(5);
-  const timerId = useRef<null | NodeJS.Timeout>(null);
 
-  useEffect(() => {
-    const future = Date.now() + 5000;
-
-    timerId.current = setInterval(() => {
-      const now = Date.now();
-      const diff = future - now;
-      const secondsLeft = Math.max(Math.ceil(diff / 1000), 0);
-      setTimer(secondsLeft);
-
-      if (secondsLeft <= 0) {
-        clearInterval(timerId.current!);
-        router.push("/library");
-      }
-    }, 1000);
-
-    return () => {
-      if (timerId.current) clearInterval(timerId.current);
-    };
-  }, [router]);
+  const timer = useTimer({ seconds: 5, fn: () => router.replace("/library") });
 
   return (
     <div className="text-center">

@@ -1,11 +1,13 @@
 import z from "zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { ReviewsGetOneOutput } from "@/modules/reviews/types";
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,7 +22,6 @@ import {
 } from "@/components/ui/field";
 import { baseReviewSchema } from "@/modules/reviews/schemas";
 import { StarPicker } from "@/components/shared/star-picker";
-import { toast } from "sonner";
 
 interface Props {
   productId: string;
@@ -141,7 +142,7 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
                       <StarPicker
                         value={field.value}
                         onChange={field.onChange}
-                        disabled={isPreview}
+                        disabled={isPreview || isLoading}
                       />
                     </div>
                   </div>
@@ -187,6 +188,9 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
                       !isPreview ? "Leave a review" : "No reviews yet..."
                     }
                     readOnly={isPreview}
+                    className={cn("min-h-[80px]", {
+                      "resize-none": isPreview,
+                    })}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

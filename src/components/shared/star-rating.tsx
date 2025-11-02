@@ -8,7 +8,6 @@ interface Props {
   totalRating: number;
   className?: string;
   iconClassName?: string;
-  text?: string;
 }
 
 export const StarRating = ({
@@ -16,7 +15,6 @@ export const StarRating = ({
   totalRating,
   className,
   iconClassName,
-  text,
 }: Props) => {
   const safeRating = Math.max(
     MIN_PRODUCT_RATING,
@@ -24,7 +22,7 @@ export const StarRating = ({
   );
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2">
       <div className={cn("flex items-center gap-x-1", className)}>
         {Array.from({ length: MAX_PRODUCT_RATING }, (_, i) => (
           <StarIcon
@@ -34,14 +32,23 @@ export const StarRating = ({
             })}
           />
         ))}
-        {text && <span>{text}</span>}
-        <span className="sr-only">{`This product has an overall rating of ${safeRating} out of ${MAX_PRODUCT_RATING}.`}</span>
+        {totalRating > 0 && (
+          <p className="sr-only">
+            {`This product has an overall rating of ${safeRating} out of ${MAX_PRODUCT_RATING}.`}
+          </p>
+        )}
       </div>
 
-      <span className="text-base font-medium">
-        <span className="sr-only">This product has a total of </span>
-        {totalRating} ratings
-      </span>
+      <p className="text-base font-medium">
+        {totalRating > 0 ? (
+          <>
+            <span className="sr-only">This product has a total of </span>
+            {totalRating} ratings<span className="sr-only">.</span>
+          </>
+        ) : (
+          <span>No ratings yet</span>
+        )}
+      </p>
     </div>
   );
 };

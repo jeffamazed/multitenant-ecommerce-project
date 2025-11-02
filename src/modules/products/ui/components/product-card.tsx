@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { memo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { StarIcon } from "lucide-react";
+import { SparklesIcon, StarIcon } from "lucide-react";
 
 import { cn, formatCurrency, generateTenantURL } from "@/lib/utils";
 
@@ -57,7 +57,7 @@ export const ProductCard = memo(function ProductCard({
     <Link
       href={`${generateTenantURL(tenantSlug)}/products/${id}`}
       className={cn(
-        "border rounded-md bg-white overflow-hidden block",
+        "border rounded-md bg-white overflow-hidden block h-full",
         "custom-shadcn-button-product"
       )}
       aria-label={`Visit product page of ${name}`}
@@ -74,6 +74,14 @@ export const ProductCard = memo(function ProductCard({
                 placeholder="blur"
                 className="object-cover"
               />
+              {reviewCount === 0 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute top-2 right-2 text-sm bg-radial from-yellow-100 from-40% to-yellow-200 p-1 rounded-md border border-yellow-400"
+                >
+                  New <SparklesIcon className="inline size-4.5" />
+                </span>
+              )}
             </AspectRatio>
             <CardTitle className="flex py-2 px-4 h-16 overflow-ellipsis">
               <h3 className="text-lg font-medium line-clamp-2 leading-tight">
@@ -108,18 +116,22 @@ export const ProductCard = memo(function ProductCard({
               </span>
             </Button>
 
-            {reviewCount > 0 && (
-              <span className="flex items-center gap-0.5 mt-1 w-fit">
-                <StarIcon className="size-3.5 fill-black" />
-                <span className="text-sm font-medium" aria-hidden="true">
-                  {reviewRating} ({reviewCount})
-                </span>
-                {/* FOR SR USERS */}
-                <span className="sr-only">
-                  {`This product has an overall rating of ${reviewRating} out of ${MAX_PRODUCT_RATING} and a total rating of ${reviewCount}`}
-                </span>
-              </span>
-            )}
+            <span className="flex items-center gap-0.5 mt-1 w-fit">
+              {reviewCount > 0 ? (
+                <>
+                  <StarIcon className="size-3.5 fill-black" />
+                  <span className="text-sm font-medium" aria-hidden="true">
+                    {reviewRating} ({reviewCount})
+                  </span>
+                  {/* FOR SR USERS */}
+                  <span className="sr-only">
+                    {`This product has an overall rating of ${reviewRating} out of ${MAX_PRODUCT_RATING} and a total ratings of ${reviewCount}.`}
+                  </span>
+                </>
+              ) : (
+                <span className="text-sm">No reviews yet</span>
+              )}
+            </span>
           </CardContent>
 
           <CardFooter className="px-4 py-2">

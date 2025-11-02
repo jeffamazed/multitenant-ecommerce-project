@@ -75,8 +75,8 @@ export const ProductList = ({ category, tenantSlug }: Props) => {
                   imageUrl={p.image?.url}
                   tenantSlug={p.tenant.slug}
                   tenantImageUrl={p.tenant.image?.url}
-                  reviewRating={3}
-                  reviewCount={5}
+                  reviewRating={Math.round(p.reviewRating * 10) / 10}
+                  reviewCount={p.reviewCount}
                   price={p.price}
                 />
               </li>

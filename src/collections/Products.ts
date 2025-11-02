@@ -13,7 +13,7 @@ export const Products: CollectionConfig = {
     },
     {
       name: "description",
-      type: "text",
+      type: "textarea",
     },
     {
       name: "price",
