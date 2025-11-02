@@ -1,6 +1,8 @@
 import { getPayload } from "payload";
+
 import config from "./payload.config";
 import { DEFAULT_BG_COLOR } from "./modules/home/constants";
+import { stripe } from "./lib/stripe";
 
 const categories = [
   {
@@ -161,6 +163,8 @@ const retryCreate = async (fn: () => Promise<any>, retries = 3) => {
 const seed = async () => {
   const payload = await getPayload({ config });
 
+  const adminAccount = await stripe.accounts.create({});
+
   console.log("Creating admin account...");
   // Create admin tenant
   const adminTenant = await payload.create({
@@ -168,7 +172,7 @@ const seed = async () => {
     data: {
       name: "admin",
       slug: "admin",
-      stripeAccountId: "admin",
+      stripeAccountId: adminAccount.id,
     },
   });
   console.log("Admin tenant created!");

@@ -95,7 +95,6 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                   />
                   <span className="text-base underline font-medium">
                     {data.tenant.name}
-                    rqwerqwer
                   </span>
                 </Link>
               </div>
