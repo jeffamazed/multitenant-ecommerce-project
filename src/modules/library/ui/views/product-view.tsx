@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
+import { Suspense } from "react";
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { ReviewSidebar } from "../components/review-sidebar";
+import { RichText } from "@payloadcms/richtext-lexical/react";
+
+import { ReviewSidebarSkeleton } from "../components/review-sidebar-skeleton";
 
 interface Props {
   productId: string;
@@ -46,15 +50,17 @@ export const ProductView = ({ productId }: Props) => {
           </h2>
           <div className="common-grid-setup">
             <div className="md:col-span-4 lg:col-span-3">
-              <ReviewSidebar productId={productId} />
+              <Suspense fallback={<ReviewSidebarSkeleton />}>
+                <ReviewSidebar productId={productId} />
+              </Suspense>
             </div>
 
             <div className="md:col-span-6 lg:col-span-7">
               {data.content ? (
-                <p>{data.content}</p>
+                <RichText data={data.content} />
               ) : (
                 <p className="font-medium italic text-muted-foreground">
-                  No special content
+                  No special content.
                 </p>
               )}
             </div>

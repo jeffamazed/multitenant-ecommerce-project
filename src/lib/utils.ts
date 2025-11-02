@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { differenceInDays } from "date-fns";
 
 import { NAVBAR_ITEMS } from "@/modules/products/constants";
 
@@ -39,4 +40,10 @@ export function formatCurrency(value: number | string | undefined) {
     currency: "USD",
     maximumFractionDigits: 0,
   }).format(Number(value));
+}
+
+export function determineIsProductNew(createdAt: string, daysAgo: number) {
+  if (daysAgo < 0) throw new Error("daysAgo must be a non-negative integer.");
+  const now = new Date();
+  return differenceInDays(now, new Date(createdAt)) <= daysAgo;
 }

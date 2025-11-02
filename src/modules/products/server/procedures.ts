@@ -7,6 +7,7 @@ import { Category, Media, Tenant } from "@/payload-types";
 import { DEFAULT_LIMIT_INFINITE_LOAD } from "@/lib/constants";
 
 import { sortValues } from "../search-params";
+import { TRPCError } from "@trpc/server";
 
 export const productsRouter = createTRPCRouter({
   getOne: baseProcedure
@@ -19,14 +20,30 @@ export const productsRouter = createTRPCRouter({
       const headers = await getHeaders();
       const session = await ctx.db.auth({ headers });
 
-      const product = await ctx.db.findByID({
-        collection: "products",
-        id: input.id,
-        depth: 2, // Load the "product.image", "product.tenant", and "product.tenant.image"
-        select: {
-          content: false,
-        },
-      });
+      let product;
+      try {
+        product = await ctx.db.findByID({
+          collection: "products",
+          id: input.id,
+          depth: 2, // Load the "product.image", "product.tenant", and "product.tenant.image"
+          select: {
+            content: false,
+          },
+        });
+      } catch (error) {
+        console.error(`Product with id ${input.id} not found.`, error);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Product not found.",
+        });
+      }
+
+      if (product.isArchived) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Product not found.",
+        });
+      }
 
       let isPurchased: boolean = false;
 
@@ -119,7 +136,11 @@ export const productsRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const where: Where = {};
+      const where: Where = {
+        isArchived: {
+          not_equals: true,
+        },
+      };
       let sort: Sort = "-createdAt";
 
       // TODO: SORTING EDIT LATER
@@ -144,10 +165,16 @@ export const productsRouter = createTRPCRouter({
         if (!isNaN(max)) where.price.less_than_equal = max;
       }
 
-      // TENANT
+      // TENANT SPECIFIC
       if (input.tenantSlug) {
         where["tenant.slug"] = {
           equals: input.tenantSlug,
+        };
+      } else {
+        // MAKING SURE PRIVATE PRODUCTS ARE NOT SHOWN ON PUBLIC STOREFRONT
+        // THESE PRODUCTS ARE EXCLUSIVELY PRIVATE TO THE TENANT STORE
+        where["isPrivate"] = {
+          not_equals: true,
         };
       }
 

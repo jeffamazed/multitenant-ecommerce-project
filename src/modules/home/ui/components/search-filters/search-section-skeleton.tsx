@@ -9,6 +9,7 @@ export const SearchSectionSkeleton = () => {
     <div
       className="flex-cent border-b"
       style={{ backgroundColor: DEFAULT_BG_COLOR }}
+      aria-hidden="true"
     >
       <div className="max-container common-padding">
         <h1 className="text-center mb-6 lg:mb-8 font-semibold">

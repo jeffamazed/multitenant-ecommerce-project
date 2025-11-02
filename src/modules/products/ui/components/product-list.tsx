@@ -78,6 +78,7 @@ export const ProductList = ({ category, tenantSlug }: Props) => {
                   reviewRating={Math.round(p.reviewRating * 10) / 10}
                   reviewCount={p.reviewCount}
                   price={p.price}
+                  createdAt={p.createdAt}
                 />
               </li>
             ))}

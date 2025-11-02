@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { CheckIcon, LinkIcon, StarIcon } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-
-import { toast } from "sonner";
+import { RichText } from "@payloadcms/richtext-lexical/react";
 
 import { formatCurrency, generateTenantURL } from "@/lib/utils";
 
@@ -120,7 +120,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
 
             <div className="p-6">
               {data.description ? (
-                <p>{data.description}</p>
+                <RichText data={data.description} />
               ) : (
                 <p className="font-medium text-muted-foreground italic">
                   No description provided.

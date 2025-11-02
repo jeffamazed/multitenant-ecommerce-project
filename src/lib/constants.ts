@@ -4,3 +4,5 @@ export const MAX_PRODUCT_RATING = 5;
 export const MIN_PRODUCT_RATING = 0;
 
 export const PLATFORM_FEE_PERCENTAGE = 10;
+
+export const NEW_PRODUCT_DAYS_THRESHOLD = 3;

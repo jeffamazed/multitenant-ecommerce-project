@@ -6,7 +6,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SparklesIcon, StarIcon } from "lucide-react";
 
-import { cn, formatCurrency, generateTenantURL } from "@/lib/utils";
+import {
+  cn,
+  determineIsProductNew,
+  formatCurrency,
+  generateTenantURL,
+} from "@/lib/utils";
 
 import {
   Card,
@@ -20,7 +25,10 @@ import { Button } from "@/components/ui/button";
 
 import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import AvatarPlaceholderSmall from "@/app/assets/img/avatar_placeholder_small.png";
-import { MAX_PRODUCT_RATING } from "@/lib/constants";
+import {
+  MAX_PRODUCT_RATING,
+  NEW_PRODUCT_DAYS_THRESHOLD,
+} from "@/lib/constants";
 
 interface ProductCardProps {
   id: string;
@@ -31,6 +39,7 @@ interface ProductCardProps {
   reviewRating: number;
   reviewCount: number;
   price: number;
+  createdAt: string;
 }
 
 export const ProductCard = memo(function ProductCard({
@@ -42,6 +51,7 @@ export const ProductCard = memo(function ProductCard({
   reviewRating,
   reviewCount,
   price,
+  createdAt,
 }: ProductCardProps) {
   const router = useRouter();
 
@@ -74,7 +84,7 @@ export const ProductCard = memo(function ProductCard({
                 placeholder="blur"
                 className="object-cover"
               />
-              {reviewCount === 0 && (
+              {determineIsProductNew(createdAt, NEW_PRODUCT_DAYS_THRESHOLD) && (
                 <span
                   aria-hidden="true"
                   className="absolute top-2 right-2 text-sm bg-radial from-yellow-100 from-40% to-yellow-200 p-1 rounded-md border border-yellow-400"

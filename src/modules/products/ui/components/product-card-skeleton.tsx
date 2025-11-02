@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const ProductCardSkeleton = () => {
   return (
-    <Card className="border-none p-0 gap-0 rounded-md">
+    <Card className="border-none p-0 gap-0 rounded-md" aria-hidden="true">
       <CardHeader className="p-0 gap-0">
         <AspectRatio className="relative w-full" ratio={1}>
           <Skeleton className="size-full bg-skeleton rounded-b-none" />

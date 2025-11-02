@@ -2,7 +2,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const NavbarSkeleton = () => {
   return (
-    <div className="border-b sticky top-0 left-0 bg-white z-50 w-full h-18">
+    <div
+      className="border-b sticky top-0 left-0 bg-white z-50 w-full h-18"
+      aria-hidden="true"
+    >
       <div className="common-padding-x max-container justify-between gap-4 size-full flex items-center overflow-x-auto">
         <div className="flex items-center gap-2">
           <Skeleton className="bg-skeleton size-[32px] shrink-0 rounded-full" />

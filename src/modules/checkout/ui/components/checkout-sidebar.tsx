@@ -48,10 +48,10 @@ export const CheckoutSidebar = ({
         <div className="p-4 border-t">
           <Alert
             variant="destructive"
-            className="rounded-md bg-destructive/30 overflow-hidden"
+            className="rounded-md bg-destructive/30 overflow-hidden border-red-700"
           >
             <AlertTitle className="flex items-center gap-2">
-              <CircleXIcon className="size-6! stroke-red-100 fill-red-600" />
+              <CircleXIcon className="size-6! stroke-red-300 fill-red-600" />
               <h3 className="text-red-600 text-lg">Checkout Error!</h3>
             </AlertTitle>
             <AlertDescription>

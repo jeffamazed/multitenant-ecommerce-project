@@ -11,6 +11,7 @@ export const CheckoutItemSkeleton = ({
 }) => {
   return (
     <div
+      aria-hidden="true"
       className={cn(
         "grid grid-cols-[6rem_1fr_auto] sm:grid-cols-[7.5rem_1fr_auto] md:grid-cols-[8.5rem_1fr_auto] xl:grid-cols-[10rem_1fr_auto] gap-2 sm:gap-4 pr-2 sm:pr-4 border-t border-l border-r overflow-x-auto bg-white",
         {
