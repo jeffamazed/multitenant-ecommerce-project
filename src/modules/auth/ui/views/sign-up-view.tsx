@@ -130,7 +130,7 @@ export const SignUpView = () => {
                       aria-label={`Your store will be available at ${username} dot shop dot com.`}
                     >
                       Your store will be available at&nbsp;
-                      <strong>{username}</strong>.shop.com
+                      <strong>{username}</strong>.monavo.com
                     </FieldDescription>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />

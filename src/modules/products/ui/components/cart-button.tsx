@@ -36,7 +36,7 @@ export const CartButton = ({
         "flex-1 hover:bg-custom-accent focus-visible:bg-custom-accent"
       )}
     >
-      <Link prefetch href={`/library/${productId}`}>
+      <Link href={`${process.env.NEXT_PUBLIC_APP_URL!}/library/${productId}`}>
         View in library
       </Link>
     </Button>
