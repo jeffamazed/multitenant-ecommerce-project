@@ -243,16 +243,6 @@ export const productsRouter = createTRPCRouter({
         },
       });
 
-      if (!data.docs.length) {
-        console.error(
-          `[Products GetMany] No products found for query - filters: ${JSON.stringify(input)}, timestamp: ${new Date().toISOString()}`
-        );
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Products not found.",
-        });
-      }
-
       const productIds = data.docs.map((p) => p.id);
       const allReviews = await ctx.db.find({
         collection: "reviews",
