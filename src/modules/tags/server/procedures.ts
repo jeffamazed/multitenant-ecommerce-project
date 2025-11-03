@@ -13,11 +13,20 @@ export const tagsRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const data = await ctx.db.find({
-        collection: "tags",
-        page: input.cursor,
-        limit: input.limit,
-      });
+      let data;
+      try {
+        data = await ctx.db.find({
+          collection: "tags",
+          page: input.cursor,
+          limit: input.limit,
+        });
+      } catch (error) {
+        console.error(
+          `[Tags GetMany] Failed to fetch tags - cursor: ${input.cursor}, limit: ${input.limit}, timestamp: ${new Date().toISOString()}`,
+          error
+        );
+        throw new Error("Failed to fetch tags. Please try again later.");
+      }
 
       return data;
     }),

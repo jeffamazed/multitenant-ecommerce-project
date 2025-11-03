@@ -24,6 +24,7 @@ export const checkoutRouter = createTRPCRouter({
     });
 
     if (!user) {
+      console.error(`[Checkout Verify] User not found: ${ctx.session.user.id}`);
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "User not found.",
@@ -38,29 +39,49 @@ export const checkoutRouter = createTRPCRouter({
     });
 
     if (!tenant) {
+      console.error(
+        `[Checkout Verify] Tenant not found for user: ${ctx.session.user.id}`
+      );
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "Tenant not found.",
       });
     }
+    try {
+      const accountLink = await stripe.accountLinks.create({
+        account: tenant.stripeAccountId,
+        refresh_url: `${process.env.NEXT_PUBLIC_APP_URL!}/admin`,
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL!}/admin`,
+        type: "account_onboarding",
+      });
 
-    const accountLink = await stripe.accountLinks.create({
-      account: tenant.stripeAccountId,
-      refresh_url: `${process.env.NEXT_PUBLIC_APP_URL!}/admin`,
-      return_url: `${process.env.NEXT_PUBLIC_APP_URL!}/admin`,
-      type: "account_onboarding",
-    });
+      if (!accountLink.url) {
+        console.error(
+          `[Checkout Verify] Stripe account link created without URL for tenant: ${tenantId}`,
+          accountLink
+        );
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            "Unable to initialize Stripe onboarding. Please try again later.",
+        });
+      }
 
-    if (!accountLink.url) {
-      console.error("Stripe account link created without URL:", accountLink);
+      console.log(
+        `[Checkout Verify] Successfully created Stripe account link for tenant: ${tenantId}`
+      );
+      return { url: accountLink.url };
+    } catch (err) {
+      console.error(
+        `[Checkout Verify] Stripe account link creation failed for tenant: ${tenantId}`,
+        err
+      );
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message:
           "Unable to initialize Stripe onboarding. Please try again later.",
       });
     }
-
-    return { url: accountLink.url };
   }),
   purchase: protectedProcedure
     .input(
@@ -99,6 +120,10 @@ export const checkoutRouter = createTRPCRouter({
       });
 
       if (products.totalDocs !== input.productIds.length) {
+        console.error(
+          `[Checkout Purchase] Not all products found for user ${ctx.session.user.id}`,
+          { expected: input.productIds.length, found: products.totalDocs }
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Product(s) not found.",
@@ -118,6 +143,9 @@ export const checkoutRouter = createTRPCRouter({
       const tenant = tenantsData.docs[0];
 
       if (!tenant) {
+        console.error(
+          `[Checkout Purchase] Tenant not found for slug: ${input.tenantSlug}`
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Tenant not found.",
@@ -125,6 +153,9 @@ export const checkoutRouter = createTRPCRouter({
       }
 
       if (!tenant.stripeDetailsSubmitted) {
+        console.error(
+          `[Checkout Purchase] Tenant not allowed to sell: ${tenant.id}`
+        );
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Tenant not allowed to sell products.",
@@ -161,38 +192,45 @@ export const checkoutRouter = createTRPCRouter({
       // SUBDOMAIN IMPLEMENTATION
       const domain = generateTenantURL(input.tenantSlug);
 
-      const checkout = await stripe.checkout.sessions.create(
-        {
-          customer_email: ctx.session.user.email,
-          success_url: `${domain}/checkout?success=true`,
-          cancel_url: `${domain}/checkout?cancel=true`,
-          mode: "payment",
-          line_items: lineItems,
-          invoice_creation: {
-            enabled: true,
+      try {
+        const checkout = await stripe.checkout.sessions.create(
+          {
+            customer_email: ctx.session.user.email,
+            success_url: `${domain}/checkout?success=true`,
+            cancel_url: `${domain}/checkout?cancel=true`,
+            mode: "payment",
+            line_items: lineItems,
+            invoice_creation: { enabled: true },
+            metadata: { userId: ctx.session.user.id } as CheckoutMetadata,
+            payment_intent_data: { application_fee_amount: platformFeeAmount },
           },
-          metadata: {
-            userId: ctx.session.user.id,
-          } as CheckoutMetadata,
-          payment_intent_data: {
-            application_fee_amount: platformFeeAmount,
-          },
-        },
-        {
-          stripeAccount: tenant.stripeAccountId,
-        }
-      );
+          { stripeAccount: tenant.stripeAccountId }
+        );
 
-      if (!checkout.url) {
-        console.error("Stripe checkout session created without URL:", checkout);
+        if (!checkout.url) {
+          console.error(
+            `[Checkout Purchase] Stripe checkout session created without URL for tenant: ${tenant.id}`,
+            checkout
+          );
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              "Unable to initialize Stripe checkout. Please try again later.",
+          });
+        }
+
+        return { url: checkout.url };
+      } catch (err) {
+        console.error(
+          `[Checkout Purchase] Stripe checkout session creation failed for tenant: ${tenant.id}`,
+          err
+        );
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message:
             "Unable to initialize Stripe checkout. Please try again later.",
         });
       }
-
-      return { url: checkout.url };
     }),
 
   getProducts: baseProcedure
@@ -223,6 +261,10 @@ export const checkoutRouter = createTRPCRouter({
 
       // IF LOCALSTORAGE IS COMPROMISED
       if (data.totalDocs !== input.ids.length) {
+        console.error(`[Checkout GetProducts] Some products not found`, {
+          expected: input.ids.length,
+          found: data.totalDocs,
+        });
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Products not found.",

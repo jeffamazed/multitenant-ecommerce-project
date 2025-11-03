@@ -39,7 +39,6 @@ const SubCategoryPage = async ({ params, searchParams }: Props) => {
       <Suspense fallback={<SearchSectionSkeleton />}>
         <SearchFilters />
       </Suspense>
-      <ProductListView />
       <ProductListView category={subcategory} />
     </HydrationBoundary>
   );

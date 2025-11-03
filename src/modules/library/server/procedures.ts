@@ -35,6 +35,9 @@ export const libraryRouter = createTRPCRouter({
 
       const order = ordersData.docs[0];
       if (!order) {
+        console.error(
+          `[Library GetOne] Order not found - user: ${ctx.session.user.id}, product: ${input.productId}, timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Order not found.",
@@ -47,6 +50,9 @@ export const libraryRouter = createTRPCRouter({
       });
 
       if (!product) {
+        console.error(
+          `[Library GetOne] Product not found - productId: ${input.productId}, timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Product not found.",
@@ -76,6 +82,16 @@ export const libraryRouter = createTRPCRouter({
         },
       });
 
+      if (!ordersData.docs.length) {
+        console.error(
+          `[Library GetMany] No orders found for user: ${ctx.session.user.id}, cursor: ${input.cursor}, timestamp: ${new Date().toISOString()}`
+        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No orders found.",
+        });
+      }
+
       const productIds = ordersData.docs.map((o) => o.product);
 
       const productsData = await ctx.db.find({
@@ -87,6 +103,16 @@ export const libraryRouter = createTRPCRouter({
           },
         },
       });
+
+      if (!productsData.docs.length) {
+        console.error(
+          `[Library GetMany] Products not found for user: ${ctx.session.user.id}, productIds: ${productIds.join(", ")}, timestamp: ${new Date().toISOString()}`
+        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No products found.",
+        });
+      }
 
       const allReviews = await ctx.db.find({
         collection: "reviews",

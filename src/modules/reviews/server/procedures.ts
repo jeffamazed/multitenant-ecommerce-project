@@ -19,6 +19,10 @@ export const reviewsRouter = createTRPCRouter({
       });
 
       if (!product) {
+        console.error(
+          `[Reviews GetOne] Failed to fetch product - id: ${input.productId}`,
+          `timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Product not found.",
@@ -46,7 +50,13 @@ export const reviewsRouter = createTRPCRouter({
 
       const review = reviewsData.docs[0];
 
-      if (!review) return null;
+      if (!review) {
+        console.info(
+          `[Reviews GetOne] No review found for user - userId: ${ctx.session.user.id}, productId: ${input.productId}, timestamp: ${new Date().toISOString()}`
+        );
+
+        return null;
+      }
 
       return review;
     }),
@@ -60,6 +70,9 @@ export const reviewsRouter = createTRPCRouter({
       });
 
       if (!product) {
+        console.error(
+          `[Reviews Create] Product not found - id: ${input.productId}, userId: ${ctx.session.user.id}, timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Product not found.",
@@ -82,6 +95,9 @@ export const reviewsRouter = createTRPCRouter({
 
       // check if already exists
       if (existingReviewsData.totalDocs > 0) {
+        console.warn(
+          `[Reviews Create] User already submitted review - userId: ${ctx.session.user.id}, productId: ${input.productId}, timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "CONFLICT",
           message: "You have already submitted a review for this product.",
@@ -111,6 +127,10 @@ export const reviewsRouter = createTRPCRouter({
       });
 
       if (!existingReview) {
+        console.warn(
+          `[Reviews Update] Review not found - reviewId: ${input.reviewId}, userId: ${ctx.session.user.id}, timestamp: ${new Date().toISOString()}`
+        );
+
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Review not found.",
@@ -118,6 +138,9 @@ export const reviewsRouter = createTRPCRouter({
       }
 
       if (existingReview.user !== ctx.session.user.id) {
+        console.warn(
+          `[Reviews Update] Unauthorized update attempt - reviewId: ${input.reviewId}, userId: ${ctx.session.user.id}, timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You are not allowed to update this review.",

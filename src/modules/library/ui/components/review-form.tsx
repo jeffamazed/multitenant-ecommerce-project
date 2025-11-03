@@ -44,6 +44,10 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
             productId,
           })
         );
+        queryClient.invalidateQueries(
+          trpc.products.getOne.queryFilter({ id: productId })
+        );
+        queryClient.invalidateQueries(trpc.products.getMany.queryFilter());
         setIsPreview(true);
 
         toast.success("Thank you for the review!");
@@ -63,6 +67,10 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
             productId,
           })
         );
+        queryClient.invalidateQueries(
+          trpc.products.getOne.queryFilter({ id: productId })
+        );
+        queryClient.invalidateQueries(trpc.products.getMany.queryFilter());
         setIsPreview(true);
 
         toast.success("Review updated successfully!");

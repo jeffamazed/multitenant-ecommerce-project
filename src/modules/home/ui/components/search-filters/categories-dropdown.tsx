@@ -1,6 +1,6 @@
 import { memo } from "react";
 import Link from "next/link";
-import { ChevronDown, Sparkles } from "lucide-react";
+import { ChevronDown, Layers } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { Category } from "@/payload-types";
@@ -80,7 +80,7 @@ export const CategoryDropdown = memo(function CategoryDropdown({
                       isCurrentPageParent && "bg-black text-white"
                     )}
                   >
-                    {category.name} <Sparkles className="size-4 text-inherit" />
+                    {category.name} <Layers className="size-4 text-inherit" />
                   </Link>
                 </NavigationMenuLink>
               </li>

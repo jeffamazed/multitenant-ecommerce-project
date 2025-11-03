@@ -38,6 +38,11 @@ export const authRouter = createTRPCRouter({
     const account = await stripe.accounts.create();
 
     if (!account) {
+      console.error("Stripe account creation failed", {
+        email: input.email,
+        username: input.username,
+        timestamp: new Date().toISOString(),
+      });
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Failed to create Stripe account. Please try again later.",
@@ -107,6 +112,5 @@ async function signInHelper(
     value: data.token,
   });
 
-  // TODO: PROBABLY DON'T SEND DATA IF NOT NEEDED
-  return data;
+  return {};
 }

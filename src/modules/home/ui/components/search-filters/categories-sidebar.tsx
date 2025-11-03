@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon, Sparkles, X } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, Layers, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
@@ -168,7 +168,7 @@ export const CategoriesSidebar = ({ open, onOpenChange, trigger }: Props) => {
                   )}
                 >
                   {selectedCategory.name}
-                  <Sparkles className="size-4" />
+                  <Layers className="size-4" />
                 </Link>
               </li>
             )}

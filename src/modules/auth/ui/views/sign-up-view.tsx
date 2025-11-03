@@ -50,7 +50,7 @@ export const SignUpView = () => {
       onSuccess: async () => {
         await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
 
-        router.push("/");
+        router.replace("/");
       },
     })
   );

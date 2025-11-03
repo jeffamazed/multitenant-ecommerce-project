@@ -31,14 +31,21 @@ export const productsRouter = createTRPCRouter({
           },
         });
       } catch (error) {
-        console.error(`Product with id ${input.id} not found.`, error);
+        console.error(
+          `[Products GetOne] Failed to fetch product - id: ${input.id}, error:`,
+          error,
+          `timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Product not found.",
         });
       }
 
-      if (product.isArchived) {
+      if (!product || product.isArchived) {
+        console.error(
+          `[Products GetOne] Product not found or archived - id: ${input.id}, timestamp: ${new Date().toISOString()}`
+        );
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Product not found.",
@@ -144,15 +151,9 @@ export const productsRouter = createTRPCRouter({
       let sort: Sort = "-createdAt";
 
       // TODO: SORTING EDIT LATER
-      if (input.sort === "curated") {
-        sort = "name";
-      }
-      if (input.sort === "trending") {
-        sort = "-name";
-      }
-      if (input.sort === "hot_and_new") {
-        sort = "-createdAt";
-      }
+      if (input.sort === "curated") sort = "name";
+      if (input.sort === "trending") sort = "-name";
+      if (input.sort === "hot_and_new") sort = "-createdAt";
 
       if (input.minPrice || input.maxPrice) {
         where.price = {};
@@ -233,6 +234,16 @@ export const productsRouter = createTRPCRouter({
           content: false,
         },
       });
+
+      if (!data.docs.length) {
+        console.error(
+          `[Products GetMany] No products found for query - filters: ${JSON.stringify(input)}, timestamp: ${new Date().toISOString()}`
+        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Products not found.",
+        });
+      }
 
       const productIds = data.docs.map((p) => p.id);
       const allReviews = await ctx.db.find({
