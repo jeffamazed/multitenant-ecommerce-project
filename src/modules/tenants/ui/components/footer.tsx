@@ -10,7 +10,7 @@ export const Footer = () => {
         <p>
           Made possible by{" "}
           <Link
-            href="/"
+            href={process.env.NEXT_PUBLIC_APP_URL!}
             className={cn("text-2xl font-semibold", poppins.className)}
           >
             Monavo

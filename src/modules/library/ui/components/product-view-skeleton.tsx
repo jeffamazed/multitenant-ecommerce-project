@@ -7,7 +7,7 @@ export const ProductViewSkeleton = () => {
     <div className="flex flex-col min-h-dvh" aria-hidden="true">
       <div className="border-b sticky top-0 left-0 bg-custom-accent z-50 w-full h-18">
         <div className="common-padding-x max-container size-full flex justify-between items-center overflow-x-auto gap-4">
-          <Skeleton className="bg-skeleton h-12 w-32" />
+          <Skeleton className="bg-skeleton h-12 w-40" />
         </div>
       </div>
       <div className="flex-1 bg-zinc-100">
