@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: ["localhost:3000"],
     },
+    globalNotFound: true,
   },
 };
 

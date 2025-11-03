@@ -28,7 +28,7 @@ export const Navbar = ({ slug }: Props) => {
             src={data.image?.url || AvatarPlaceholder}
             width={32}
             height={32}
-            className="rounded-full border shrink-0 size-[32px]"
+            className="rounded-full border shrink-0 size-8"
             alt={`${slug}'s avatar`}
             priority
           />

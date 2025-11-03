@@ -91,7 +91,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                     alt={`${data.tenant.name}'s avatar`}
                     width={20}
                     height={20}
-                    className="rounded-full inline align-middle mr-2 border shrink-0 size-[20px]"
+                    className="rounded-full inline align-middle mr-2 border shrink-0 size-5"
                   />
                   <span className="text-base underline font-medium">
                     {data.tenant.name}
@@ -228,7 +228,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
                         <dd className="flex items-center gap-2 w-5/6">
                           <Progress
                             value={ratingDist}
-                            className="h-[0.7lh] md:h-[1lh]"
+                            className="h-[0.7lh] md:h-lh"
                             aria-valuenow={ratingDist}
                             aria-label={`${stars} stars rating`}
                           />

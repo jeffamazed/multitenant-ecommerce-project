@@ -117,7 +117,7 @@ export const ProductCard = memo(function ProductCard({
                   src={tenantImageUrl || AvatarPlaceholderSmall}
                   width={16}
                   height={16}
-                  className="rounded-full border shrink-0 size-[16px]"
+                  className="rounded-full border shrink-0 size-4"
                 />
                 <span className="text-sm font-medium whitespace-normal line-clamp-1">
                   <span className="sr-only">Visit tenant of </span>
