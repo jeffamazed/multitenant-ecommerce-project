@@ -1,5 +1,6 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
+import { useDebounce } from "use-debounce";
 
 import { Label } from "@/components/ui/label";
 
@@ -16,13 +17,18 @@ export const PriceFilter = memo(function PriceFilter({
   onMinPriceChange,
   onMaxPriceChange,
 }: Props) {
-  const handlePriceChange = (
-    value: string | undefined | null,
-    type: "minPrice" | "maxPrice"
-  ) => {
-    if (type === "minPrice") onMinPriceChange(value ?? "");
-    else onMaxPriceChange(value ?? "");
-  };
+  const [localMinPrice, setLocalMinPrice] = useState<string>(minPrice ?? "");
+  const [localMaxPrice, setLocalMaxPrice] = useState<string>(maxPrice ?? "");
+
+  const [debouncedMinPrice] = useDebounce(localMinPrice, 500);
+  const [debouncedMaxPrice] = useDebounce(localMaxPrice, 500);
+  useEffect(() => {
+    onMinPriceChange(debouncedMinPrice);
+  }, [debouncedMinPrice, onMinPriceChange]);
+
+  useEffect(() => {
+    onMaxPriceChange(debouncedMaxPrice);
+  }, [debouncedMaxPrice, onMaxPriceChange]);
 
   return (
     <div className="flex flex-col gap-2" aria-label="Price filter" role="group">
@@ -33,9 +39,9 @@ export const PriceFilter = memo(function PriceFilter({
         <CurrencyInput
           id="filter-minimum-price"
           placeholder="$0"
-          value={minPrice ?? ""}
+          value={localMinPrice}
           decimalsLimit={2}
-          onValueChange={(value) => handlePriceChange(value, "minPrice")}
+          onValueChange={(value) => setLocalMinPrice(value ?? "")}
           intlConfig={{ locale: "en-US", currency: "USD" }}
           className="custom-shadcn-input"
         />
@@ -47,9 +53,9 @@ export const PriceFilter = memo(function PriceFilter({
         <CurrencyInput
           id="filter-maximum-price"
           placeholder="∞"
-          value={maxPrice ?? ""}
+          value={localMaxPrice}
           decimalsLimit={2}
-          onValueChange={(value) => handlePriceChange(value, "maxPrice")}
+          onValueChange={(value) => setLocalMaxPrice(value ?? "")}
           intlConfig={{ locale: "en-US", currency: "USD" }}
           className="custom-shadcn-input placeholder:text-xl"
         />

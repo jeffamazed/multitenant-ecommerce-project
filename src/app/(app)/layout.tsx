@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { throttle } from "nuqs/server";
 import "./globals.css";
 
 import { TRPCReactProvider } from "@/trpc/client";
@@ -24,11 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.className} antialiased`}>
-        <NuqsAdapter
-          defaultOptions={{
-            limitUrlUpdates: throttle(500),
-          }}
-        >
+        <NuqsAdapter>
           <TRPCReactProvider>
             <ToasterCustom />
             {children}

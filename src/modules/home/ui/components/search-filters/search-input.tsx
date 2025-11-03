@@ -1,5 +1,6 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BookmarkCheckIcon, ListFilterIcon, SearchIcon } from "lucide-react";
+import { useDebounce } from "use-debounce";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/use-auth";
 import Link from "next/link";
 import TooltipCustom from "@/components/shared/tooltip-custom";
+import { useProductsFilters } from "@/modules/products/hooks/use-product-filter";
 
 interface Props {
   disabled?: boolean;
@@ -18,9 +20,15 @@ interface Props {
 export const SearchInput = ({ disabled, isMobile }: Props) => {
   const session = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [filters, setFilters] = useProductsFilters();
+  const [searchVal, setSearchVal] = useState<string>(filters.search);
+  const [debouncedSearch] = useDebounce(searchVal, 500);
+
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, search: debouncedSearch }));
+  }, [debouncedSearch, setFilters]);
 
   return (
-    // TODO: CHANGE TO FORM IF IT HAS ANY ACTION
     <div className="flex items-center gap-2 w-full max-w-3xl mx-auto">
       <div className="relative w-full">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
@@ -33,6 +41,8 @@ export const SearchInput = ({ disabled, isMobile }: Props) => {
           className="pl-8"
           placeholder="Search Products"
           disabled={disabled}
+          value={searchVal}
+          onChange={(e) => setSearchVal(e.target.value)}
         />
       </div>
 
