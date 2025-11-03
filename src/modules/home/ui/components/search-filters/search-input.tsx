@@ -39,7 +39,7 @@ export const SearchInput = ({ disabled, isMobile }: Props) => {
           id="homepage-search"
           type="search"
           className="pl-8"
-          placeholder="Search Products"
+          placeholder="Search products"
           disabled={disabled}
           value={searchVal}
           onChange={(e) => setSearchVal(e.target.value)}

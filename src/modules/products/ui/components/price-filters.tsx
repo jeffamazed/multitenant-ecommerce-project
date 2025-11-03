@@ -30,6 +30,15 @@ export const PriceFilter = memo(function PriceFilter({
     onMaxPriceChange(debouncedMaxPrice);
   }, [debouncedMaxPrice, onMaxPriceChange]);
 
+  // keep local state synced with props when parent resets
+  useEffect(() => {
+    setLocalMinPrice(minPrice ?? "");
+  }, [minPrice]);
+
+  useEffect(() => {
+    setLocalMaxPrice(maxPrice ?? "");
+  }, [maxPrice]);
+
   return (
     <div className="flex flex-col gap-2" aria-label="Price filter" role="group">
       <div className="flex flex-col gap-2">

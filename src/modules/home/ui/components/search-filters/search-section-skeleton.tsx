@@ -22,7 +22,7 @@ export const SearchSectionSkeleton = () => {
               id="homepage-search"
               type="search"
               className="pl-8"
-              placeholder="Search Products"
+              placeholder="Search products"
               readOnly
               disabled
             />
