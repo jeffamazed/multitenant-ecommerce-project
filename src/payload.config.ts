@@ -31,7 +31,10 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
-      beforeNavLinks: ["@/components/stripe-verify#StripeVerify"],
+      actions: [
+        "@/components/payload-components/stripe-verify#StripeVerify",
+        "@/components/payload-components/back-to-home#BackToHome",
+      ],
     },
   },
   collections: [
