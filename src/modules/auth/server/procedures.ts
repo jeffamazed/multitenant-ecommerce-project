@@ -1,7 +1,11 @@
-import { headers as getHeaders } from "next/headers";
+import { headers as getHeaders, cookies as getCookies } from "next/headers";
 import { BasePayload } from "payload";
 
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import {
+  baseProcedure,
+  createTRPCRouter,
+  protectedProcedure,
+} from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { stripe } from "@/lib/stripe";
 
@@ -78,6 +82,13 @@ export const authRouter = createTRPCRouter({
 
   signIn: baseProcedure.input(signInSchema).mutation(async ({ input, ctx }) => {
     return signInHelper(input, ctx);
+  }),
+
+  signOut: protectedProcedure.mutation(async ({ ctx }) => {
+    const cookies = await getCookies();
+
+    cookies.delete(`${ctx.db.config.cookiePrefix}-token`);
+    return { success: true };
   }),
 });
 
