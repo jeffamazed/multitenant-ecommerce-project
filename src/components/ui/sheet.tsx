@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { XIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";

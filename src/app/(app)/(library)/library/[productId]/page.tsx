@@ -9,6 +9,8 @@ interface Props {
   params: Promise<{ productId: string }>;
 }
 
+export const dynamic = "force-dynamic";
+
 const LibraryPage = async ({ params }: Props) => {
   const { productId } = await params;
 
