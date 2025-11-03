@@ -1,3 +1,4 @@
+import { COOKIE_MAX_AGE } from "@/lib/constants";
 import { cookies as getCookies } from "next/headers";
 
 interface Props {
@@ -12,6 +13,7 @@ export const generateAuthCookie = async ({ prefix, value }: Props) => {
     value,
     httpOnly: true,
     path: "/",
+    maxAge: COOKIE_MAX_AGE,
     ...(process.env.NODE_ENV !== "development" && {
       sameSite: "none",
       domain: process.env.NEXT_PUBLIC_ROOT_DOMAIN!,
