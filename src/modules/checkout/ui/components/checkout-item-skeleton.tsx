@@ -28,13 +28,13 @@ export const CheckoutItemSkeleton = ({
 
       <div className="py-2 sm:py-4 flex flex-col justfiy-between">
         <div className="flex flex-col gap-1 sm:gap-2">
-          <Skeleton className="bg-skeleton w-30 h-8" />
-          <Skeleton className="bg-skeleton w-20 h-6" />
+          <Skeleton className="bg-skeleton w-30 h-5 md:h-6 lg:h-7" />
+          <Skeleton className="bg-skeleton w-20 h-5 md:h-6" />
         </div>
       </div>
 
       <div className="py-2 sm:py-4 flex flex-col justify-between">
-        <Skeleton className="bg-skeleton w-10 h-6 self-end" />
+        <Skeleton className="bg-skeleton w-10 h-5 md:h-6 self-end" />
         <Skeleton className="bg-skeleton w-6 md:w-16 h-6 self-end" />
       </div>
     </div>

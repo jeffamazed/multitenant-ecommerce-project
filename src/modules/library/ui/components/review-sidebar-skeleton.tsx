@@ -9,7 +9,7 @@ export const ReviewSidebarSkeleton = () => {
     <div className="p-4 bg-white rounded-md border" aria-hidden="true">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4">
-          <Skeleton className="bg-skeleton w-40 h-7" />
+          <Skeleton className="bg-skeleton w-40 h-7 mb-4" />
           <FieldSet>
             <FieldGroup className="gap-4">
               {/* RATING */}
@@ -26,7 +26,7 @@ export const ReviewSidebarSkeleton = () => {
               {/* DESCRIPTION */}
 
               <Field>
-                <Skeleton className="bg-skeleton w-20 h-5" />
+                <Skeleton className="bg-skeleton w-24! h-5" />
                 <Textarea
                   id="review-description-product"
                   disabled={true}

@@ -18,7 +18,7 @@ export const ProductViewSkeleton = () => {
         </div>
 
         <div className="common-padding max-container">
-          <Skeleton className="bg-skeleton h-10 w-50 common-margin-bottom" />
+          <Skeleton className="bg-skeleton h-7 md:h-8 w-50 common-margin-bottom" />
           <div className="common-grid-setup">
             <div className="md:col-span-4 lg:col-span-3">
               <ReviewSidebarSkeleton />

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/field";
 import { baseReviewSchema } from "@/modules/reviews/schemas";
 import { StarPicker } from "@/components/shared/star-picker";
+import { Spinner } from "@/components/ui/spinner";
 
 interface Props {
   productId: string;
@@ -217,8 +218,11 @@ export const ReviewForm = ({ productId, initialData }: Props) => {
             size="lg"
             className="bg-black text-white hover:bg-custom-accent hover:text-foreground focus-visible:bg-custom-accent focus-visible:text-foreground w-fit mt-2"
           >
-            {initialData && "Update review"}
-            {!initialData && "Post review"}
+            {isLoading && <Spinner />}
+            {initialData && !isLoading && "Update review"}
+            {initialData && isLoading && "Updating... "}
+            {!initialData && !isLoading && "Post review"}
+            {!initialData && isLoading && "Posting..."}
           </Button>
         )}
       </form>
