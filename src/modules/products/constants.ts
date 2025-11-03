@@ -21,10 +21,6 @@ export const SORT_BUTTONS: { label: string; value: SortValue }[] = [
     value: "curated",
   },
   {
-    label: "Trending",
-    value: "trending",
-  },
-  {
     label: "Hot & New",
     value: "hot_and_new",
   },

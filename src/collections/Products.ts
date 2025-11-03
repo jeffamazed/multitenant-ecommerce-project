@@ -110,5 +110,12 @@ export const Products: CollectionConfig = {
         description: "If checked, this product will be archieved.",
       },
     },
+    {
+      name: "score",
+      type: "number",
+      index: true,
+      defaultValue: 0,
+      admin: { readOnly: true },
+    },
   ],
 };

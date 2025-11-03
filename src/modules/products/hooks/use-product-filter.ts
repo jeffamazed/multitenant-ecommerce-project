@@ -5,7 +5,7 @@ import {
   parseAsStringLiteral,
 } from "nuqs";
 
-const sortValues = ["curated", "trending", "hot_and_new"] as const;
+const sortValues = ["curated", "hot_and_new"] as const;
 
 export const params = {
   search: parseAsString.withDefault("").withOptions({

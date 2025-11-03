@@ -114,6 +114,15 @@ export const reviewsRouter = createTRPCRouter({
         },
       });
 
+      // update product score
+      await ctx.db.update({
+        collection: "products",
+        id: product.id,
+        data: {
+          score: (product.score || 0) + 1,
+        },
+      });
+
       return review;
     }),
 

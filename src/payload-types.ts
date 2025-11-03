@@ -287,6 +287,7 @@ export interface Product {
    * If checked, this product will be archieved.
    */
   isArchived?: boolean | null;
+  score?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -515,6 +516,7 @@ export interface ProductsSelect<T extends boolean = true> {
   content?: T;
   isPrivate?: T;
   isArchived?: T;
+  score?: T;
   updatedAt?: T;
   createdAt?: T;
 }
