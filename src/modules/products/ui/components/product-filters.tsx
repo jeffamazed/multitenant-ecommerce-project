@@ -19,7 +19,7 @@ export const ProductFilters = memo(function ProductFilters() {
   const [filters, setFilters] = useProductsFilters();
   const hasAnyFilters = Object.entries(filters).some(([key, value]) => {
     // PREVENTING SORT TO HAVE ANY EFFECT ON FILTER
-    if (key === "sort") return false;
+    if (key === "sort" || key === "search") return false;
 
     if (typeof value === "string") return value !== "";
     if (Array.isArray(value)) return value.length > 0;

@@ -31,9 +31,9 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
-      actions: [
+      actions: ["@/components/payload-components/back-to-home#BackToHome"],
+      beforeDashboard: [
         "@/components/payload-components/stripe-verify#StripeVerify",
-        "@/components/payload-components/back-to-home#BackToHome",
       ],
     },
   },
