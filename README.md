@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Monavo
 
-## Getting Started
+**Monavo** is a modern, multitenant e-commerce application engineered for scalable, high-performance online stores. Built with Next.js 15, React 19, and Payload CMS, Monavo enables multiple stores (tenants) to operate under a single platform, providing robust administration, flexible theming, and advanced commerce features.
 
-First, run the development server:
+---
+
+## ✨ Features
+
+- **Multitenancy:** Out-of-the-box tenancy support via [Payload CMS multi-tenant plugin](https://payloadcms.com/plugins/multi-tenant)
+- **Modern UI:** Responsive & accessible design powered by Tailwind CSS and Shadcn
+- **Robust API Layer:** Type-safe client/server APIs using [tRPC](https://trpc.io/)
+- **State Management:** Lightweight and efficient with Zustand
+- **E-commerce Essentials:** Product management, carts, checkout, orders, user auth, and more
+- **Payments:** Seamless [Stripe](https://stripe.com/) integration for secure payments
+- **Performance:** Bun for ultra-fast local development
+- **Developer Experience:** Superjson, Date-fns, type-safe forms, and robust validation (Zod)
+- **Animations:** Delightful interactions and transitions using animate.css and Shadcn
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend:** [Next.js 15](https://nextjs.org/), [React 19](https://react.dev/)
+- **API:** [tRPC (client & server)](https://trpc.io/)
+- **CMS & Backend:** [Payload CMS](https://payloadcms.com/) (with multi-tenant plugin), MongoDB
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/), [Shadcn UI](https://ui.shadcn.com/)
+- **State Management:** [Zustand](https://zustand-demo.pmnd.rs/)
+- **Payments:** [Stripe](https://stripe.com/)
+- **Form Handling:** [react-hook-form](https://react-hook-form.com/), [zod](https://zod.dev/)
+- **Icons:** [Lucide-react](https://lucide.dev/)
+- **Utilities:** [date-fns](https://date-fns.org/), [clsx](https://www.npmjs.com/package/clsx), [superjson](https://github.com/blitz-js/superjson)
+- **Other:** [nuqs](https://github.com/postedin/nuqs) for query string state
+- **Development:** Bun, TypeScript, Eslint, Tailwind plugins
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Bun**: [Install Bun](https://bun.sh/) if you haven't already
+- **MongoDB**: Ensure a MongoDB instance is running (local or cloud)
+- **Node 20+/Bun**: Modern runtime required for Next.js 15 and React 19
+
+---
+
+### 1. Clone the repo
+
+```bash
+git clone git@github.com:jeffamazed/multitenant-ecommerce-project.git
+cd multitenant-ecommerce-project
+```
+
+### 2. Install dependencies
+
+```bash
+bun install
+```
+
+### 3. Configure environment
+
+Copy the example env files and update variables:
+
+```bash
+cp sample.env .env
+# Edit .env with your credentials (MongoDB, Stripe, etc.)
+```
+
+**Essential env variables include:**
+
+- `MONGODB_URI`
+- `PAYLOAD_SECRET`
+- `STRIPE_SECRET_KEY`
+- etc.
+
+### 4. Run local development
+
+```bash
+bun run dev
+```
+
+or with `npm` (alternative, slower)
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Access your app at [http://localhost:3000](http://localhost:3000)  
+Payload Admin panel at [http://localhost:3000/admin](http://localhost:3000/admin)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Database Seed (optional)
 
-## Learn More
+If you want to start with some fake data:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# fresh db
+bun run db:fresh
+bun run db:seed
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 💡 Scripts
 
-## Deploy on Vercel
+| Command             | Description                               |
+| ------------------- | ----------------------------------------- |
+| `bun run dev`       | Start dev server (Next.js + Payload CMS)  |
+| `bun run build`     | Build for production                      |
+| `bun run start`     | Start production server                   |
+| `bun run lint`      | Lint codebase with ESLint                 |
+| `bun run gen:types` | Generate Payload type definitions         |
+| `bun run db:fresh`  | Fresh DB migration (drops/recreates data) |
+| `bun run db:seed`   | Seed database with test/sample data       |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 License
+
+[MIT](LICENSE) — © JeffAmazed
+
+---
+
+## 📄 Acknowledgements
+
+- [Payload CMS](https://payloadcms.com/)
+- [Next.js](https://nextjs.org/)
+- [Shadcn UI](https://ui.shadcn.com/)
+- [tRPC](https://trpc.io/)
+- [Stripe](https://stripe.com/)
+- [Bun](https://bun.sh/)
+- [CodeWithAntonio YouTube](https://www.youtube.com/@CodeWithAntonio) — Big thanks to Antonio for the massive tutorial! Check out his youtube channel!
+- And all other awesome OSS packages used.
