@@ -2,7 +2,15 @@ import { MenuIcon, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 
+import { useTRPC } from "@/trpc/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cn, isActiveMainNav } from "@/lib/utils";
+import useAuth from "@/hooks/use-auth";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+import { NAVBAR_ITEMS } from "@/modules/products/constants";
 import {
   Sheet,
   SheetClose,
@@ -13,11 +21,8 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { NAVBAR_ITEMS } from "@/modules/products/constants";
 import TooltipCustom from "@/components/shared/tooltip-custom";
-import { cn, isActiveMainNav } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
-import useAuth from "@/hooks/use-auth";
+import { Spinner } from "@/components/ui/spinner";
 
 export const NavbarSidebar = () => {
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -25,6 +30,27 @@ export const NavbarSidebar = () => {
   const isMobile = useIsMobile(1024);
   const pathname = usePathname();
   const session = useAuth();
+
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const { mutate: mutateSignOut, isPending } = useMutation(
+    trpc.auth.signOut.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message);
+      },
+      onSuccess: () => {
+        toast.success("Signed out successfully!");
+      },
+      onSettled: async () => {
+        await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
+      },
+    })
+  );
+
+  const handleSignOut = () => {
+    mutateSignOut();
+    setOpen(false);
+  };
 
   useEffect(() => {
     if (!isMobile) setOpen(false);
@@ -96,16 +122,28 @@ export const NavbarSidebar = () => {
                 );
               })}
               {session.data?.user ? (
-                <li className="w-full border-t">
-                  <Link
-                    href="/admin"
-                    className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
-                    onClick={() => setOpen(false)}
-                    aria-label="Navigate to dashboard"
-                  >
-                    Dashboard
-                  </Link>
-                </li>
+                <>
+                  <li className="w-full border-t">
+                    <Link
+                      href="/admin"
+                      className="navbar-items-mobile hover:bg-custom-accent hover:text-black focus-visible:bg-custom-accent focus-visible:text-black"
+                      onClick={() => setOpen(false)}
+                      aria-label="Navigate to dashboard"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                  <li className="w-full">
+                    <button
+                      className="navbar-items-mobile bg-white text-black hover:bg-destructive focus-visible:bg-destructive hover:text-red-50 focus-visible:text-red-50 transition-colors border-none rounded-none justify-start gap-2"
+                      onClick={handleSignOut}
+                      disabled={isPending}
+                    >
+                      {isPending && <Spinner />}
+                      Sign out
+                    </button>
+                  </li>
+                </>
               ) : (
                 <>
                   <li className="w-full border-t">

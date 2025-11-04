@@ -44,7 +44,7 @@ export const CartButton = ({
     <Button
       className={cn("flex-1", {
         "bg-custom-accent": !productInCart,
-        "bg-destructive": productInCart,
+        "bg-destructive text-red-50": productInCart,
       })}
       variant="elevated"
       onClick={handleClick}

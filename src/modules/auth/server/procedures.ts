@@ -88,6 +88,8 @@ export const authRouter = createTRPCRouter({
     const cookies = await getCookies();
 
     cookies.delete(`${ctx.db.config.cookiePrefix}-token`);
+
+    cookies.delete("payload-tenant");
     return { success: true };
   }),
 });
