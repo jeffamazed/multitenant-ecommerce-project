@@ -109,7 +109,7 @@ export const Navbar = () => {
                 <li>
                   <Button
                     asChild
-                    className="border-l border-t-0 border-b-0 border-r px-6 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
+                    className="border-l border-t-0 border-b-0 border-r-0 px-6 xl:px-12 h-full rounded-none bg-black text-white hover:bg-custom-accent focus-visible:bg-custom-accent hover:text-black focus-visible:text-black transition-colors text-lg"
                   >
                     <Link href="/admin" aria-label="Navigate to dashboard">
                       Dashboard
