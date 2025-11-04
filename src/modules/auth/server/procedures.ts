@@ -101,9 +101,6 @@ export const authRouter = createTRPCRouter({
     cookies.delete({
       name: "payload-tenant",
       path: "/",
-      ...(process.env.NODE_ENV !== "development" && {
-        domain: process.env.NEXT_PUBLIC_ROOT_DOMAIN!,
-      }),
     });
     return { success: true };
   }),
