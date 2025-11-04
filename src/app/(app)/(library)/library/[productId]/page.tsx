@@ -1,3 +1,5 @@
+import { Metadata } from "next";
+
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
@@ -7,6 +9,25 @@ import { ProductViewSkeleton } from "@/modules/library/ui/components/product-vie
 
 interface Props {
   params: Promise<{ productId: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { productId } = await params;
+  const queryClient = getQueryClient();
+
+  const product = await queryClient.fetchQuery(
+    trpc.products.getMeta.queryOptions({ id: productId })
+  );
+
+  const authData = await queryClient.fetchQuery(
+    trpc.auth.session.queryOptions()
+  );
+  const username = authData.user?.username;
+
+  return {
+    title: `Library | ${username} | ${product.name}`,
+    description: `${username}'s library page showcasing "${product.name}". Explore details, reviews, and related content for this product.`,
+  };
 }
 
 export const dynamic = "force-dynamic";

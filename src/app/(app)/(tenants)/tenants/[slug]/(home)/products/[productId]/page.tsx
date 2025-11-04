@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
@@ -10,6 +11,23 @@ import { TRPCError } from "@trpc/server";
 
 interface Props {
   params: Promise<{ productId: string; slug: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { productId, slug } = await params;
+  const queryClient = getQueryClient();
+
+  const product = await queryClient.fetchQuery(
+    trpc.products.getMeta.queryOptions({ id: productId })
+  );
+  const tenant = await queryClient.fetchQuery(
+    trpc.tenants.getMeta.queryOptions({ slug })
+  );
+
+  return {
+    title: `${tenant.name} | ${product.name}`,
+    description: `Explore "${product.name}" from ${tenant.name}. Check details, read reviews, and discover related products.`,
+  };
 }
 
 const ProductPage = async ({ params }: Props) => {

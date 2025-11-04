@@ -6,6 +6,39 @@ import { TRPCError } from "@trpc/server";
 import { Media, Tenant } from "@/payload-types";
 
 export const tenantsRouter = createTRPCRouter({
+  getMeta: baseProcedure
+    .input(
+      z.object({
+        slug: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const tenantsData = await ctx.db.find({
+        collection: "tenants",
+        where: {
+          slug: { equals: input.slug },
+        },
+        select: {
+          name: true,
+        },
+        limit: 1,
+        pagination: false,
+      });
+
+      const tenant = tenantsData.docs[0];
+
+      if (!tenant) {
+        console.error(
+          `[Tenants GetMeta] Tenant not found - slug: ${input.slug}, timestamp: ${new Date().toISOString()}`
+        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Tenant not found.",
+        });
+      }
+
+      return tenant;
+    }),
   getOne: baseProcedure
     .input(
       z.object({

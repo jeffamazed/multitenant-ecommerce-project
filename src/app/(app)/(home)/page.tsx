@@ -1,4 +1,5 @@
 import type { SearchParams } from "nuqs/server";
+import type { Metadata } from "next";
 
 import { trpc, getQueryClient } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
@@ -9,6 +10,12 @@ import { DEFAULT_LIMIT_INFINITE_LOAD } from "@/lib/constants";
 import { Suspense } from "react";
 import { SearchFilters } from "@/modules/home/ui/components/search-filters/search-filters";
 import { SearchSectionSkeleton } from "@/modules/home/ui/components/search-filters/search-section-skeleton";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description:
+    "Explore products and categories on Monavo, a multitenant e-commerce platform for discovering top items and new collections.",
+};
 
 interface Props {
   searchParams: Promise<SearchParams>;

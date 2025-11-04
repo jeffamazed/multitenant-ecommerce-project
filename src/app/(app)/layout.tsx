@@ -8,8 +8,12 @@ import { dmSans } from "@/lib/fonts";
 import { ToasterCustom } from "@/components/shared/toaster-custom";
 
 export const metadata: Metadata = {
-  title: "Monavo",
-  description: "Monavo Multitenant E-commerce.",
+  title: {
+    template: "Monavo | %s",
+    default: "Monavo",
+  },
+  description:
+    "Monavo: A multitenant e-commerce platform to explore and manage products across multiple stores.",
   icons: {
     icon: "/icons/favicon.ico",
   },

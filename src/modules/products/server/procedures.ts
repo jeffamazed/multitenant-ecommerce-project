@@ -10,6 +10,34 @@ import { sortValues } from "../search-params";
 import { TRPCError } from "@trpc/server";
 
 export const productsRouter = createTRPCRouter({
+  getMeta: baseProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const product = await ctx.db.findByID({
+        collection: "products",
+        id: input.id,
+        select: {
+          name: true,
+        },
+      });
+
+      if (!product) {
+        console.error(
+          `[Products GetMeta] Product not found - id: ${input.id}, timestamp: ${new Date().toISOString()}`
+        );
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Product not found.",
+        });
+      }
+
+      return product;
+    }),
+
   getOne: baseProcedure
     .input(
       z.object({
