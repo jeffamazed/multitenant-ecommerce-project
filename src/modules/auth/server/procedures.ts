@@ -87,9 +87,25 @@ export const authRouter = createTRPCRouter({
   signOut: protectedProcedure.mutation(async ({ ctx }) => {
     const cookies = await getCookies();
 
-    cookies.delete(`${ctx.db.config.cookiePrefix}-token`);
+    cookies.delete({
+      name: `${ctx.db.config.cookiePrefix}-token`,
+      path: "/",
+      httpOnly: true,
+      ...(process.env.NODE_ENV !== "development" && {
+        sameSite: "none",
+        domain: process.env.NEXT_PUBLIC_ROOT_DOMAIN!,
+        secure: true,
+      }),
+    });
 
-    cookies.delete("payload-tenant");
+    cookies.delete({
+      name: "payload-tenant",
+      path: "/",
+      httpOnly: true,
+      ...(process.env.NODE_ENV !== "development" && {
+        domain: process.env.NEXT_PUBLIC_ROOT_DOMAIN!,
+      }),
+    });
     return { success: true };
   }),
 });
