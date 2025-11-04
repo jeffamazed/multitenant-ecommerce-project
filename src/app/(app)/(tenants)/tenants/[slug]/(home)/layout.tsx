@@ -29,7 +29,7 @@ const Layout = async ({ children, params }: LayoutProps) => {
           <Navbar slug={slug} />
         </Suspense>
       </HydrationBoundary>
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 overflow-x-clip">{children}</main>
       <Footer />
     </div>
   );

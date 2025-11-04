@@ -7,10 +7,10 @@ interface Props {
 
 const Layout = async ({ children }: Props) => {
   return (
-    <div className="flex flex-col min-h-dvh">
+    <div className="flex flex-col min-h-dvh w-full">
       <Navbar />
 
-      <main className="flex-1 bg-zinc-100">{children}</main>
+      <main className="flex-1 overflow-x-clip bg-zinc-100">{children}</main>
       <Footer />
     </div>
   );

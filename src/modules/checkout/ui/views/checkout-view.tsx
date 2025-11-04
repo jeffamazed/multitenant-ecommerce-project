@@ -173,7 +173,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
 
             <aside className="md:col-span-4">
               <div className="md:sticky top-24 lg:top-26 xl:top-28">
-                <h2 className="text-xl md:text-2xl mb-4 font-medium text-right">
+                <h2 className="text-xl md:text-2xl mb-4 font-medium md:text-right">
                   Order Summary
                 </h2>
                 <CheckoutSidebar

@@ -12,7 +12,7 @@ const Layout = async ({ children, params }: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-dvh bg-zinc-100">
       <Navbar slug={slug} />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 overflow-x-clip">{children}</main>
       <Footer />
     </div>
   );

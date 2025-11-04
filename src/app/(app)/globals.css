@@ -130,7 +130,7 @@
     @apply border-border outline-ring/50 scrollbar-thin scrollbar-thumb-black scrollbar-thumb-rounded-full scrollbar-hover:scrollbar-thumb-black/90;
   }
   body {
-    @apply bg-background text-foreground overflow-x-clip;
+    @apply bg-background text-foreground overflow-x-hidden;
   }
   a {
     @apply focus-visible:ring-ring focus-visible:ring-[2px] focus-visible:outline-0;

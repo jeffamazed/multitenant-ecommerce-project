@@ -29,7 +29,7 @@ const TooltipCustom = ({
         side={side}
         alignOffset={alignOffset}
         className={cn(
-          "text-xs font-semibold select-none bg-zinc-100/90 border text-foreground",
+          "text-xs font-semibold select-none bg-zinc-100/90 border text-foreground max-sm:hidden",
           className
         )}
       >
