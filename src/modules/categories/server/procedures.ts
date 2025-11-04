@@ -1,9 +1,39 @@
+import z from "zod";
+
 import { Category } from "@/payload-types";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 
 export const categoriesRouter = createTRPCRouter({
+  getMeta: baseProcedure
+    .input(z.object({ name: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const categoriesData = await ctx.db.find({
+        collection: "categories",
+        pagination: false,
+        depth: 0,
+        where: {
+          slug: {
+            equals: input.name,
+          },
+        },
+        select: {
+          name: true,
+        },
+      });
+
+      const category = categoriesData?.docs[0]?.name;
+
+      if (!category) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Category or subcategory not found.",
+        });
+      }
+
+      return category;
+    }),
   getMany: baseProcedure.query(async ({ ctx }) => {
     let data;
     try {

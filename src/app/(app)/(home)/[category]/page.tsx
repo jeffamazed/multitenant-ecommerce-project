@@ -1,5 +1,6 @@
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
+import { Metadata } from "next";
 
 import { trpc, getQueryClient } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
@@ -10,12 +11,27 @@ import { DEFAULT_LIMIT_INFINITE_LOAD } from "@/lib/constants";
 import { SearchFilters } from "@/modules/home/ui/components/search-filters/search-filters";
 import { SearchSectionSkeleton } from "@/modules/home/ui/components/search-filters/search-section-skeleton";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ category: string }>;
   searchParams: Promise<SearchParams>;
 }
 
-export const dynamic = "force-dynamic";
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { category } = await params;
+
+  const queryClient = getQueryClient();
+
+  const cat = await queryClient.fetchQuery(
+    trpc.categories.getMeta.queryOptions({ name: category })
+  );
+
+  return {
+    title: `${cat}`,
+    description: `Explore top products in the ${cat} category on Monavo. Browse, compare, and discover curated collections from multiple independent stores.`,
+  };
+}
 
 const CategoryPage = async ({ params, searchParams }: Props) => {
   const { category } = await params;
