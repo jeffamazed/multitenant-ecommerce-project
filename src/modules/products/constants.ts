@@ -1,3 +1,4 @@
+import { ArrowDownAZ, ArrowUpAz, LucideIcon } from "lucide-react";
 import { sortValues } from "./search-params";
 
 export interface NavbarItemType {
@@ -15,7 +16,13 @@ export const NAVBAR_ITEMS: NavbarItemType[] = [
 
 export type SortValue = (typeof sortValues)[number];
 
-export const SORT_BUTTONS: { label: string; value: SortValue }[] = [
+export const SORT_BUTTONS: {
+  label?: string;
+  value: SortValue;
+  Icon?: LucideIcon;
+  ariaLabel?: string;
+  tooltip?: boolean;
+}[] = [
   {
     label: "Curated",
     value: "curated",
@@ -23,5 +30,17 @@ export const SORT_BUTTONS: { label: string; value: SortValue }[] = [
   {
     label: "Hot & New",
     value: "hot_and_new",
+  },
+  {
+    value: "ascending",
+    Icon: ArrowDownAZ,
+    ariaLabel: "Sort ascending",
+    tooltip: true,
+  },
+  {
+    value: "descending",
+    Icon: ArrowUpAz,
+    ariaLabel: "Sort descending",
+    tooltip: true,
   },
 ];
