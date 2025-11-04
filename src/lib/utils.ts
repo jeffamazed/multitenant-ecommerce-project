@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { differenceInDays } from "date-fns";
 
-import { NAVBAR_ITEMS } from "@/modules/products/constants";
+import { NAVBAR_ITEMS } from "@/modules/home/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

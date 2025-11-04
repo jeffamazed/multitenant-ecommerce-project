@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 
 import { cn, isActiveMainNav } from "@/lib/utils";
-import { NAVBAR_ITEMS } from "@/modules/products/constants";
 import { poppins } from "@/lib/fonts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
@@ -15,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Spinner } from "@/components/ui/spinner";
 import useAuth from "@/hooks/use-auth";
 
+import { NAVBAR_ITEMS } from "../../constants";
 import { NavbarSidebar } from "./navbar-sidebar";
 
 interface NavbarItemprops {

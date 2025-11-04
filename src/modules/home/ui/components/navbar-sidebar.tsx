@@ -10,7 +10,6 @@ import { cn, isActiveMainNav } from "@/lib/utils";
 import useAuth from "@/hooks/use-auth";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-import { NAVBAR_ITEMS } from "@/modules/products/constants";
 import {
   Sheet,
   SheetClose,
@@ -23,6 +22,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import TooltipCustom from "@/components/shared/tooltip-custom";
 import { Spinner } from "@/components/ui/spinner";
+
+import { NAVBAR_ITEMS } from "../../constants";
 
 export const NavbarSidebar = () => {
   const triggerRef = useRef<HTMLButtonElement>(null);
