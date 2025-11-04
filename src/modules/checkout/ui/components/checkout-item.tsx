@@ -7,6 +7,7 @@ import { cn, formatCurrency } from "@/lib/utils";
 import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { memo } from "react";
 
 interface Props {
   isLast?: boolean;
@@ -21,7 +22,7 @@ interface Props {
   onRemove: (id: string) => void;
 }
 
-export const CheckoutItem = ({
+export const CheckoutItem = memo(function CheckoutItem({
   isLast,
   isFirst,
   imageUrl,
@@ -32,7 +33,7 @@ export const CheckoutItem = ({
   id,
   price,
   onRemove,
-}: Props) => {
+}: Props) {
   return (
     <article
       className={cn(
@@ -90,4 +91,4 @@ export const CheckoutItem = ({
       </div>
     </article>
   );
-};
+});

@@ -45,7 +45,9 @@ export const useCart = (tenantSlug: string) => {
   );
 
   const removeProductOptimized = useCallback(
-    (productId: string) => removeProduct(tenantSlug, productId),
+    (productId: string) => {
+      removeProduct(tenantSlug, productId);
+    },
     [removeProduct, tenantSlug]
   );
 

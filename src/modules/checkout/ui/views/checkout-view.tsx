@@ -16,6 +16,7 @@ import { CheckoutSidebar } from "../components/checkout-sidebar";
 import { CheckoutItemSkeleton } from "../components/checkout-item-skeleton";
 import { useCheckoutStates } from "../../hooks/use-checkout-states";
 import { CheckoutSuccess } from "../components/checkout-success";
+import { CheckoutGetProducts } from "../../types";
 
 interface Props {
   tenantSlug: string;
@@ -25,6 +26,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
   const router = useRouter();
   const [checkoutStates, setCheckoutStates] = useCheckoutStates();
   const [isLoadingLocal, setIsLoadingLocal] = useState<boolean>(false);
+  const [localData, setLocalData] = useState<CheckoutGetProducts | null>(null);
   const { productIds, removeProduct, clearCart } = useCart(tenantSlug);
 
   const queryClient = useQueryClient();
@@ -38,6 +40,10 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
       ids: productIds,
     })
   );
+
+  useEffect(() => {
+    if (data) setLocalData(data);
+  }, [data]);
 
   const purchase = useMutation(
     trpc.checkout.purchase.mutationOptions({
@@ -53,8 +59,7 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
         setIsLoadingLocal(false);
         toast.error(error.message);
         if (error.data?.code === "UNAUTHORIZED") {
-          // TODO: MODIFY WHEN SUBDOMAINS ENABLED
-          router.push("/sign-in");
+          router.push(`${process.env.NEXT_PUBLIC_APP_URL!}/sign-in`);
         }
       },
     })
@@ -87,7 +92,25 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
   }, [clearCart, error]);
 
   const onRemoveProduct = useCallback(
-    (productId: string) => removeProduct(productId),
+    (productId: string) => {
+      removeProduct(productId);
+      setLocalData((prev) => {
+        if (prev) {
+          const newDocs = prev?.docs.filter((p) => p.id !== productId);
+          const newTotalPrice = newDocs.reduce(
+            (acc, product) => acc + product.price,
+            0
+          );
+          return {
+            ...prev,
+            docs: newDocs,
+            totalPrice: newTotalPrice,
+          };
+        }
+
+        return prev;
+      });
+    },
     [removeProduct]
   );
 
@@ -118,9 +141,9 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
               <h2 className="text-xl md:text-2xl mb-4 font-medium">
                 Review Your Items
               </h2>
-              {isLoadingData ? (
+              {isLoadingData && !localData ? (
                 skeletons
-              ) : data?.totalDocs === 0 ? (
+              ) : localData?.totalDocs === 0 ? (
                 <EmptyPlaceholder
                   Heading="h3"
                   headingContent="No items here..."
@@ -128,11 +151,11 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
                 />
               ) : (
                 <ul className="">
-                  {data?.docs.map((p, i) => (
+                  {localData?.docs.map((p, i) => (
                     <li key={p.id}>
                       <CheckoutItem
                         id={p.id}
-                        isLast={i === data.docs.length - 1}
+                        isLast={i === localData.docs.length - 1}
                         isFirst={i === 0}
                         imageUrl={p.image?.url}
                         name={p.name}
@@ -154,9 +177,13 @@ export const CheckoutView = ({ tenantSlug }: Props) => {
                   Order Summary
                 </h2>
                 <CheckoutSidebar
-                  total={data?.totalPrice}
+                  total={localData?.totalPrice}
                   onPurchase={handleOnPurchase}
-                  disabled={purchase.isPending || isLoadingLocal}
+                  disabled={
+                    purchase.isPending ||
+                    isLoadingLocal ||
+                    localData?.docs.length === 0
+                  }
                   isLoading={isLoadingData}
                   isCanceled={checkoutStates.cancel}
                 />

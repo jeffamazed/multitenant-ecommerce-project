@@ -1,3 +1,10 @@
+import { inferRouterOutputs } from "@trpc/server";
+
+import { type AppRouter } from "@/trpc/routers/_app";
+
+export type CheckoutGetProducts =
+  inferRouterOutputs<AppRouter>["checkout"]["getProducts"];
+
 import type Stripe from "stripe";
 
 export type ProductMetadata = {

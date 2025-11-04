@@ -44,7 +44,7 @@ export const CheckoutSidebar = ({
         </Button>
       </div>
 
-      {isCanceled && (
+      {isCanceled && (total ?? 0) > 0 && (
         <div className="p-4 border-t">
           <Alert
             variant="destructive"
