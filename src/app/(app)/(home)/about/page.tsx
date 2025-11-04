@@ -1,5 +1,11 @@
+import { HeroSection } from "@/modules/about/ui/views/hero-section";
+
 const AboutPage = () => {
-  return <div>AboutPage</div>;
+  return (
+    <>
+      <HeroSection />
+    </>
+  );
 };
 
 export default AboutPage;

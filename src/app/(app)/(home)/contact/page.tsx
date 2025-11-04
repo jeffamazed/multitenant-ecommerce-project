@@ -1,5 +1,11 @@
+import { HeroSection } from "@/modules/contact/ui/views/hero-section";
+
 const ContactPage = () => {
-  return <div>ContactPage</div>;
+  return (
+    <>
+      <HeroSection />
+    </>
+  );
 };
 
 export default ContactPage;
