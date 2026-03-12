@@ -284,7 +284,7 @@ export interface Product {
    */
   isPrivate?: boolean | null;
   /**
-   * If checked, this product will be archieved.
+   * If checked, this product will be archived.
    */
   isArchived?: boolean | null;
   score?: number | null;

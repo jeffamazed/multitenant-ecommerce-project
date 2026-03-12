@@ -1,21 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import z from "zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
+import z from "zod";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { signInSchema } from "../../schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import AuthBackground from "@/app/assets/img/background.png";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import { poppins } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -30,6 +30,7 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
+import { DEFAULT_EMAIL, DEFAULT_PASSWORD } from "../../constants";
 
 type SignInSchemaType = z.infer<typeof signInSchema>;
 
@@ -50,15 +51,15 @@ export const SignInView = () => {
         await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
         router.replace("/");
       },
-    })
+    }),
   );
 
   const form = useForm<SignInSchemaType>({
     mode: "onChange",
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: DEFAULT_EMAIL,
+      password: DEFAULT_PASSWORD,
     },
   });
 

@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import React, { memo } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { SparklesIcon, StarIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { memo } from "react";
 
 import {
   cn,
@@ -13,6 +13,8 @@ import {
   generateTenantURL,
 } from "@/lib/utils";
 
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,11 +22,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
 
-import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import AvatarPlaceholderSmall from "@/app/assets/img/avatar_placeholder_small.png";
+import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import {
   MAX_PRODUCT_RATING,
   NEW_PRODUCT_DAYS_THRESHOLD,
@@ -56,7 +56,7 @@ export const ProductCard = memo(function ProductCard({
   const router = useRouter();
 
   const handleUserNavigation = (
-    e: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>
+    e: React.MouseEvent<HTMLSpanElement> | React.KeyboardEvent<HTMLSpanElement>,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -68,7 +68,7 @@ export const ProductCard = memo(function ProductCard({
       href={`${generateTenantURL(tenantSlug)}/products/${id}`}
       className={cn(
         "border rounded-md bg-white overflow-hidden block h-full",
-        "custom-shadcn-button-product"
+        "custom-shadcn-button-product",
       )}
       aria-label={`Visit product page of ${name}`}
     >
@@ -81,7 +81,7 @@ export const ProductCard = memo(function ProductCard({
                 fill
                 sizes="50vw"
                 src={imageUrl || ProductPlaceholderMedium}
-                placeholder="blur"
+                placeholder={!imageUrl ? "blur" : undefined}
                 className="object-cover"
               />
               {determineIsProductNew(createdAt, NEW_PRODUCT_DAYS_THRESHOLD) && (

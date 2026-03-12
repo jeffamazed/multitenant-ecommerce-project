@@ -107,7 +107,7 @@ export const Products: CollectionConfig = {
       defaultValue: false,
       type: "checkbox",
       admin: {
-        description: "If checked, this product will be archieved.",
+        description: "If checked, this product will be archived.",
       },
     },
     {
