@@ -1,22 +1,22 @@
 "use client";
 
+import { CheckIcon, LinkIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckIcon, LinkIcon, StarIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-import { formatCurrency, generateTenantURL } from "@/lib/utils";
+import { formatCurrency, generateTenantURL, jsxConverters } from "@/lib/utils";
 
-import ProductPlaceholderLarge from "@/app/assets/img/product_placeholder_large.png";
 import AvatarPlaceholderSmall from "@/app/assets/img/avatar_placeholder_small.png";
+import ProductPlaceholderLarge from "@/app/assets/img/product_placeholder_large.png";
 import { StarRating } from "@/components/shared/star-rating";
-import { Button } from "@/components/ui/button";
 import TooltipCustom from "@/components/shared/tooltip-custom";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { MAX_PRODUCT_RATING } from "@/lib/constants";
 
@@ -30,7 +30,7 @@ interface Props {
 export const ProductView = ({ productId, tenantSlug }: Props) => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
-    trpc.products.getOne.queryOptions({ id: productId })
+    trpc.products.getOne.queryOptions({ id: productId }),
   );
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
@@ -54,7 +54,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
             fill
             sizes="100vw"
             className="object-cover"
-            placeholder="blur"
+            placeholder={!data.cover?.url ? "blur" : undefined}
             priority
           />
         </div>
@@ -120,7 +120,7 @@ export const ProductView = ({ productId, tenantSlug }: Props) => {
 
             <div className="p-6">
               {data.description ? (
-                <RichText data={data.description} />
+                <RichText data={data.description} converters={jsxConverters} />
               ) : (
                 <p className="font-medium text-muted-foreground italic">
                   No description provided.

@@ -1,12 +1,12 @@
-import Image from "next/image";
 import { Trash2Icon } from "lucide-react";
+import Image from "next/image";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn, formatCurrency } from "@/lib/utils";
 
 import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { memo } from "react";
 
 interface Props {
@@ -41,7 +41,7 @@ export const CheckoutItem = memo(function CheckoutItem({
         {
           "border-b rounded-b-md": isLast,
           "rounded-t-md": isFirst,
-        }
+        },
       )}
     >
       <div className="overflow-hidden border-r">
@@ -52,7 +52,7 @@ export const CheckoutItem = memo(function CheckoutItem({
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover"
-            placeholder="blur"
+            placeholder={!imageUrl ? "blur" : undefined}
           />
         </AspectRatio>
       </div>

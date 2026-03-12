@@ -1,17 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import React, { memo } from "react";
-import Image from "next/image";
 import { StarIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { memo } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import AvatarPlaceholderSmall from "@/app/assets/img/avatar_placeholder_small.png";
+import ProductPlaceholderMedium from "@/app/assets/img/product_placeholder_medium.png";
 import { MAX_PRODUCT_RATING } from "@/lib/constants";
 
 interface ProductCardProps {
@@ -38,7 +38,7 @@ export const ProductCard = memo(function ProductCard({
       href={`library/${id}`}
       className={cn(
         "border rounded-md bg-white overflow-hidden block h-full",
-        "custom-shadcn-button-product"
+        "custom-shadcn-button-product",
       )}
       aria-label={`View product ${name}`}
       prefetch
@@ -52,7 +52,7 @@ export const ProductCard = memo(function ProductCard({
                 fill
                 sizes="50vw"
                 src={imageUrl || ProductPlaceholderMedium}
-                placeholder="blur"
+                placeholder={!imageUrl ? "blur" : undefined}
                 className="object-cover"
               />
             </AspectRatio>

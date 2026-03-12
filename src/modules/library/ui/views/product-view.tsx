@@ -1,16 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
+import Link from "next/link";
 import { Suspense } from "react";
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import { ReviewSidebar } from "../components/review-sidebar";
 import { RichText } from "@payloadcms/richtext-lexical/react";
+import { ReviewSidebar } from "../components/review-sidebar";
 
+import { jsxConverters } from "@/lib/utils";
 import { ReviewSidebarSkeleton } from "../components/review-sidebar-skeleton";
 
 interface Props {
@@ -22,7 +23,7 @@ export const ProductView = ({ productId }: Props) => {
   const { data } = useSuspenseQuery(
     trpc.library.getOne.queryOptions({
       productId,
-    })
+    }),
   );
 
   return (
@@ -57,7 +58,7 @@ export const ProductView = ({ productId }: Props) => {
 
             <div className="md:col-span-6 lg:col-span-7">
               {data.content ? (
-                <RichText data={data.content} />
+                <RichText data={data.content} converters={jsxConverters} />
               ) : (
                 <p className="font-medium italic text-muted-foreground">
                   No special content.
