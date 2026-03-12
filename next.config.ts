@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     },
     globalNotFound: true,
   },
+  turbopack: {},
 };
 
 export default withPayload(nextConfig);
